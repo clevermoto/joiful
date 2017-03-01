@@ -1,0 +1,51 @@
+﻿
+<div  style="width:100%;margin:0 auto;padding-top:0px; padding-bottom:0px;">
+    <div class="picArtist" ></div>
+    <div class="row noPadding" style="min-height:123px;width:100%; margin:0 auto; padding-top:0px; padding-bottom:0px;">
+        <div class="col-xs-6 noPadding" style="border-right:1px solid #5B6770;min-height:123px;">
+            <div class="row noPadding" style="margin-top:5px">
+                <div class="col-xs-12 noPadding">
+                    <div ng-include="'../assets/common/html/angJobListPhotoCell.html'"></div>
+
+                    <div style="margin:0 auto; text-align:center;padding:0px 5px 0px 5px;"> 
+                        <div ng-bind-html="GetFullDescription(y.CartItems)">
+
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-xs-6 noPadding" style="padding-top:0px">
+            <div style="margin: 0 auto; word-wrap: break-word; white-space:normal;width:100%">
+                <div ng-include="'../assets/common/html/angJobListContactCell.html'"></div>
+
+            </div>
+        </div>
+
+</div>
+    
+    <div class="row border-top" style="width:100%; margin:0 auto; padding-top:0px; padding-bottom:0px;height:60px">
+
+        <div class="col-xs-12 noPadding" style="text-align:center;">
+            <div class="noPadding" ng-include="'../assets/common/html/angJobListAddressCell.html'"></div>
+        </div>
+    </div>
+    <div ng-if="y.JobNote.length>0" class="row border-top" style="width:100%; margin:0 auto; padding-top:0px; padding-bottom:0px;">
+
+        <div class="col-xs-12 noPadding" style="text-align:center">
+            <div  style="padding-top:5px;padding-bottom:5px;color:#d86018"><span style="color:black;font-weight:600">{{y.FirstName}} says:&nbsp;</span>{{y.JobNote}}</div>
+        </div>
+    </div>
+
+        <!-- MAJOR ITEMS -->
+    <div class="row divJobViewImage noPadding footer-auto" style="margin:0 auto;padding-top:0px">
+        <!-- This is the Button CELL / ROW -->
+        <div class="row noPadding footer-relative" ng-show="providerview==true">
+            <div class="col-xs-12 noPadding" style="text-align:center;margin:0 auto;">
+                <div ng-include="'../assets/common/html/angJobListProviderMajorButtonCell.html'"></div>
+            </div>
+    </div>
+    </div>
+</div>

@@ -1,0 +1,129 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<!-- spapp -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+</head>
+<body ng-app="spappApp">
+    <div class="appcontainer" style="display:none">
+
+        <div class="container" ng-controller="JobListCtrl">
+            <form class="form-signin" style="height:100% !important;">
+                <div class="scrollmenewheader scrollmenewbase" id="scrollmewindow">
+                    <div ng-include="'../assets/common/html/angJobListView.html'"></div>
+                </div>
+            </form>
+            <div ng-if="JobList.length > 4 || ReturnRecordCount > 3 || JobID=='0'" class="footer-auto">
+                <button id="btnMore" ng-click="More()" class="btn btn-lg btn-success btn-block ajaxbtn btn-notround grad btnHeight" style="margin-bottom: 0px;z-index: 3147483647 !important;position: absolute;bottom: 0;left:0;" type="button">MORE</button>
+            </div>
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+
+<script type="text/javascript">
+    var StatusGroup = getParameterByName("StatusGroup");
+    var bProvider = (getParameterByName("Provider").toLowerCase() == "true" ? true : false);
+    var bAvailableForWork = false;
+    var ReturnRecordCount = 5;
+
+    if (bProvider == true) {
+        bAvailableForWork = (GetCookieItem("AvailableForWork") == "true" ? true : false);
+    } else {
+        bAvailableForWork = false;
+    }
+</script>
+
+<script src="../assets/common/js/angApp.js"></script>
+<script src="../assets/common/js/angJobListCtrl.js"></script>
+
+<script type="text/javascript">
+    $(window).ready(function() {
+        //-----------------------------------------//
+        // Add marketing list
+        //-----------------------------------------//
+        var x = document.getElementsByClassName("appcontainer");
+
+        if (x.length > 0) {
+            x[0].insertAdjacentHTML('afterbegin', DynamicMenu("white", "black", "X", "SendUserHome()", "", true, "", ""));
+        }
+
+        if (CheckLogin() == true) {
+            BuildCommonUI();
+            SetupDashboard(true);
+            $(".header-auto").show();
+            setFormHeight();
+            if (bProvider == true) {
+                if (user.Persona != "provider") {
+                    showAlert('You do not have access to this area!', 'SendUserHome();');
+                    return;
+                }
+            }
+
+            //var PageDescription = GetPageDescription(StatusGroup, bProvider);
+
+            $("#messageHeading").html((bProvider == true ? "ARTIST HISTORY" : "HISTORY"));
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+
+            if (bDisplayPage == true) {
+                $(".appcontainer").show();
+            } else {
+                setTimeout(ReleasePage, 5000);
+            }
+        }
+    });
+
+    function Done() {
+        SendUserHome();
+    }
+
+    function More() {
+        ReturnRecordCount = ReturnRecordCount + 5;
+
+    }
+</script>

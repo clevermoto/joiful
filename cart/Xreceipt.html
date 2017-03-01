@@ -1,0 +1,539 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+
+	<!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+<body>
+    <div class="appcontainer" style="display:none">
+        <div class="row spaheader" id="spaheader"><script>document.write(BuildHeaderNew());</script></div>
+        <div id="message" class="spaMessage">
+            <h3 id="messageHeading" class="spaMessageHeading">Receipt</h3>
+        </div>
+        <div class="container">
+
+            <form class="form-signin" style="display:none;">
+
+                <div id="spa-menu-wrap">
+                    <div id="spa-menu-list">
+                        <ul class="list-unstyled"></ul>
+                    </div>
+                    <div id="spa-menu-container">
+                        <div class="scrollme">
+                            <!--<div style="margin:0 auto;padding-bottom:5px">
+                                <div style="padding-right:0px;padding-left:0px;text-align:center">
+                                    
+                                    <img style="border-radius:10px;width:100%; height:auto;max-height:240px;" id='imgServicePic' alt='Joiful' />
+                                </div>
+                            </div>-->
+                            <div style="padding: 3px 3px 3px 3px;border-radius:0px; color:#5B6770">
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div style="text-decoration: underline;"><strong>Customer</strong></div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div style="text-decoration: underline;"><strong>Artist</strong></div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-6">
+                                        <div id="cName"></div>
+                                    </div>
+                                    <div class="col-xs-6">
+                                        <div id="pName"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-top:10px">
+                                <div class="col-xs-12" style="width:100%;text-align:center;">Details</div>
+                            </div>
+                            <div class="cartDisplay" id="divCartDisplay" style="border:solid 1px #808080;overflow:auto; padding-top:5px; padding-bottom:5px; padding-left:10px;padding-right:10px"></div>
+
+
+                            <div class="row" style="padding-top:3px;padding-bottom:3px">
+                                <div class="col-xs-12  noPadding" id="lnkNext"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </form>
+
+        </div> <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp-bas.js"></script>
+
+
+
+<script type="text/javascript">
+
+    var RebookJobID = getParameterByName("RebookJobID");
+
+    //var lnkNext = '&nbsp;';
+    var lnkNext = '<button id="btnDone" type="button" class="btn btn-lg btn-success btn-block ajaxbtn btnHeight" onclick="Done()">Done</button>';
+    var cartQuestionArray = new Array();
+
+    var cartItemArray = new Array();
+    var cartItem = new Object();
+    var cart = new Object();
+    var now = new Date();
+    var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+    $(document).ready(function ()
+    {
+
+        $("#lnkNext").html(lnkNext);
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+
+
+            //var MobileNumber = GetCookieItem("MobileNumber");
+
+            //$("#txtMobileNumber").val(MobileNumber);
+
+            //GetDefaultTip();
+
+            // Load Cart Obj
+            if (RebookJobID.length != 0)
+            {
+                $(".form-signin").show();
+                blockUI();
+
+                BuildAdditionalQuestionArray();
+                unblockUI();
+            }
+            else
+            {
+                showAlert("Invalid input", gCustomerHomePage);
+            }
+            //else
+            //{
+            //    $(".form-signin").show();
+            //    blockUI();
+
+            //    BuildAdditionalQuestionArray();
+            //    unblockUI();
+            //}
+            ////setTimeout("generateTip('" + $("#txtTip").val() + "')", 500);
+
+            
+       }
+    });
+//    function generateTip(pct)
+//    {
+//        gPreTip = (gTotalCost * pct).toFixed(2);
+
+//        $("#spnpreTip").html(gPreTip);
+
+//        if (gPreTip > 0)
+//        {
+//            $("#preTip").show();
+//            $("#divSubTotal").show();
+//        }
+//        else
+//        {
+//            $("#preTip").hide();
+//            $("#divSubTotal").hide();
+//        }
+//        var tCost = parseFloat(gPreTip) + parseFloat(gTotalCost);
+
+//        $("#totalCost").html(tCost.toFixed(2));
+
+//    }
+//    function GetDefaultTip() {
+
+//        //$("#txtTip").val(".10");
+//        //var pct = parseFloat(".10");
+//        //gPreTipPct = pct;
+
+//        //return;
+
+//        var UserID = user.UserID;
+
+//        var url = ServicePrefix + "/api/GetUserDefaultGratuity/?userid=" + UserID;
+
+//        $.ajax(
+//               {
+//                   dataType: "json",
+//                   url: url,
+//                   method: "GET",
+//                   success: BuildDefaultTip,
+//                   error: DefaultTipeError
+//               });
+//    }
+
+//    function BuildDefaultTip(result)
+//    {
+//        if (result == null) {
+//            showAlert('returned no data');
+//            return;
+//        }
+
+//        if (result.Status != "SUCCESS") {
+//            showAlert(result.Message);
+//            
+//            return;
+//        }
+//        else {
+//            $("#txtTip").val(result.DefaultGratuity);
+//            var pct = parseFloat($("#txtTip").val());
+//            gPreTipPct = pct;
+////            generateTip(restult.DefaultGratuity);
+//        }
+//    }
+
+//    function DefaultTipeError(jqXHR, textStatus, err) {
+//        showAlert(textStatus);
+//        return false;
+//    }
+
+    function BuildAdditionalQuestionArray()
+    {
+        var JobID = RebookJobID;
+
+        var url = ServicePrefix + "/api/GetAdditionalQuestionsByJobCartType/?jobid=" + RebookJobID + "&carttype=service";
+
+        $.ajax(
+               {
+                   dataType: "json",
+                   url: url,
+                   method: "GET",
+                   success: BuildAdditionalQuestionArraySuccess,
+                   error: BuildAdditionalQuestionArrayError
+               });
+    }
+
+    function BuildAdditionalQuestionArraySuccess(result)
+    {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            
+            return;
+        }
+        else {
+            // Questions
+
+            if (result.Results.length > 0)
+            {
+                for (var i = 0; i < result.Results.length; i++) {
+                    var cartQuestion = new Object();
+                    cartQuestion.ID = result.Results[i].AdditionalQuestionID;
+                    cartQuestion.answer = result.Results[i].AdditionalQuestionAnswer;
+                    cartQuestionArray.push(cartQuestion);
+                }
+            }
+            BuildCartFromHistory();
+        }
+    }
+
+    function BuildAdditionalQuestionArrayError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+    function BuildCartFromHistory()
+    {
+        var JobID = RebookJobID;
+
+        var url = ServicePrefix + "/api/GetJobList/?userid=" + user.UserID.toString() + "&jobid=" + JobID + "&statusgroup=&usertype=user";
+
+        $.ajax(
+               {
+                   dataType: "json",
+                   url: url,
+                   method: "GET",
+                   success: BuildCartFromHistorySuccess,
+                   error: APIUpdateError
+               });
+    }
+
+    function BuildCartFromHistorySuccess(result)
+    {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+        else
+        {
+            $("#cName").html(result.Results[0].FirstName + " " + result.Results[0].LastName);
+            $("#pName").html(result.Results[0].ProviderFirstName + " " + result.Results[0].ProviderLastName);
+
+            LoadCartFromHistory(result);
+
+        }
+    }
+
+    function LoadCartFromHistory(result)
+    {
+
+        if (result.Results.length < 1)
+        {
+            SilentLogout();
+        }
+
+        if (user.UserID != result.Results[0].UserID)
+        {
+            SilentLogout();
+        }
+
+        var obj = result.Results[0];
+        // Location
+        var LocationID = obj.CartAddress.UserAddressID;
+
+        // Credit Card ID
+        var CreditCardID = obj.CartCreditCard.UserCreditCardID;
+
+        var ServiceID = "0";
+        var OfferingArray = new Array();
+
+        for (var i=0; i < obj.CartItems.length; i++)
+        {
+            if (i == 0) {
+                ServiceID = obj.CartItems[i].CartServiceID;
+            }
+            if (obj.CartItems[i].CartOfferingID != "-1") {
+                OfferingObject = new Object();
+                OfferingObject =
+                    {
+                        itemID: obj.CartItems[i].CartOfferingID,
+                        itemSubID: obj.CartItems[i].CartSubOfferingID,
+                        itemType: obj.CartItems[i].CartOfferingType,
+                        itemServiceID: obj.CartItems[i].CartServiceID
+                    }
+                OfferingArray.push(OfferingObject);
+            }
+        }
+
+        cart = {
+            FirstName: user.FirstName,
+            LastName: user.LastName,
+            UserMobile: "",
+            cartID: "1",
+            WhenIndex: -1,
+            serviceItemEntry: -1,
+            parentID: 0,
+            locationID: LocationID,
+            providerUserID: 0,
+            creditCardID: CreditCardID,
+            userID: user.UserID,
+            cartDateTime: now_utc,
+            serviceDeliveryDateTime: now,
+            cartItems: OfferingArray,
+            additionalQuestions: cartQuestionArray
+        }
+
+        // save settings
+        UpdateCookieItem("cart", JSON.stringify(cart));
+        UpdateCookieItem("ServiceID", ServiceID);
+        ////var picsrc = ImagePrefix + "/service/" + GetCookieItem("ServiceID") + ".jpg";
+        ////$("#imgServicePic").attr("src", picsrc);
+        LoadCartDisplay(cart, true, "divCartDisplay");
+        unblockUI();
+
+    }
+
+    function BuildCartFromHistoryError(jqXHR, textStatus, err)
+    {
+        showAlert(textStatus);
+        return false;
+    }
+
+    function UpdateCart() {
+        // save settings
+        UpdateCookieItem("cart", JSON.stringify(cart));
+    }
+    //---------------------------------
+    // Navigation
+    //---------------------------------
+    function Prev(file) {
+
+        UpdateCart();
+        window.location = "../cart/" + file;
+    }
+
+    function CartIsValid()
+    {
+
+        //alert(JSON.stringify(cart))
+        // Check for CartItems
+        if (!cart.cartItems)
+        {
+            showAlert('No Service selected.');
+            return false;
+        }
+
+        if (cart.cartItems.length <=0) {
+            showAlert('No Service selected');
+            return false;
+        }
+
+
+        // Location Address
+        if (cart.locationID == "-1") 
+        {
+            showAlert('No location selected');
+            return false;
+
+        }
+
+        // Credit Card
+        if (cart.creditCardID == "-1")   {
+            showAlert('No credit card selected');
+            return false;
+        }
+
+        // Expiration of CC ?
+        var ccOK = true;
+        var dt = new Date();
+        var ExpYear = gCCEXYYYY;
+
+        if (ExpYear == dt.getFullYear())
+        {
+            var ExpMonth = gCCEXMM;
+
+            if (ExpMonth < 1 + dt.getMonth())
+            {
+                ccOK = false;
+            }
+        }
+        else
+        {
+            if (ExpYear < dt.getFullYear())
+            {
+                ccOK = false;
+            }
+        }
+
+        if (ccOK==false)
+        {
+                showAlert('Expiration Date must be in the future');
+                return false;
+        }
+
+        // Mobile
+        return ValidMobile(RemoveTags($("#txtMobileNumber").val()));
+    }
+
+    function Done()
+    {
+        window.location = gCustomerHomePage;
+        //blockUI();
+        //if (CartIsValid() == true)
+        //{
+        //    APICall();
+        //}
+    }
+
+    function APICall() {
+
+
+        var callback = APICallSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/InsertCartTransaction/';
+        //showAlert(JSON.stringify(cart));
+
+        // Additional Cart Updates
+        cart.Note = RemoveTags($("#txtNote").val());
+        cart.tipAmount = RemoveTags($("#txtTip").val());
+        cart.UserMobile = RemoveTags($("#txtMobileNumber").val());
+
+        // Update Mobile Cookie
+        UpdateCookieItem("MobileNumber", cart.UserMobile);
+
+        var data = BuildCartInputObject(cart);
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: APIUpdateError
+               });
+
+    }
+
+    function APICallSuccess(result) {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS")
+        {
+            showAlert(result.Message);
+            
+            return;
+        }
+        else {
+                RemoveCookie("cart");
+                var uri = "../cart/jobdetail.html?jobid=" + result.ID + "&provider=false";
+                showAlert('Your order has been initiated. Please monitor.', uri);
+        }
+    }
+
+    function APIUpdateError(jqXHR, textStatus, err)
+    {
+        showAlert(textStatus);
+        return false;
+    }
+
+</script>
+

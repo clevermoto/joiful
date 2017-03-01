@@ -1,0 +1,633 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+      
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+    
+  </head>
+
+<body ng-app="editAddressGet">
+    <div class="appcontainer">
+        <script>document.write(DynamicMenu("white", "black", "X", "Done()", "", true, "save", "Update()"));</script>
+
+
+        <div class="container" ng-controller="editAddressGetCtrl">
+
+            <form class="form-signin">
+                <div class="scrollmenewheader scrollmenewbase noPadding">
+                    <div id="nonPrimary" ng-if="PrimaryAddress==false" class="row border-bottom" style="padding-top:5px;padding-bottom:5px;">
+
+
+                        <div class="col-xs-6 border-right" style="height:54px;padding-top:9px">
+                            <button id="btnPrimary" onclick="SetAsPrimaryAddress()" class="btn btn-md btn-success btn-block ajaxbtn btn-notround grad" type="button">SET AS PRIMARY</button>
+                        </div>
+                        <div class="col-xs-6" style="height:54px;padding-top:9px">
+                            <button id="btnUpdate" onclick="DeleteAddress()" class="btn btn-md btn-success btn-block ajaxbtn btn-notround grad" type="button">DELETE</button>
+                        </div>
+                    </div>
+                    <div style="margin-top:0px">
+                        <p class="bg-info" id="filloutgeo" style="display: none;padding: 14px;"><span class="glyphicon glyphicon-refresh glyphicon-refresh-animate" id="glyphicon-loading"></span> Looking for your address...</p>
+                        <div>
+                            <label for="inputCountry" class="sr-only">Country</label>
+                            <select style="padding-left:3px" id="inputCountry" onchange="CheckStateEntry()" class="form-control control-clear-gray" placeholder="Country" required autofocus" ng-controller="getCountryListCtrl">
+                                <option  ng-repeat="c in CountryList" ng-selected="CountryID==c.CountryID" spa-countryCode="{{c.CountryCode}}" value="{{c.CountryID}}">{{c.CountryName}}</option>
+                            </select>
+                            <label for="inputAddress1" class="sr-only">Address</label>
+                            <input type="text" id="inputAddress1" class="form-control control-clear-gray" placeholder="Address" required autofocus maxlength="50" value="{{Address1}}">
+                            <input type="text" id="inputAddress2" class="form-control control-clear-gray" placeholder="" autofocus maxlength="50" value="{{Address2}}">
+                            <input type="hidden" id="lat" value="" />
+                            <input type="hidden" id="long" value="" />
+
+                            <label for="inputCity" class="sr-only">City</label>
+                            <input type="text" id="inputCity" class="form-control control-clear-gray" placeholder="City" required autofocus maxlength="50" value="{{City}}">
+
+                            <label for="inputState" class="sr-only">State</label>
+                            <select style="padding-left:3px" id="inputState" class="form-control control-clear-gray" placeholder="State" required autofocus" ng-controller="getStateListCtrl">
+                                <option ng-selected="s.StateID==StateID" ng-repeat="s in StateList" spa-stateCode="{{s.StateShortName}}" value="{{s.StateID}}">{{s.StateName}}</option>
+                            </select>
+                            <label for="inputZipCode" class="sr-only">Zip Code</label>
+                            <input type="text" id="inputZipCode" class="form-control control-clear-gray" placeholder="Zip Code" autofocus maxlength="8" value="{{ZipCode}}">
+                        </div>
+                    </div>
+                </div>
+ 
+
+            </form>
+
+        </div> <!-- /container -->
+    </div>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+
+
+<script type="text/javascript">
+
+    var bStateRequired = false;
+    var AddressID = getParameterByName('AddressID');
+
+    if (!AddressID) {
+        showAlert('Problem with Input.', 'SilentLogout();');
+    }
+
+    var app = angular.module('editAddressGet', []);
+
+    app.controller('editAddressGetCtrl', function ($scope, $http)
+    {
+        var UserID = (window.localStorage.getItem("UserID") == null ? "0" : window.localStorage.getItem("UserID"));
+
+        if (!UserID) {
+            showAlert('Problem with Input.', 'SilentLogout();');
+        }
+
+        var uri = ServicePrefix + "/api/getuseraddress?userid=" + encodeURIComponent(UserID) + "&addressid=" + encodeURIComponent(AddressID);
+
+        if (AddressID.length > 1) {
+            $http.get(uri).then(function (result) {
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+                    return;
+                }
+
+
+
+                if (result.data.Results.length > 0) {
+                    $scope.Address1 = result.data.Results[0].Address1;
+                    $scope.Address2 = result.data.Results[0].Address2;
+                    $scope.City = result.data.Results[0].City;
+                    $scope.StateID = result.data.Results[0].StateID;
+                    $scope.CountryID = result.data.Results[0].CountryID;
+                    $scope.CountryCode = result.data.Results[0].CountryCode;
+                    $scope.PrimaryAddress = result.data.Results[0].PrimaryAddress;
+                    $scope.ZipCode = result.data.Results[0].ZipCode;
+                }
+
+
+            });
+        }
+
+
+    });
+
+    app.controller('getStateListCtrl', function ($scope, $http)
+    {
+    
+        var uri = ServicePrefix + "/api/getstatelist";
+
+        var StateList = new Array();
+        var StateItem = new Object();
+
+        StateItem =
+        {
+            StateID: "",
+            StateName: "Select a State",
+            StateShortName: ""
+        }
+        StateList.push(StateItem);
+
+        $http.get(uri).then(function (result) {
+
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.data.Status != "SUCCESS") {
+                showAlert(result.data.Message);
+                return;
+            }
+
+            for (var i = 0; i < result.data.Results.length; i++)
+            {
+                var StateItem = new Object();
+
+                StateItem =
+                {
+                    StateID: result.data.Results[i].StateID,
+                    StateName: result.data.Results[i].StateName,
+                    StateShortName: result.data.Results[i].StateAbbreviation
+                }
+                StateList.push(StateItem);
+            }
+
+            $scope.StateList = StateList;
+
+        });
+
+    });
+
+    app.controller('getCountryListCtrl', function ($scope, $http) {
+
+        var uri = ServicePrefix + "/api/getcountrylist";
+
+        var CountryList = new Array();
+        var CountryItem = new Object();
+
+        CountryItem =
+        {
+            CountryID: "",
+            CountryName: "Select a Country",
+            CountryShortName: ""
+        }
+
+        CountryList.push(CountryItem);
+
+        $http.get(uri).then(function (result) {
+
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+                    return;
+                }
+
+                for (var i = 0; i < result.data.Results.length; i++)
+                {
+                    CountryItem = new Object();
+
+                    CountryItem =
+                    {
+                        CountryID: result.data.Results[i].CountryID,
+                        CountryName: result.data.Results[i].CountryName,
+                        CountryCode: result.data.Results[i].CountryCode,
+                        CountryShortName: result.data.Results[i].CountryCode
+                    }
+                    CountryList.push(CountryItem);
+                }
+
+                $scope.CountryList = CountryList;
+
+
+
+
+            });
+    });
+
+    function callbackgps()
+    {
+        getAddress(GetCookieItem("my_lat"), GetCookieItem("my_lng"), "localGPS");
+
+        // Load UI
+		$("#inputAddress1").val(GetCookieItem("localGPS_address"));  
+		$("#inputAddress2").val("");
+		$("#inputCity").val(GetCookieItem("localGPS_city"));
+		$("#inputZipCode").val(GetCookieItem("localGPS_zip"));
+
+
+		$("#filloutgeo").fadeOut("slow");
+        // Select Country
+		$("#inputCountry option:selected").removeAttr("selected");
+		$('#inputCountry option[spa-countryCode="' + GetCookieItem("localGPS_country") + '"]').prop('selected', true);
+        // Select State
+		$("#inputState option:selected").removeAttr("selected");
+		$('#inputState option[spa-stateCode="'+GetCookieItem("localGPS_state")+'"]').prop('selected', true);
+	}
+
+    $(document).ready(function ()
+    {
+	
+        $(".btn-menu-right").addClass("btn-menu-right-save");
+        $(".btn-menu-right").removeClass("btn-menu-right");
+
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            if (getParameterByName("autoGPS") == "yes") {
+                //$("#filloutgeo").show();
+                blockUI();
+                getLocation("callbackgps();");
+            }
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+            $("#messageHeading").html((AddressID == 0 ? "ADD ADDRESS" : "EDIT ADDRESS"));
+        }
+
+    });
+
+    function CheckStateEntry(val)
+    {
+
+        var element = $("#inputCountry").find('option:selected');
+        var myTag = element.attr("spa-countryCode");
+
+        if (myTag == "CA" || myTag == "US") {
+            bStateRequired = true;
+            $("#inputState").val("");
+            $("#inputState").show();
+
+        }
+        else
+        {
+            bStateRequired = false;
+            $("#inputState").val("");
+            $("#inputState").hide();
+        }
+
+        APICallGetStates();
+    }
+
+    function replaceAll(str, find, replace) {
+        return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    }
+    function escapeRegExp(str) {
+        return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    }
+    function Done()
+    {    
+        window.location = "../profile/profileaddressmanager.html";
+    }
+    function EditProfile() {
+        window.location = "../profile/editprofile.html";
+    }
+
+    // form submit with enter key
+    document.onkeydown=function(evt){
+        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+        if(keyCode == 13){  
+            Update();
+        }
+    }
+
+    //---------------------------
+    // Update/Change Functions
+    //---------------------------
+    function Update()
+    {
+	// --------------------------
+	// Block as soon as clicked
+	// --------------------------
+        blockUI();
+
+        if (Validate() == false)
+        {
+	    //--------------------------------
+	    // unlock on failed validation
+            //-------------------------------- 
+            unblockUI();
+            return;
+        }
+        else
+        {
+            var country =  $('#inputCountry option:selected').attr('spa-countrycode');
+            var state =  $('#inputState option:selected').attr('spa-statecode');
+
+            AddressToGPS($("#inputAddress1").val() + " " + $("#inputCity").val() + " " + state + " " + country, "editor", "APICall();");
+        }
+    }
+    
+    //-------------------------
+    // Validation
+    //-------------------------
+    function Validate()
+    {
+
+        if (RemoveTags($("#inputCountry").val())== "")
+        {
+            showAlert('A Country must be selected');
+            return false;
+        }
+
+        if (DataLength(RemoveTags($("#inputAddress1").val()))== 0)
+        {
+            showAlert('Address must be entered');
+            return false;
+        }
+
+        if (DataLength(RemoveTags($("#inputCity").val()))== 0)
+        {
+            showAlert('City must be entered');
+            return false;
+        }
+
+        if (bStateRequired == true) {
+            if (RemoveTags($("#inputState").val()) == "") {
+                showAlert('A State must be selected');
+                return false;
+            }
+        }
+
+        var countryCode = $('#inputCountry option:selected').attr('spa-countrycode');
+
+        if(isValidPostalCode(RemoveTags($("#inputZipCode").val()), countryCode) == false)
+        {
+            showAlert('A valid Zip Code must be entered');
+            return false;
+        }
+
+        return true;
+    }
+    
+    function APICall()
+    {	
+        var callback = APICallSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/updateuseraddress/';
+        
+        //if($("#lat").val()=="") {
+	    //    var lat = "34.019266";
+        //} else {
+	    //    var lat = RemoveTags($("#lat").val());
+        //}
+        
+        //if($("#long").val()=="") {
+	    //    var lng = "-118.498728";
+        //} else {
+	    //    var lng = RemoveTags($("#long").val());
+        //}
+
+
+
+        var myLat = GetCookieItem("editor_lat");
+        var myLong = GetCookieItem("editor_lng");
+
+        console.log(myLat);
+        console.log(myLong);
+
+
+        if (myLat == "") {
+            myLat = "34.019266";
+        }
+
+        if (myLong == "") {
+            myLong = "-118.498728";
+        }
+
+
+        data = {
+            userid: user.UserID,
+            addressid: RemoveTags(AddressID),
+            address1: RemoveTags($("#inputAddress1").val()),
+            address2: RemoveTags($("#inputAddress2").val()),
+            city: RemoveTags($("#inputCity").val()),
+            stateid: RemoveTags($("#inputState").val()),
+            countryid: RemoveTags($("#inputCountry").val()),
+            zipcode: RemoveTags($("#inputZipCode").val()),
+            latitude: myLat,
+            longitude: myLong
+        };
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: APIUpdateError
+               });
+
+    }
+    
+    function APICallSuccess(result)
+    {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+
+        AddressID = result.ID;
+        RemoveCookie("cUserAddressList");
+        showAlert('',"../profile/profileaddressmanager.html");
+        //Done();
+	    
+    }
+
+    function APIUpdateError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+
+    function APICallGetStates()
+    {
+        var callback = APICallStateSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/getstatesbycountry/?countryid=' + RemoveTags($("#inputCountry").val());
+
+        $.ajax(
+               {
+                   dataType: "json",
+                   url: url,
+                   method: "GET",
+                   success: callback,
+                   error: APIUpdateStateError
+               });
+
+    }
+
+    function APICallStateSuccess(result)
+    {
+
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+
+        $('#inputState').html("");
+        for (var i = 0; i < result.Results.length; i++)
+        {
+            $('#inputState').append($("<option>").attr('value', result.Results[i].StateID).attr('spa-stateCode', result.Results[i].StateShortName).text(result.Results[i].StateName));
+        }
+
+    }
+
+    function APIUpdateStateError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+
+    function SetAsPrimaryAddress() {
+        blockUI();
+        var callback = SetAsPrimaryAddressSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/UpdateUserAddressAsPrimary/';
+
+        data = {
+            userid: user.UserID,
+            addressid: RemoveTags(AddressID)
+        };
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: SetAsPrimaryAddressError
+               });
+
+    }
+
+    function SetAsPrimaryAddressSuccess(result) {
+
+        unblockUI();
+
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+        RemoveCookie("cUserAddressList");
+        UpdateCookieItem("PrimaryAddressID", AddressID);
+        showAlert('');
+
+        $("#nonPrimary").hide();
+    }
+
+    function SetAsPrimaryAddressError(jqXHR, textStatus, err) {
+        unblockUI();
+        showAlert(textStatus);
+        return false;
+    }
+
+    function DeleteAddress() {
+        showConfirm('Are you sure you want to delete this address?', 'Yes!', 'No', 'DeleteAddressClick("' + AddressID + '")');
+    }
+
+    function DeleteAddressClick(AddressID) {
+        blockUI();
+        var callback = DeleteAddressSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/DeleteUserAddress/';
+
+        data = {
+            userid: user.UserID,
+            addressid: RemoveTags(AddressID)
+        };
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: DeleteAddressError
+               });
+    }
+
+    function DeleteAddressSuccess(result) {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+        RemoveCookie("cUserAddressList");
+        showAlert('', '../profile/profileaddressmanager.html');
+    }
+
+    function DeleteAddressError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+</script>

@@ -1,0 +1,183 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+
+  </head>
+
+<body ng-app="CreditCardListApp">
+    <div class="appcontainer">
+
+        <script>document.write(DynamicMenu("white", "black", "X", "SendUserHome()", "", true, "", ""));</script>
+
+
+        <div class="container">
+
+            <form class="form-signin">
+
+                <div class="scrollmenewheader scrollmenewbase noPadding">
+
+                    <div ng-controller="CreditCardListCtrl"style="margin-top:0px">
+                        <div style="width: 100%;" ng-repeat="x in CreditCardList">
+                            <div class="row" style="height:57px;width:100%;border-bottom: solid #e5e5e6 2px">
+                                <div class="row"ng-click="EditCreditCard(x.CreditCardID)" >
+                                    <div class="col-xs-10" ng-style="{'padding-top': x.PrimaryCreditCard==true ? '10px' : '10px'} " style="font-size:small;color:#5B6770">
+                                        <div>{{x.CreditCardType}}:&nbsp;{{x.CreditCardNumber.slice(12)}}<span ng-if="x.PrimaryCreditCard" style="color:red"> (primary)</span></div>
+                                        <div><span>{{x.CreditCardExpMonth}}</span><span>&nbsp;/&nbsp;{{x.CreditCardExpYear}}</span></div>
+                                                
+                                        <div style="color:red" ng-show="{{x.CreditCardExpired}}">EXPIRED</div>
+
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <span><button type="button" id="editCreditCard_{{$index}}" ng-click="EditCreditCard(x.CreditCardID)"  class="btn btn-sm btn-arrow" style="margin-top:18px;padding-top:0px;"><img src='../assets/common/images/nextarrow-gray.png' style='height:13px'></button></span>
+                                    </div>
+
+                                </div>
+
+                                <!--<div class="row"style="padding-bottom:3px">
+                                    <div class="col-xs-12">
+                                        <div ng-if="x.PrimaryCreditCard" style="color:red">PRIMARY</div>
+                                        <span ng-if="x.PrimaryCreditCard==false"><button type="button"  id="setCreditCardPrimary_{{$index}}" ng-click="SetAsPrimaryCreditCard(x.CreditCardID)" class="ajaxbtn btn btn-success btn-sm spapp-joblist-button ">set as primary</button></span>
+                                        <span><button type="button" id="editCreditCard_{{$index}}" ng-click="EditCreditCard(x.CreditCardID)" class="ajaxbtn btn btn-success btn-sm spapp-joblist-button ">edit</button></span>
+                                        <span ng-if="CreditCardList.length > 1"><button type="button" id="deleteCreditCard_{{$index}}" ng-click="DeleteCreditCard(x.CreditCardID)" class="ajaxbtn btn btn-success btn-sm spapp-joblist-button ">delete</button></span>
+                                    </div>
+                                    </div>-->
+                                </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div style="width: 100%;">
+                            <div class="row" style="height:60px;width:100%; border-radius:0px;border-bottom: solid #e5e5e6 2px;" onclick="EditCreditCard(0)">
+                                <div class="row">
+                                    <div class="col-xs-10" style="padding-top:20px;font-size:small">
+                                        <div style="color:#5B6770">Add Credit Card</div>
+                                    </div>
+                                    <div class="col-xs-2">
+                                        <span><button type="button" id="editCreditCard_{{$index}}" ng-click="EditCreditCard(0)" class="btn btn-sm btn-arrow"  style="margin-top:18px;padding-top:0px;"><img src='../assets/common/images/nextarrow-gray.png' style='height:13px'></button></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                    <!--</div>
+                </div>-->
+            </form>
+
+        </div> <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<script type="text/javascript">
+
+    var app = angular.module('CreditCardListApp', []);
+
+    app.controller('CreditCardListCtrl', function ($scope, $http) {
+
+        var UserID = GetCookieItem("UserID");
+
+
+        if (!UserID) {
+            showAlert('Problem with Input.', 'SilentLogout();');
+        }
+
+        var uri = ServicePrefix + "/api/GetUserCreditCardList/?userid=" + UserID.toString();
+
+        $http.get(uri).then(function (result) {
+
+            if (!result) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.data.Status != "SUCCESS") {
+                showAlert(result.data.Message);
+                return;
+            }
+
+           
+            if (result.data.Results.length > 0) {
+                $scope.CreditCardList = result.data.Results;
+                UpdateCookieItem("cUserCCList", JSON.stringify(result.data.Results));
+            //} else {
+            //    RemoveCookieItem("cUserCCList");
+            //    window.location = "../profile/profilecreditcardeditor.html?creditcardid=0";
+            }
+
+            $scope.EditCreditCard = function (CreditCardID) {
+                EditCreditCard(CreditCardID);
+
+            }
+            $scope.DeleteCreditCard = function (CreditCardID) {
+                DeleteCreditCard(CreditCardID);
+            }
+            $scope.SetAsPrimaryCreditCard = function (CreditCardID) {
+                SetAsPrimaryCreditCard(CreditCardID);
+            }
+
+        });
+
+    });
+
+    $(document).ready(function ()
+    {
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            $("#messageHeading").html("PAYMENTS");
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+          
+        }
+    });
+   
+
+    function EditCreditCard(CreditCardID) {
+
+        window.location = "../profile/profilecreditcardeditor.html?creditcardid=" + CreditCardID;
+    }
+    function Done()
+    {
+        window.location = "../profile/editprofile.html";
+    }
+    
+
+</script>

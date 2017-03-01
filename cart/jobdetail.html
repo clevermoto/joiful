@@ -1,0 +1,535 @@
+﻿<!DOCTYPE HTML>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<script>
+    var firsttime = getParameterByName('firsttime');
+</script>
+<html lang="en">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+</head>
+
+<body ng-app="spappApp">
+    <div class="appcontainer" style="display:none">
+        <div id="detailHeader" style="z-index:9999;height:60px">
+                <script>document.write(DynamicMenu("none", "black", "", "", "", false, "", ""));</script>
+        </div>
+        <div class="container">
+            <form class="form-signin">
+                <div >
+                    <div class="row noPadding">
+                        <div class="locationcontainer border-bottom pullDown" style="display:none">
+                            <div class="row" id="locationcontainer" style="display:none;background-color:white;border-bottom:none;border-right:none;border-left:none;border-top:none">
+
+                                <div class="col-sm-12 col-xs-12 noPadding" style="text-align:center;">
+
+                                    <div id="location">
+                                        <!--<img id="locationsrc" style="display:none;border-radius:00px" />-->
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-include="'../assets/common/html/angJobListView.html'" ></div>
+                </div>
+            </form>
+
+        </div> <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+
+<script type="text/javascript">
+
+    LoadExternalFile("https://maps.googleapis.com/maps/api/js?key=" + GetCookieItem("googleapikey"));
+
+    var zoom = 0;
+
+    var DestinationAddress = "";
+    var CurrentLocation = "";
+
+    var bProvider = (getParameterByName("Provider").toLowerCase() == "true" ? true : false);
+    var JobID = getParameterByName("JobID").toUpperCase();
+    var bAvailableForWork = false;
+
+    if (bProvider == true) {
+        bAvailableForWork = (GetCookieItem("AvailableForWork") == "true" ? true : false);
+    }
+    else {
+        bAvailableForWork = false;
+    }
+
+    var bShowMap = false;
+    var bMapPainted = false;
+
+</script>
+
+<script src="../assets/common/js/angApp.js"></script>
+<script src="../assets/common/js/angJobListCtrl.js"></script>
+
+<script type="text/javascript">
+
+    var ButtonCheck = null;
+    var bFormSet = false;
+    var bFirstLoadComplete = false;
+    var oldStatus = "";
+
+
+    $(document).ready(function ()
+    {
+        if (gMobileVersion == true)
+        {
+            RemoveCookie("DevicePlatform");
+            RemoveCookie("ArtistLatLong");
+            RemoveCookie("CustomerLatLong");
+            document.addEventListener("deviceready", onDeviceReady, false);
+           // onDeviceReady();
+        }
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+
+            if (bProvider == true) {
+                if (user.Persona != "provider")
+                {
+                    showAlert('You do not have access to this area!', 'SendUserHome();');
+                    return;
+                }
+            }
+         
+            $(".searchMode").css("height", "100%");
+            $("#messageHeading").html("");
+
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+
+            if (FirstJobStatus == 'servicestarted') {
+                GetReady();
+            }
+
+            SetButtons();
+            //showConfirm('Would you like to open your navigation system for directions?', 'Yes', 'No', 'StartNavigation()', 'GoTo()');
+            ButtonCheck = setInterval(SetButtons, 1000);
+
+        }
+    });
+
+    function SetButtons()
+    {
+
+
+        if (FirstJobStatus.length ==0 || FirstJobStatus==oldStatus) {
+            return;
+        }
+        oldStatus = FirstJobStatus;
+        //console.log(111);
+        if (bProvider == false)
+        {
+            //// Set Buttons
+            if (FirstJobStatus == 'servicestarted')
+            {
+                GetReady();
+                $("#divFollowProvider").hide();
+                $("#detailHeader").html(DynamicMenu('white', 'white', '', '', '', true, "", ""));
+                $("#detailHeader").show();
+            }
+
+            // Cancel?
+            else if (FirstJobStatus == "open") {
+                $(".searchMode").show();
+                $("#detailHeader").html(DynamicMenu('#d86018', 'white', '', '', '', false, "X", "CancelQuestion()"));
+                $(".appcontainer").css("background", '#d86018');
+                $("#detailHeader").show();
+            }
+            else
+            {
+                //$("#searchMode").hide();
+                //$(".d86018").hide();
+                $("#detailHeader").html(DynamicMenu("white", "black", "", "", "", true, "X", "CancelQuestion()"));
+                $(".appcontainer").css("background", 'white');
+                $("#detailHeader").show();
+            }
+
+            // Cancel?
+            if (FirstJobStatus == "open" || FirstJobStatus == 'providerassign' || FirstJobStatus == 'providertravel' )
+            {
+                $("#btnCancel").show();
+            }
+            else {
+                $("#btnCancel").hide();
+            }
+
+
+        }
+        else
+        {
+            $("#detailHeader").html(DynamicMenu("white", "black", "", "", "", true, "X", "CancelQuestion()"));
+            $("#detailHeader").show();
+        }
+
+        if (FirstJobStatus.length > 0)
+        {
+            $(".header-auto").show();
+        }
+
+        bFirstLoadComplete = true;
+    }
+    function onDeviceReady()
+    {
+        UpdateCookieItem("DevicePlatform", device.platform.toLowerCase());
+    }
+    function HowFarAwayIsTheArtist()
+    {
+
+        DestinationAddress = gToJobAddress;
+
+        bShowMap = false;
+
+        if (gProviderUserID.length > 1)
+        {
+            if (DestinationAddress.length > 0)
+            {
+                if (FirstJobStatus == "providerassign" || FirstJobStatus == "providertravel")
+                {
+                    // Go Get Current Address use gProviderUserID
+                    bShowMap = true;
+                    var url = ServicePrefix + "/api/getproviderscurrentlocation/?userid=" + gProviderUserID.toString();
+
+                    $.ajax(
+                           {
+                               dataType: "json",
+                               url: url,
+                               method: "GET",
+                               success: HowFarAwayIsTheArtistSuccess,
+                               error: HowFarAwayIsTheArtistFailure
+                           });
+                }
+                else
+                {
+                    //var PageDescription = GetPageDescription("", bProvider);
+
+                    //$("#messageHeading").html(PageDescription);
+
+                }
+            }
+        }
+
+        if (bShowMap==false)
+        {
+            $("#locationcontainer").hide();
+        }
+    }
+
+    function HowFarAwayIsTheArtistSuccess(result)
+    {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+        else {
+
+            if (result.Results.length > 0)
+            {
+
+                CurrentLocation = result.Results[0].LocationLatitude + "," + result.Results[0].LocationLongitude;
+                var oldArtistLocation = GetCookieItem("ArtistLatLong");
+                UpdateCookieItem("ArtistLatLong", CurrentLocation);
+
+                if (oldArtistLocation != CurrentLocation || bMapPainted == false)
+                {
+                    bMapPainted = true;
+                    travelTimeWithTraffic(CurrentLocation, DestinationAddress, 'DistanceResults()', 'artist');
+                }
+            }
+
+        }
+
+    }
+
+    function HowFarAwayIsTheArtistFailure(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+    function CancelJob()
+    {
+        var newStatus = (bProvider == true ? "providercancel" : "usercancel");
+        window.location = "../cart/canceljob.html?jobid=" + JobID + "&provider=" + bProvider + "&newstatus=" + newStatus;
+    }
+    function showhide(control)
+    {
+        
+
+        if ($(control).is(":visible")==true)
+        {
+
+            $(control).hide();
+            $("#follow").html("&#9660");
+        }
+        else
+        {
+            $(control).show();
+            $("#follow").html("&#9650;");
+        }
+        
+    }
+    function DistanceResults()
+    {
+        var timeleft = GetCookieItem("artist_traveltime");
+
+        var fromaddress = GetCookieItem("artist_address1");
+        var toaddress = GetCookieItem("artist_address2");
+        var distance = GetCookieItem("artist_traveldistance");
+
+        if ($(".divGetReadyText").is(":visible") == false) {
+            showPosition(fromaddress, toaddress, distance);
+        }
+
+        if (timeleft != "0") {
+            $("#arrivalminutes").html("in " + timeleft + ' minutes');
+            var msg = '<span style="font-size:small;color:#00A499">' + gArtist + ' will arrive in about ' + timeleft + ' minutes.</span>';//(' + distance + ' <span style="font-size:small">miles</span>)<span style="font-size:small"> away.</span>';
+
+            //$("#divHowFarAway").html(msg);
+            //$("#divHowFarAway").show();
+
+            $("#howfaraway").html(msg);
+            //$(".arrivalminutes").show();
+        }
+        else
+        {
+
+            $("#arrivalminutes").html('in less than a minute');
+            var msg = '<span style="font-size:small;color:#00A499">' + gArtist + ' will arrive in less than a minute.</span>';//(' + distance + ' <span style="font-size:small">miles</span>)<span style="font-size:small"> away.</span>';
+            $("#howfaraway").html(msg);
+            //$(".arrivalminutes").show();
+        }
+        //else
+        //{
+        //    $("#divHowFarAway").hide();
+        //    $("#message").show();
+        //}
+        return;
+    }
+    function Done()
+    {
+        SendUserHome();
+    }
+    function showPosition(fromaddress, toaddress, distance)
+    {
+        $.ajax({
+            url: "https://www.mapquestapi.com/geocoding/v1/address?key=" + GetCookieItem('mapquest') + "&location=" + toaddress,
+            dataType: 'html'
+        }).done(function (html) {
+
+            var obj = jQuery.parseJSON(html);
+
+            var lat = obj.results[0].locations[0].latLng.lat;
+            var lng = obj.results[0].locations[0].latLng.lng;
+
+            UpdateCookieItem("CustomerLatLong", lat + "," + lng);
+
+            var address2 = fromaddress.split(',');
+
+            var map = middleoftwopoints(lat + "," + lng + "|" + address2[0] + "," + address2[1]);
+
+            //var height = GetMapAdjustmentHeight(".appcontainer", 1);
+            mapdisplay = GetMapAdjustmentHeight(".appcontainer", 1);
+            zoom = getmapzoom(lat, lng, address2[0], address2[1], map.center.lat, map.center.lng);
+
+            UpdateCookieItem("artist_midpoint", map.center.lat + "," + map.center.lng);
+
+            updatelocationdisplay(fromaddress, lat + ',' + lng, map.center.lat + "," + map.center.lng, zoom);
+
+        }).fail(function () {
+            return;
+            //alert("Sorry. MapQuest server unavailable.");
+        });
+    }
+
+    function updatelocationdisplay(fromaddress, toaddress, middlepoint, zoom)
+    {
+
+        if (bFirstLoadComplete == false)
+        {
+            return;
+        }
+
+        var Scale = 1;
+
+        var distance = GetCookieItem("artist_traveldistance");
+        var basecontrol = ".appcontainer";
+
+        // Deal with the width
+        var w = $(basecontrol).width();
+
+        if (w == "0") {
+            return;
+        }
+
+        var w = parseInt(parseInt($(basecontrol).width()) / Scale);
+
+        // Height
+        var height = GetMapAdjustmentHeight(basecontrol, Scale);
+
+        $("#location").css("height", height + "px");
+        $("#location").css("width", w + "px");
+
+
+        var where = middlepoint.split(",");
+
+        var myCenter = new google.maps.LatLng(parseFloat(where[0]), parseFloat(where[1]));
+        var mapCanvas = document.getElementById("location");
+
+        var mapOptions = {
+            center: myCenter,
+            zoomControl: false,
+            mapTypeControl: false,
+            scaleControl: true,
+            streetViewControl: false,
+            rotateControl: false,
+            fullscreenControl: false,
+
+
+            zoom: zoom,
+            styles:
+                    [
+                        {
+                            featureType: "all",
+                            elementType: "labels",
+                            stylers:
+                                [
+                                    {
+                                        visibility: "off"
+                                    }
+                                ]
+                        },
+                        {
+                            featureType: "road",
+                            elementType: "labels",
+                            stylers:
+                                [
+                                    {
+                                        visibility: "on"
+                                    }
+                                ]
+                        }
+                    ]
+        };
+        var map = new google.maps.Map(mapCanvas, mapOptions);
+
+        // Customer
+        var where = toaddress.split(",");
+
+        var toLocation = new google.maps.LatLng(parseFloat(where[0]), parseFloat(where[1]));
+        var marker = new google.maps.Marker({
+            position: toLocation,
+            icon: "../assets/common/images/marker-icon.png"
+        });
+        marker.setMap(map);
+
+        // provider
+        where = fromaddress.split(",");
+
+
+        var fromLocation = new google.maps.LatLng(parseFloat(where[0]), parseFloat(where[1]));
+        marker = new google.maps.Marker({
+            position: fromLocation,
+            icon: "../assets/common/images/professional-map-icon.png"
+        });
+        marker.setMap(map);
+
+        // show map now
+        $("#locationcontainer").show();
+        $('.locationcontainer').show();
+    }
+    function GetMapAdjustmentHeight(basecontrol, Scale)
+    {
+        var TotalCalcHeight = 0;
+        var height = 0;
+        if ($(".header-auto").is(":visible") == true) {
+            TotalCalcHeight = TotalCalcHeight + parseInt($(".header-auto").height());
+            //console.log('Header');
+            //console.log($(".header-auto").outerHeight(true));
+            //console.log($(".header-auto").innerHeight());
+            console.log($(".header-auto").height());
+        }
+        if ($(".footer-auto").is(":visible") == true) {
+            TotalCalcHeight = TotalCalcHeight + parseInt($(".footer-auto").height());
+            //console.log("footer");
+            //console.log($(".footer-auto").outerHeight(true));
+            //console.log($(".footer-auto").innerHeight());
+            console.log($(".footer-auto").height());
+        }
+        //---------------------------------------------------------------
+        // We are moving everything off the page except for the 
+        // picture/name row...
+        //---------------------------------------------------------------
+        if ($("#jlNameLine0").is(":visible") == true) {
+            TotalCalcHeight = TotalCalcHeight + (parseInt($("#jlNameLine0").height()));
+            console.log(parseInt($("#jlNameLine0").height()));
+        }
+        if ($(".arrivalminutes").is(":visible") == true) {
+            TotalCalcHeight = TotalCalcHeight + (parseInt($(".arrivalminutes").height()));
+            console.log(parseInt($(".arrivalminutes").height()));
+        }
+
+        //if ($(".footer-auto").is(":visible") == true) {
+        //    TotalCalcHeight = TotalCalcHeight + (parseInt($(".footer-auto").outerHeight()));
+        //}
+
+        TotalCalcHeight = parseInt(TotalCalcHeight / Scale);
+        console.log(parseInt($(basecontrol).height()));
+        height = parseInt(parseInt($(basecontrol).height()) / Scale);
+
+
+        height = height - parseInt(TotalCalcHeight / Scale);
+        console.log(height);
+        return height;
+    }
+</script>

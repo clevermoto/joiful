@@ -1,0 +1,740 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+      
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+    <!-- card.io -->
+    <script src="../assets/lib/card.io/card.io.js"></script>
+
+  </head>
+
+<body ng-app="editCreditCardGet">
+    <div class="appcontainer">
+
+        <script>document.write(DynamicMenu("white", "black", "X", "Done()", "", true, "save", "Update()"));</script>
+
+        <div class="container" ng-controller="editCreditCardGetCtrl">
+
+            <form class="form-signin">
+
+                        <div class="scrollmenewheader scrollmenewbase noPadding">
+                            <div id="nonPrimary" ng-if="CreditCardIsPrimary==false" class="row border-bottom" style="padding-top:5px;padding-bottom:5px;">
+                                <div class="col-xs-6 border-right" style="height:54px;padding-top:9px">
+                                    <button id="btnPrimary" onclick="SetAsPrimaryCreditCard()" class="btn btn-md btn-success btn-block ajaxbtn btn-notround grad" type="button">SET AS PRIMARY</button>
+                                </div>
+                                <div class="col-xs-6"style="height:54px;padding-top:9px">
+                                    <button id="btnUpdate" onclick="DeleteCreditCard()" class="btn btn-md btn-success btn-block ajaxbtn btn-notround grad" type="button">DELETE</button>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <label for="inputCardNumber" class="sr-only">Name on Credit Card</label>
+                                <input type="text" style="display:none" id="inputCardName" class="form-control" placeholder="Name on Credit Card" required autofocus maxlength="50" value="NA">
+                                <div class="row  border-bottom" style="padding-top:5px;padding-bottom:5px;">
+                                    <div class="col-xs-3 noPadding" style="border-right:1px #808080 solid">
+                                        <label for="inputCardType" class="sr-only">Card Type</label>
+                                        <select  id="inputCardType" class="form-control control-clear-gray-noborder" placeholder="Card Type" required autofocus ng-controller="CreditCardTypeGetCtrl">
+                                            <option ng-repeat="x in CreditCardTypeList" ng-selected="CreditCardTypeID==x.CreditCardTypeID" value="{{x.CreditCardTypeID}}">{{x.CreditCardTypeName}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-9 noPadding">
+                                        <label for="inputCardNumber" class="sr-only">Card Number</label>
+                                        <input style="text-align:center" type="text" id="inputCardNumber" class="form-control control-clear-gray-noborder" placeholder="card number" required autofocus maxlength="50" value="{{CreditCardNumber}}">
+
+                                    </div>
+                                </div>
+
+                                <div class="row  border-bottom" style="padding-top:5px;padding-bottom:5px;">
+                                    <div class="col-xs-4 noPadding" style="border-right:1px #808080 solid">
+
+                                        <label for="inputExpMonth" class="sr-only btn-notround">Expiration Month</label>
+                                        <select  id="inputExpMonth" class="form-control  control-clear-gray-noborder"  placeholder="mm" required autofocus>
+                                            <option ng-repeat="x in Months" ng-selected="x.MonthNumber==CreditCardExpMonth" value="{{x.MonthNumber}}">{{(x.MonthNumber==0 ? 'mm' : x.MonthName)}}</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-xs-4 noPadding"  style="border-right:1px #808080 solid">
+
+                                        <label for="inputExpYear" class="sr-only ">Expiration Year</label>
+                                        <select style="text-align:center" id="inputExpYear" class="form-control control-clear-gray-noborder"  placeholder="yyyy" required autofocus>
+                                            <option ng-repeat="x in Years" ng-selected="x.YearNumber==CreditCardExpYear" value="{{x.YearNumber}}">{{(x.YearNumber==0 ? 'yyyy' : x.YearNumber)}}</option>
+                                        </select>
+
+                                    </div>
+                                    <div class="col-xs-4 noPadding">
+                                        <label for="inputSecurityCode" class="sr-only ">Security Code</label>
+                                        <input  style="text-align:center" type="text" id="inputSecurityCode" class="form-control  control-clear-gray-noborder" placeholder="code" autofocus maxlength="4" value="{{CreditCardSecurityCode}}">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 noPadding">
+                                        <input type="text" id="inputZipCode" class="form-control  control-clear-gray-noborder" placeholder="zip code" autofocus maxlength="8" value="">
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="row" id="divZipCodeOnly" style="margin-left:0px;margin-right:0px;width:100%;margin:0 auto;">
+                                    <div class="col-sm-12">
+                                        <label for="inputZipCode" class="sr-only">Zip Code</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row btnHeight" style="display:none" >
+                                <div style="text-align:center" id="lblPaymentScan" class="lblPayment btn btn-lg btn-success grad btn-notround btn-block">
+                                    SCAN CREDIT CARD</div>
+                                </div>
+                            </div>
+
+                </form>
+
+            </div> <!-- /container -->
+        </div>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<script type="text/javascript">
+
+    var CreditCardID = getParameterByName('CreditCardID');
+    scanCreditCardID = CreditCardID;
+
+    var bReturnUserToHome = (getParameterByName("home") == "true" ? true : false);
+
+    if (!CreditCardID) {
+        showAlert('Problem with Input.', 'SilentLogout();');
+    }
+
+    var app = angular.module('editCreditCardGet', []);
+    //app.controller('AddressCtrl', function ($scope, $http) {
+
+    //    var UserID = GetCookieItem("UserID");
+
+    //    if (!UserID) {
+    //        showAlert('Problem with Input.');
+    //        SilentLogout();
+    //    }
+
+    //    var uri = ServicePrefix + "/api/GetUserAddressList/?userid=" + UserID.toString();
+
+    //    $http.get(uri).then(function (result) {
+    //        if (!result) {
+    //            showAlert('returned no data');
+    //            return;
+    //        }
+
+    //        if (result.data.Status != "SUCCESS") {
+    //            showAlert(result.data.Message);
+    //            return;
+    //        }
+
+    //        if (result.data.Results.length > 0) {
+    //            $scope.AddressList = result.data.Results;
+    //        }
+
+
+
+    //    });
+
+    //    $scope.ChangeLabelColor = function (classname, idname, val) {
+
+    //        $('input[name="radAddress"][value="' + val + '"]').prop('checked', true);
+    //        ChangeLabelColor(classname, 'lblLoc' + idname);
+    //    }
+
+    //});
+    app.controller('editCreditCardGetCtrl', function ($scope, $http) {
+
+        var UserID = (window.localStorage.getItem("UserID") == null ? "0" : window.localStorage.getItem("UserID"));
+
+        if (!UserID) {
+            showAlert('Problem with Input.', 'SilentLogout();');
+        }
+
+        $scope.Months = BuildMonths();
+        $scope.Years = BuildYears();
+
+        var uri = ServicePrefix + "/api/getusercreditcard?userid=" + encodeURIComponent(UserID) + "&creditcardid=" + encodeURIComponent(CreditCardID);
+
+        if (CreditCardID.length > 1) {
+            $http.get(uri).then(function (result) {
+
+
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+                    return;
+                }
+
+                if (result.data.Results.length > 0) {
+                    $scope.CreditCardTypeID = result.data.Results[0].CreditCardTypeID;
+                    $scope.CreditCardNumber = result.data.Results[0].CreditCardNumber;
+                    $scope.CreditCardExpMonth = result.data.Results[0].CreditCardExpMonth;
+                    $scope.CreditCardExpYear = result.data.Results[0].CreditCardExpYear;
+                    $scope.CreditCardSecurityCode = result.data.Results[0].CreditCardSecurityCode;
+                    $scope.CreditCardIsPrimary = result.data.Results[0].PrimaryCreditCard;
+                    $scope.CreditCardName = result.data.Results[0].CreditCardNameOnCard;
+                    $scope.CreditCardAddressID = result.data.Results[0].CreditCardAddressID;
+
+                    GetTheZipCode(result.data.Results[0].CreditCardAddressID);
+                }
+
+
+
+            });
+        }
+    });
+    app.controller('CreditCardTypeGetCtrl', function ($scope, $http) {
+
+        var uri = ServicePrefix + "/api/getcreditcardtypelist";
+
+        var CreditCardTypes = new Array();
+        var CreditCardType = new Object();
+
+        CreditCardType = {
+            CreditCardTypeID: 0,
+            CreditCardTypeName: 'card'
+        }
+        CreditCardTypes.push(CreditCardType);
+
+
+        $http.get(uri).then(function (result) {
+
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.data.Status != "SUCCESS") {
+                showAlert(result.data.Message);
+                return;
+            }
+
+
+            for (var i = 0; i < result.data.Results.length; i++)
+            {
+                CreditCardType = new Object();
+
+                CreditCardType = {
+                    CreditCardTypeID: result.data.Results[i].CreditCardTypeID,
+                    CreditCardTypeName: result.data.Results[i].CreditCardTypeName
+                }
+                CreditCardTypes.push(CreditCardType);
+            }
+
+            $scope.CreditCardTypeList = CreditCardTypes;
+
+        });
+    });
+    function BuildMonths()
+    {
+        var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var Months = new Array();
+        var Month = new Object();
+        Month = new Object();
+        Month = {
+            MonthName: 'Select an Expiration Month',
+            MonthNumber: 0
+        }
+
+        Months.push(Month);
+        for (var i = 1; i <= 12; i++) {
+            Month = new Object();
+            Month = {
+
+                MonthName: MonthNames[i - 1],
+                MonthNumber: i,
+            }
+            Months.push(Month);
+        }
+
+        return Months;
+    }
+
+    function BuildYears() {
+
+        var Years = new Array();
+        var Year = new Object();
+
+        Year = new Object();
+        Year = {
+            YearNumber: 0
+        }
+        Years.push(Year);
+
+        var dt = new Date();
+
+        var CurrentYear = dt.getFullYear();
+
+        for (var i = CurrentYear; i <= CurrentYear+10; i++) {
+            Year = new Object();
+            Year = {
+                YearNumber: i
+            }
+            Years.push(Year);
+        }
+
+        return Years;
+    }
+
+    function DisplayAddressDiv(id) {
+        // Zip Only
+        if (id == "0") {
+            $("#divZipCodeOnly").show();
+            $("#divFullAddress").hide();
+        }
+        else {
+            $("#divZipCodeOnly").hide();
+            $("#divFullAddress").show();
+        }
+    }
+
+    function GetTheZipCode(AddressID)
+    {
+        //console.log('getthezipcode');
+        var uri = ServicePrefix + "/api/getuseraddress?userid=" + encodeURIComponent(user.UserID) + "&addressid=" + encodeURIComponent(AddressID);
+
+        $.get(uri).then(function (result) {
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.Status != null) {
+                if (result.Status != "SUCCESS") {
+                    showAlert(result.Message);
+                    return;
+                }
+                else {
+                    //console.log(JSON.stringify(result));
+                    if (result.Results.length > 0) {
+                        $("#inputZipCode").val(result.Results[0].ZipCode);
+                    }
+                }
+            }
+            else {
+                return;
+            }
+        });
+    }
+
+    $(document).ready(function ()
+    {
+        $(".btn-menu-right").addClass("btn-menu-right-save");
+        $(".btn-menu-right").removeClass("btn-menu-right");
+        
+
+
+        if (CheckLogin() == true)
+        {
+            if (CreditCardID.length <= 1)
+            {
+                scanCreditCard();
+            }
+
+            BuildCommonUI();
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+            $("#messageHeading").html((CreditCardID==0 ? "ADD PAYMENT" : "EDIT PAYMENT"));
+        }
+
+ 
+    });
+
+    function replaceAll(str, find, replace) {
+        return str.replace(new RegExp(escapeRegExp(find), 'g'), replace);
+    }
+    function escapeRegExp(str) {
+        return str.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    }
+
+    function EditProfile() {
+        window.location = "../profile/editprofile.html";
+    }
+
+    function Done() {
+        
+        //if (bReturnUserToHome == false) {
+            window.location = "../profile/profilecreditcardmanager.html";
+        //}
+        //else
+        //{
+        //    SendUserHome();
+        //}
+    }
+
+    // form submit with enter key
+/*    document.onkeydown=function(evt){
+        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+        if(keyCode == 13){  
+            blockUI();
+            if (Validate() == false)
+            {
+                return;
+                unblockUI();
+            }
+            else
+            {
+                APICall();
+            }
+        }
+    }*/
+
+        // form submit with enter key
+    document.onkeydown=function(evt){
+        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+        if(keyCode == 13){  
+            Update();
+        }
+    }
+    
+    //---------------------------
+    // Update/Change Functions
+    //---------------------------
+    function Update()
+    {
+	    blockUI();
+        if (Validate() == false)
+        {
+            return;
+            unblockUI();
+        }
+        else
+        {
+            APICall();
+        }
+    }
+    
+    //-------------------------
+    // Validation
+    //-------------------------
+    function Validate()
+    {
+
+        if (DataLength(RemoveTags($("#inputCardName").val()))== 0) {
+            showAlert('Valid Credit Card Name must be entered');
+            return false;
+        }
+
+        if (RemoveTags($("#inputCardType").val()) == 0)
+        {
+            showAlert('Valid Credit Card Type must be selected');
+            return false;
+        }
+
+        if (DataLength(RemoveTags($("#inputCardNumber").val())) == 0) {
+            showAlert('Valid Credit Card must be entered');
+            return false;
+        }
+
+        if (ValidateCreditCardNumber(RemoveTags($("#inputCardNumber").val())) == false)
+        {
+            showAlert('Valid Credit Card Number must be entered');
+            return false;
+        }
+
+        if (RemoveTags($("#inputExpMonth").val()) == 0) {
+            showAlert('Valid Month must be selected');
+            return false;
+        }
+
+        if (RemoveTags($("#inputExpYear").val()) == 0) {
+            showAlert('Valid Year must be selected');
+            return false;
+        }
+
+        var dt = new Date();
+
+        // Expired Date in past?
+        var ExpYear = parseInt($("#inputExpYear").val());
+
+        if (ExpYear == dt.getFullYear())
+        {
+            var ExpMonth = parseInt($("#inputExpMonth").val());
+
+            if (ExpMonth < 1 + dt.getMonth())
+            {
+                showAlert('Expiration Date must be in the future');
+                return false;
+            }
+        }
+
+        if (DataLength(RemoveTags($("#inputSecurityCode").val())) == 0)
+        {
+            showAlert('Security Code must be entered');
+            return false;
+        }
+        if (testInputData(RemoveTags($("#inputSecurityCode").val()), numbersOnly) == false) {
+            showAlert('Security Code must be numeric');
+            return false;
+        }
+
+        //// check the zip
+        //if ($("input[name='optCCAddressType'][value='0']").is(':checked')) {
+            var countryCode = 'US';
+
+            if(isValidPostalCode(RemoveTags($("#inputZipCode").val()), countryCode) == false)
+            {
+                showAlert('A valid Zip Code must be entered');
+                return false;
+            }
+        //}
+        //else {
+
+        //    if ($("input[name='radAddress']").is(':checked') == false) {
+        //        showAlert('An address must be selected');
+        //        return false;
+        //    }
+        //}
+        return true;
+      
+    }
+    
+    function ValidateCreditCardNumber(value)
+    {
+
+            // accept only digits, dashes or spaces
+            if (/[^0-9-\s]+/.test(value)) return false;
+
+            // The Luhn Algorithm. It's so pretty.
+            var nCheck = 0, nDigit = 0, bEven = false;
+            value = value.replace(/\D/g, "");
+
+            for (var n = value.length - 1; n >= 0; n--) {
+                var cDigit = value.charAt(n),
+                      nDigit = parseInt(cDigit, 10);
+
+                if (bEven) {
+                    if ((nDigit *= 2) > 9) nDigit -= 9;
+                }
+
+                nCheck += nDigit;
+                bEven = !bEven;
+            }
+
+            return (nCheck % 10) == 0;
+
+    }
+
+    function APICall()
+    {
+
+        var callback = APICallSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/updateusercreditcard/';
+        var ccAddressID = RemoveTags($("input[name='radAddress']:checked").val());
+
+        //if ($("input[name='optCCAddressType'][value='0']").is(':checked')) {
+            ccAddressID = "ZIP:" + RemoveTags($("#inputZipCode").val());
+        //}
+        data = {
+            userid: user.UserID,
+            creditcardid: RemoveTags(CreditCardID),
+            creditcardnumber: RemoveTags($("#inputCardNumber").val()),
+            creditcardexpmonth: RemoveTags($("#inputExpMonth").val()),
+            creditcardexpyear: RemoveTags($("#inputExpYear").val()),
+            creditcardsecuritycode: RemoveTags($("#inputSecurityCode").val()),
+            creditcardtypeid: RemoveTags($("#inputCardType").val()),
+            nameoncard: RemoveTags($("#inputCardName").val()),
+            creditcardaddressid: ccAddressID,
+            externalprofileid: RemoveTags(user.ExternalProfileID)
+        };
+    
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: APIUpdateError
+               });
+
+    }
+    
+    function APICallSuccess(result)
+    {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+
+        CreditCardID = result.ID;
+
+        UpdateCookieItem("CreditCardCount", "1");
+        RemoveCookie("cUserCCList");
+
+        showAlert('', "../profile/profilecreditcardmanager.html");
+
+
+    }
+
+    function APIUpdateError(jqXHR, textStatus, err) {
+
+        showAlert(textStatus);
+        return false;
+    }
+    function EditAddress(AddressID) {
+
+
+        showConfirm('Are you sure you want to add a new address? This will take you out of the Edit Credit Card process and you will need to start this process again.', 'Yes!', 'No', 'GoToAddressEditor("0");');
+
+    }
+    //function GoToAddressEditor(AddressID) {
+    //    window.location = "../profile/profileaddresseditor.html?addressid=" + AddressID;
+    //}
+
+    function SetAsPrimaryCreditCard()
+    {
+        blockUI();
+        var callback = SetAsPrimaryCreditCardSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/UpdateUserCreditCardAsPrimary/';
+
+        data = {
+            userid: user.UserID,
+            creditcardid: RemoveTags(CreditCardID)
+        };
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: SetAsPrimaryCreditCardError
+               });
+
+    }
+
+    function SetAsPrimaryCreditCardSuccess(result) {
+
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+
+
+        RemoveCookie("cUserCCList");
+        UpdateCookieItem("PrimaryCreditCardID", CreditCardID);
+
+        showAlert('');
+        $("#nonPrimary").hide();
+
+    }
+
+    function SetAsPrimaryCreditCardError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+
+    function DeleteCreditCard() {
+        showConfirm('Are you sure you want to delete this credit card?', 'Yes!', 'No', 'DeleteCreditCardClick("' + CreditCardID + '")');
+
+    }
+
+    function DeleteCreditCardClick(CreditCardID) {
+        blockUI();
+        var callback = DeleteCreditCardSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/DeleteUserCreditCard/';
+
+        data = {
+            userid: user.UserID,
+            creditcardid: RemoveTags(CreditCardID)
+        };
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: DeleteCreditCardError
+               });
+
+
+    }
+
+    function DeleteCreditCardSuccess(result) {
+
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+
+        RemoveCookie("cUserCCList");
+        var url = "../profile/profileCreditCardmanager.html";
+        showAlert('', url);
+
+    }
+
+    function DeleteCreditCardError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+
+</script>

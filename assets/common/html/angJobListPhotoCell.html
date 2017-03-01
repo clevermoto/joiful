@@ -1,0 +1,18 @@
+﻿<div id="imgProviderContainer" style="margin:0 auto; text-align:center;padding-top:5px;padding-bottom:3px">
+    <img ng-if="providerview==false" ng-src="{{imglib + '/profile/'+y.ProviderUserID+'.jpg'}}" class="img-circle" style='max-height:60px;border-radius:50%;border:solid 2px #d86018' id="imgProvider" onclick="alertme('#divBio')" name="imgProvider" />
+    <div ng-if="providerview==true" style='margin:0 auto;padding-top:25px;font-size:small;vertical-align:middle' id="imgProvider" name="imgProvider">{{y.FirstName}}</div>
+
+</div>
+
+<!-- Provider Name, LIC, Review-->
+<div ng-if="providerview==false">
+    <div ng-if="y.ProviderUserID!='0'" style="margin:0 auto; text-align:center;padding-bottom:3px;padding-top:3px">
+        <div style="font-weight:600">
+            {{y.ProviderFirstName}}
+        </div>
+        <div style="color:#00A499;vertical-align:bottom">
+            <span> {{y.ProviderAvgReview}}</span>&nbsp;<span><img style="height:18px;margin-top:-5px" src="../assets/common/images/stars.png" /></span>
+        </div>
+        <div ng-show="y.ProviderLicense.length > 0">License: {{y.ProviderLicense}}</div>
+    </div>
+</div>

@@ -1,0 +1,233 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+  <body>
+      <div class="appcontainer">
+          <div class="row border-bottom" style="width:100%">
+              <script>document.write(DynamicMenu("white", "black", "X", "SendUserHome()", "", true, "", ""));</script>
+          </div>
+          <div class="container">
+
+              <form class="form-signin">
+                <div class="scrollmenewheaderfooter scrollmenewbase">
+                    <div style="width:90%;margin:0 auto;padding-top:10px">
+                    <div class="row">Needs some assistance?</div>
+                    <div class="row" style="height:100%;">
+                        <textarea id="txtNote" maxlength="2000" placeholder="Enter your question or comment here." style="height:240px; width:100%; resize:none"></textarea>
+                    </div>
+                </div>
+                </div>
+                <div class="footer">
+                    <button id="btnHelp" class="btn btn-lg btn-success btn-block btn-notround grad btnHeight" type="button" onclick="GetHelp()">SUBMIT</button>
+
+                </div>
+            </form>
+
+          </div> <!-- /container -->
+
+      </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<script>
+
+  var UserID = "";
+
+  $(document).ready(function ()
+  {
+
+
+      if (CheckLogin() == true)
+      {
+          BuildCommonUI();
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+      }
+
+        //if (ValidateInput() == true)
+        ///{
+        ///    APICallLoad();
+        //} else {
+	    //    unblockUI();
+        //}
+  });
+
+  function Validate()
+  {
+      //// Get Token
+      //var token = getParameterByName("RPT");
+      //if (token == null || token.length == 0) {
+      //    showAlert('no token passed. Invalid request.', '../index.html');
+      //    return false;
+      //}
+      //else
+      //{
+      //    return true;
+      //}
+  }
+
+  function APICallLoad() {
+
+      var token = getParameterByName("RPT");
+      var ret = false;
+      var uri = ServicePrefix + '/api/passwordtokenvalid/?token=' + encodeURIComponent(token);
+
+      $.ajax(
+             {
+                 dataType: "json",
+                 url: uri,
+                 success: APISuccessLoad,
+                 error: APICallFailure
+             });
+
+  }
+
+  function APICallFailure(result, textStatus, err) {
+      showAlert(err, "../index.html");
+      return;
+  }
+
+  function APISuccessLoad(result)
+  {
+      if (result == null)
+      {
+          showAlert('returned no data',"../index.html");
+          return;
+      }
+
+
+      if (result.Status != "SUCCESS")
+      {
+          showAlert(result.Message, "../index.html");
+          return;
+      }
+
+      UserID = result.UserID;
+
+  }
+
+  // form submit with enter key
+  document.onkeydown=function(evt){
+      var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+      if(keyCode == 13){  
+      GetHelp();
+    }
+  }
+
+  function GetHelp()
+  {
+	  blockUI();
+      var Notes = RemoveTags($("#txtNote").val());
+        
+      // Validate Input
+      if (Notes.length==0)
+      {
+          showAlert("You must enter a comment to submit this item.");
+          return false;
+      }
+      else
+      {
+          APICallUpdate();
+      }
+  }
+
+  function APICallUpdate()
+  {
+      var Notes = RemoveTags($("#txtNote").val());
+      var UserId = user.UserID;
+      var Persona = (user.Persona.toLowerCase()=="provider" ? "provider" : "user");
+
+      var uri = ServicePrefix + '/api/updatehelp/';
+
+      var postData = {
+          userid: user.UserID,
+          usertype: Persona,
+          notes: Notes
+      }
+
+      $.ajax(
+             {
+                 data: postData,
+                 dataType: "json",
+                 url: uri,
+                 method: "POST",
+                 success: APISuccessUpdate,
+                 error: APIUpdateError
+             });
+
+  }
+
+  function APISuccessUpdate(result)
+  {
+  	  unblockUI();
+      if (result == null) {
+          showAlert('returned no data');
+          return;
+      }
+
+      if (result.Status != "SUCCESS") {
+          showAlert(result.Message);
+          return;
+      }
+
+      var url = gCustomerHomePage;
+
+      if (user.Persona.toLowerCase() == "provider")
+      {
+          url = gProviderHomePage;
+      }
+
+      showAlert('', url);
+
+  }
+
+  function APIUpdateError(result, textStatus, err) {
+	  
+      var url = gCustomerHomePage;
+
+	  if (user.Persona.toLowerCase() == "provider") {
+	      url = gProviderHomePage;
+	  }
+	  showAlert(err, url);
+
+      return;
+  }
+
+</script>

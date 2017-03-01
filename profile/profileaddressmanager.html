@@ -1,0 +1,279 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+  <body ng-app="AddressListApp">
+      <div class="appcontainer">
+
+          <script>document.write(DynamicMenu("white", "black", "X", "SendUserHome()", "", true, "", ""));</script>
+          <div class="container">
+
+              <form class="form-signin">
+
+                    <div class="scrollmenewheader scrollmenewbase noPadding">
+
+                        <div ng-controller="AddressListCtrl" style="margin-top:0px">
+                            <div style="width: 100%;" ng-repeat="x in AddressList">
+                                <div class="row" ng-if="x.Address1 != 'Credit Card Address Only'"style="height:57px;width:100%; border-radius:0px;border-bottom: solid #e5e5e6 2px;color:#5B6770" >
+                                    <div class="row"ng-click="EditAddress(x.AddressID)">
+                                        <div class="col-xs-10" style="font-size:small">
+                                            <div ng-style="{'padding-top': x.PrimaryAddress==true ? '10px' : '10px'} ">{{x.Address1}}<span ng-if="x.Address2.length>0">,&nbsp;{{x.Address2}}</span><span ng-if="x.PrimaryAddress" style="color:red"> (primary)</span></div>
+                                            <div><span>{{x.City}},</span><span>&nbsp;{{x.StateAbbrev}}</span><span>&nbsp;{{x.ZipCode}}</span>&nbsp;<span>{{x.CountryShort}}</span></div>
+                                            
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <span><button type="button" id="editAddress_{{$index}}" ng-click="EditAddress(x.AddressID)" class="btn btn-sm btn-arrow" style="margin-top:18px;padding-top:0px;"><img src='../assets/common/images/nextarrow-gray.png' style='height:13px'></button></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div style="width: 100%;">
+                                <div class="row"  style="height:60px;width:100%; border-radius:0px;border-bottom: solid #e5e5e6 2px" onclick="EditAddress(0)">
+                                    <div class="row">
+                                        <div class="col-xs-10" style="padding-top:20px;font-size:small">
+                                            <div style="color:#5B6770">ADD ADDRESS</div>
+                                        </div>
+                                        <div class="col-xs-2">
+                                            <span><button type="button" id="editAddress_{{$index}}" ng-click="EditAddress(0)" class="btn btn-sm btn-arrow"  style="margin-top:18px;padding-top:0px;"><img src='../assets/common/images/nextarrow-gray.png' style='height:13px'></button></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+
+
+              </form>
+
+          </div> <!-- /container -->
+
+      </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<script type="text/javascript">
+
+    var app = angular.module('AddressListApp', []);
+
+    app.controller('AddressListCtrl', function ($scope, $http) {
+
+        var UserID = GetCookieItem("UserID");
+
+
+        if (!UserID) {
+            showAlert('Problem with Input.', 'SilentLogout();');
+        }
+
+        var uri = ServicePrefix + "/api/GetUserAddressList/?userid=" + UserID.toString();
+
+        $http.get(uri).then(function (result) {
+
+            if (!result) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.data.Status != "SUCCESS") {
+                showAlert(result.data.Message);
+                return;
+            }
+
+            RemoveCookieItem("cUserAddressList");
+            var gUnFilteredAddressArray = new Array();
+            var AddressObj = { 'AddressID': '-1', 'Address1': 'current location' };
+
+            if (result.data.Results.length > 0) {
+                $scope.AddressList = result.data.Results;
+
+                // Setup Cache
+                gUnFilteredAddressArray.push(AddressObj);
+
+                for (var i = 0; i < result.data.Results.length; i++) {
+                    gUnFilteredAddressArray.push(result.data.Results[i]);
+                }
+
+                // Update Cookie with Cache
+                UpdateCookieItem("cUserAddressList", JSON.stringify(gUnFilteredAddressArray));
+                //
+
+            }
+            //else {
+            //    UpdateCookieItem("cUserAddressList", JSON.stringify(gUnFilteredAddressArray));
+	        //    window.location = "../profile/profileaddresseditor.html?addressid=0&autogps=yes";
+            //}
+
+            $scope.EditAddress = function (AddressID) {
+                EditAddress(AddressID);
+
+            }
+            $scope.DeleteAddress = function (AddressID) {
+                DeleteAddress(AddressID);
+            }
+            $scope.SetAsPrimaryAddress = function (AddressID) {
+                SetAsPrimaryAddress(AddressID);
+            }
+            
+        });
+
+    });
+
+    $(document).ready(function ()
+    {
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            $("#messageHeading").html("ADDRESSES");
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+          
+        }
+    });
+    
+    function EditAddress(AddressID)
+    {
+        window.location = "../profile/profileaddresseditor.html?addressid=" + AddressID;
+    }
+
+    function Done()
+    {
+        window.location = "../profile/editprofile.html";
+    }
+
+    function SetAsPrimaryAddress(AddressID)
+    {
+		blockUI();
+        var callback = SetAsPrimaryAddressSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/UpdateUserAddressAsPrimary/';
+
+        data = {
+            userid: user.UserID,
+            addressid: RemoveTags(AddressID)
+        };
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: SetAsPrimaryAddressError
+               });
+
+    }
+
+    function SetAsPrimaryAddressSuccess(result) {
+        unblockUI();
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+        RemoveCookie("cUserAddressList");
+        showAlert('', "../profile/profileaddressmanager.html");
+    }
+
+    function SetAsPrimaryAddressError(jqXHR, textStatus, err) {
+        unblockUI();
+        showAlert(textStatus);
+        return false;
+    }
+
+
+    function DeleteAddress(AddressID)
+    {
+       showConfirm('Are you sure you want to delete this address?', 'Yes!', 'No', 'DeleteAddressClick("'+AddressID+'")');
+    }
+    
+    function DeleteAddressClick(AddressID) {
+	    blockUI();
+	    var callback = DeleteAddressSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/DeleteUserAddress/';
+
+        data = {
+            userid: user.UserID,
+            addressid: RemoveTags(AddressID)
+        };
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: DeleteAddressError
+               });
+    }
+
+    function DeleteAddressSuccess(result) {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+        RemoveCookie("cUserAddressList");
+        showAlert('', '../profile/profileaddressmanager.html');
+    }
+
+    function DeleteAddressError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+
+</script>

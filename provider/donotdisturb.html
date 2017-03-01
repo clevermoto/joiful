@@ -1,0 +1,387 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+      
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+    
+    <!-- Cordova -->
+
+    <script src="../cordova.js"></script>
+
+  </head>
+
+<body ng-app="manageProviderApp">
+    <div class="appcontainer">
+        <script>document.write(DynamicMenu("white", "black", "X", "SendToArtistTools()", "", true, "save", "Save()"));</script>
+        <div class="container" ng-controller="manageProviderDoNotDisturbCtrl">
+
+            <form class="form-signin">
+
+                <div class="scrollmenewheader scrollmenewbase">
+
+                    <div class="row border-bottom" style="width:100%;margin-top:5px">
+                        <div style="width:80%; margin: 0 auto; text-align:center">I ONLY want to be contacted between the following hours</div>
+                    </div>
+   
+                    <div class="row border-bottom" style="padding-bottom:10px">
+                        <div style="margin: 0 auto; text-align:center">
+                            <button id="btnDay0" class="btn btn-sm btnDay" ng-class="(inDay==0 ? 'btn-primary' : 'btn-default')" type="button" ng-click="changeview(0)">S</button>
+
+                            <button id="btnDay1" class="btn btn-sm btnDay" ng-class="(inDay==1 ? 'btn-primary' : 'btn-default')" type="button" ng-click="changeview(1)">M</button>
+
+                            <button id="btnDay2" class="btn btn-sm btnDay" ng-class="(inDay==2 ? 'btn-primary' : 'btn-default')" type="button" ng-click="changeview(2)">T</button>
+
+                            <button id="btnDay3" class="btn btn-sm btnDay" ng-class="(inDay==3 ? 'btn-primary' : 'btn-default')" type="button" ng-click="changeview(3)">W</button>
+
+                            <button id="btnDay4" class="btn btn-sm btnDay" ng-class="(inDay==4 ? 'btn-primary' : 'btn-default')" type="button" ng-click="changeview(4)">T</button>
+
+                            <button id="btnDay5" class="btn btn-sm btnDay" ng-class="(inDay==5 ? 'btn-primary' : 'btn-default')" style="margin-top: 10px" type="button" ng-click="changeview(5)">F</button>
+
+                            <button id="btnDay6" class="btn btn-sm btnDay" ng-class="(inDay==6 ? 'btn-primary' : 'btn-default')" style="margin-top: 10px" type="button" ng-click="changeview(6)">S</button>
+                        </div>
+                    </div>
+     
+                    <div class="row" id="inputFrom" style="padding-top:10px">
+                        <div class="col-xs-4" style="text-align:right">From:</div>
+                        <div class="col-xs-4" style="text-align:center">
+                            <select id="selFromHour" ng-controller="HourCtrl" style="width:100px">
+                                <option value="{{x.Hour}}:{{x.Minute}}" ng-repeat="x in HourList" ng-selected="fTime==(x.Hour+':'+x.Minute)">{{x.HourLabel}}</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-4">&nbsp;</div>
+                    </div>
+                    <div class="row " id="inputTo" style="margin-top:10px">
+                        <div class="col-xs-4" style="text-align:right">To:</div>
+                        <div class="col-xs-4" style="text-align:center">
+                            <select id="selToHour" ng-controller="HourCtrl"style="width:100px">
+                                <option value="{{x.Hour}}:{{x.Minute}}" ng-repeat="x in HourList" ng-selected="(tTime==x.Hour+':'+x.Minute)">{{x.HourLabel}}</option>
+                            </select>
+                        </div>
+                        <div class="col-xs-4">&nbsp;</div>
+                    </div>
+
+                        <!--  <button id="btnDone" class="btn btn-lg btn-success btn-block" style="margin-top: 10px;margin-bottom:5px" type="button" onclick="Done()">Done</button>-->
+                </div>
+                <!--<div class="footer-auto">
+                    <button id="btnDoNotDisturb" class="btn btn-lg btn-primary btn-block ajaxbtn btn-notround grad" type="button" onclick="Save()">SAVE</button>
+                </div>-->
+
+            </form>
+
+        </div> <!-- /container -->
+        </div>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<script>
+    var inDay = getParameterByName("day");
+    if (inDay.length == 0)
+    {
+        var CDate = new Date();
+        inDay = CDate.getDay().toString();
+    }
+
+    var app = angular.module('manageProviderApp', []);
+
+    app.controller('manageProviderDoNotDisturbCtrl', function ($scope, $http) {
+
+ 
+
+        $scope.getData = function (angDay) {
+            var uri = ServicePrefix + '/api/GetProviderDoNotDisturbSetting/?userid=' + GetCookieItem("UserID") + "&day=" + angDay;
+
+            $http.get(uri).then(function (result) {
+
+                if (!result) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+                    return;
+                }
+
+                if (result.data.Results.length > 0) {
+                    var fTime = parseInt(result.data.Results[0].DoNotDisturbSettings.ProviderDoNotDisturbFromHour);
+
+
+                    if (result.data.Results[0].DoNotDisturbSettings.ProviderDoNotDisturbFromAM == "false") {
+                        fTime = fTime + 12;
+                    }
+                    if (fTime > 23) {
+                        fTime = 0;
+                    }
+                    fTime = fTime;
+
+                    fTime = fTime + ":" + parseInt(result.data.Results[0].DoNotDisturbSettings.ProviderDoNotDisturbFromMinute);
+
+                    if (result.data.Results[0].DoNotDisturbSettings.ProviderDoNotDisturbFromHour == '0' &&
+                        result.data.Results[0].DoNotDisturbSettings.ProviderDoNotDisturbFromMinute == '0' &&
+                        result.data.Results[0].DoNotDisturbSettings.ProviderDoNotDisturbFromAM == "false") {
+                        fTime = 0;
+
+                    }
+                    $scope.fTime = fTime;
+
+                    var tTime = parseInt(result.data.Results[0].DoNotDisturbSettings.ProviderDoNotDisturbToHour);
+                    if (result.data.Results[0].DoNotDisturbSettings.ProviderDoNotDisturbToAM == "false") {
+                        tTime = tTime + 12;
+                    }
+                    if (tTime > 23) {
+                        tTime = 0;
+                    }
+                    tTime = tTime;
+
+                    tTime = tTime + ":" + parseInt(result.data.Results[0].DoNotDisturbSettings.ProviderDoNotDisturbToMinute);
+
+                    $scope.tTime = tTime;
+                }
+
+            });
+        }
+
+        $scope.inDay = inDay;
+        $scope.getData(inDay);
+
+        $scope.changeview = function(inday)
+        {
+            inDay = inday;
+            $scope.inDay = inday;
+            myChangeLabelColor("btnDay", "btnDay" + inDay.toString());
+            $scope.getData(inday);
+        }
+        });
+    
+    function myChangeLabelColor(ClassName, ID) {
+
+        $("." + ClassName).removeClass("btn-primary");
+        $("." + ClassName).addClass("btn-default");
+
+//        $("#" + ID).removeClass("btn-default");
+//        $("#" + ID).addClass("btn-primary");
+
+    }
+    app.controller('HourCtrl', function ($scope) {
+
+        //var uri = ServicePrefix + '/api/GetProviderDoNotDisturbSetting/?userid=' + GetCookieItem("UserID");
+        var Hours = new Array();
+        var HourItem = new Object();
+
+        for (var i = 0; i < 24; i++)
+        {
+            for (var y = 0; y < 4; y++)
+            {
+                HourItem = new Object();
+                HourItem =
+                {
+                    Hour: i,
+                    Minute: y * 15,
+                    HourLabel: (i > 12 ? (i-12).toString() : (i==0 ? "12" : i.toString())) + ":" + (y==0 ? "00" : (y * 15).toString()) + " " +  (i==0 && y==0 ? "PM" :  ((i * 100) + (y*15) > 1200 ? " PM" : "AM"))
+
+            }
+
+            Hours.push(HourItem);
+        }
+        }
+
+        $scope.HourList = Hours;
+
+    });
+
+
+
+    $(document).ready(function ()
+    {
+        $(".btn-menu-right").addClass("btn-menu-right-save");
+        $(".btn-menu-right").removeClass("btn-menu-right");
+
+        if (CheckLogin() == true) {
+            BuildCommonUI();
+            if (ProviderAccess() == false)
+            {
+                return;
+            }
+
+
+            InitNotificationPoll();
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+            $(".form-signin").show();
+            //$("#messageHeading").html("DO NOT DISTURB");
+
+        }
+  });
+
+  function ValidateInput()
+  {
+
+          return true;
+  }
+
+  function GetValueFromTimeList(inTime, valToGet) {
+
+      var hm = inTime.toString().split(":");
+
+      if (valToGet == "h") {
+          return hm[0];
+      }
+
+      if (valToGet == "m") {
+          return hm[1];
+      }
+
+  }
+
+  function Save()
+  {
+
+
+      var FromHour = GetValueFromTimeList(RemoveTags($("#selFromHour").val()), "h");
+      var FromMinutes = GetValueFromTimeList(RemoveTags($("#selFromHour").val()), "m");
+      var FromAM = (FromHour==0 && FromMinutes==0 ? false : (FromHour >=12 ? false : true));
+
+      var ToHour = GetValueFromTimeList(RemoveTags($("#selToHour").val()), "h");
+      var ToMinutes = GetValueFromTimeList(RemoveTags($("#selToHour").val()), "m");
+      var ToAM = (ToHour == 0 && ToMinutes == 0 ? false : (ToHour >= 12 ? false : true));
+
+      var api_dndFrom = parseInt(FromHour) * 100;
+      api_dndFrom = api_dndFrom + parseInt(FromMinutes);
+      if (FromAM == "false") {
+          api_dndFrom = api_dndFrom + 1200;
+      }
+
+      var api_dndTo = parseInt(ToHour) * 100;
+      api_dndTo = api_dndTo + parseInt(ToMinutes);
+      if (ToAM == "false") {
+          api_dndTo = api_dndTo + 1200;
+      }
+
+      if (api_dndFrom >= api_dndTo)
+      {
+          showAlert("From must be less than To");
+      }
+      else
+      {
+	      blockUI();
+          APICallUpdate();
+      }
+  }
+
+  function APICallUpdate()
+  {
+
+      var FromHour = GetValueFromTimeList(RemoveTags($("#selFromHour").val()), "h");
+      var FromMinutes = GetValueFromTimeList(RemoveTags($("#selFromHour").val()), "m");
+      var FromAM = (FromHour == 0 && FromMinutes == 0 ? false : (FromHour >= 12 ? false : true));
+
+      var ToHour = GetValueFromTimeList(RemoveTags($("#selToHour").val()), "h");
+      var ToMinutes = GetValueFromTimeList(RemoveTags($("#selToHour").val()), "m");
+      var ToAM = (ToHour == 0 && ToMinutes == 0 ? false : (ToHour >= 12 ? false : true));
+
+      FromHour = (FromHour > 12 ? FromHour - 12 : FromHour);
+      ToHour = (ToHour > 12 ? ToHour - 12 : ToHour);
+
+
+      var uri = ServicePrefix + '/api/UpdateProviderDoNotDisturbSetting/';
+
+      var postData = {
+          userid: user.UserID,
+          fromhour: FromHour,
+          fromminute: FromMinutes,
+          fromam: FromAM.toString(),
+          tohour: ToHour,
+          tominute: ToMinutes,
+          toam: ToAM.toString(),
+          day: inDay
+      }
+
+
+      $.ajax(
+             {
+                 data: postData,
+                 dataType: "json",
+                 url: uri,
+                 method: "POST",
+                 success: APISuccessUpdate,
+                 error: APIUpdateError
+             });
+
+  }
+
+  function APISuccessUpdate(result)
+  {
+      if (result == null) {
+          showAlert('returned no data');
+          return;
+      }
+
+      if (result.Status != "SUCCESS") {
+          showAlert(result.Message);
+          return;
+      }
+
+
+      var FromHour = GetValueFromTimeList(RemoveTags($("#selFromHour").val()), "h");
+      var FromMinutes = GetValueFromTimeList(RemoveTags($("#selFromHour").val()), "m");
+      var FromAM = (FromHour == 0 && FromMinutes == 0 ? false : (FromHour >= 12 ? false : true));
+
+      var ToHour = GetValueFromTimeList(RemoveTags($("#selToHour").val()), "h");
+      var ToMinutes = GetValueFromTimeList(RemoveTags($("#selToHour").val()), "m");
+      var ToAM = (ToHour == 0 && ToMinutes == 0 ? false : (ToHour >= 12 ? false : true));
+
+
+      UpdateDoNotDisturbFromToCookie(
+          FromHour,
+          FromMinutes,
+          FromAM,
+          ToHour,
+          ToMinutes,
+          ToAM);
+
+      showAlert('');
+
+  }
+
+  function APIUpdateError(result, textStatus, err) {
+  
+      showAlert(err, '../index.html');
+      return;
+  }
+
+  function Done()
+  {
+      window.location = "../provider/index.html";
+  }
+</script>

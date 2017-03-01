@@ -1,0 +1,1865 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+
+	<!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+<body>
+    <div class="appcontainer whitebackground">
+        <div class="PopupPanel"id="divCurrentLocationAddress" style="display:none;">
+            <div ng-app="spappApp" class="row footer-auto" style="z-index:1001">
+                <!--<div class="row" style="padding:5px 5px 5px 5px;width:100%;margin:0 auto;background-color: #d86018;color:white;">Edit Address</div>-->
+                <div ng-include="'../assets/common/html/angAddressEditor.html'"></div>
+            </div>
+        </div>
+
+        <script>document.write(DynamicMenu('white', 'black', 'X', 'StartBAS()', 'SCHEDULE', true, "", ""));</script>
+
+        <div class="container">
+
+            <form class="form-signin" style="display:none;"onsubmit="return false">
+
+
+                <div class="scrollmenewheaderfooter scrollmenewbase" style="width:100%;margin:0 auto;padding:0 10px;">
+                    <div class="page1">
+                        <div class="cartDisplay" id="divCartDisplay" style="overflow:auto; padding-top:5px; padding-bottom:0px; padding-left:00px;padding-right:00px">
+                           
+                        </div>
+
+                    <!--</div>
+                    <div class="page2" style="display:none">-->
+
+                        <div class="row" style="padding-top:5px;width:100%; margin:0 auto">
+                            <div id="AdditionalQuestions"></div>
+                        </div>
+                        <div class="row" style="padding-top:10px;padding-bottom:10px;">
+                            <div class="col-xs-12 noPadding">
+                                <div class="col-xs-12  noPadding">
+                                    <textarea style="font-size:14px;width:100%; resize:none;border-color:silver!important" id="txtNote" maxlength="2000" placeholder="Anything we need to know? Parking? Entry? Pets?"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- TIP -->
+                        <div class="row noPadding" style="padding-top:10px;border-top:#808080 1px solid">
+                            <div style="width:100px;display:table-cell;font-size:14px">
+                                Tip?
+                            </div>
+                            <div style="width:140px;display:table-cell">
+                                <select id="txtTip" onchange="generateTip(this.value)" style="height:22px;width:100%;font-size:14px">
+                                    <option value=".00">No thank you</option>
+                                    <option value=".05">5%</option>
+                                    <option value=".10">10%</option>
+                                    <option value=".15">15%</option>
+                                    <option value=".20">20%</option>
+                                    <option value=".25">25%</option>
+                                    <option value=".30">30%</option>
+                                    <option value=".35">35%</option>
+                                    <option value=".40">40%</option>
+                                    <option value=".45">45%</option>
+                                    <option value=".50">50%</option>
+                                </select>
+                                
+                                <div style="display:table-cell;color:#5B6770">TIP AMOUNT: </div>
+                                <div style="display:table-cell;color:#5B6770">&nbsp;$</div>
+                                <div style="display:table-cell;color:#5B6770" id="page2Tip">0.00</div>
+                            </div>
+                            
+                        </div>
+                        <!-- Promo Code -->
+                        <div class="row noPadding" style="margin-bottom:10px;margin-top:10px;border-top:#808080 1px solid">
+                            <div class="col-xs-12 noPadding" style="padding-top:10px">
+                                <div style="width:100px;display:table-cell;font-size:14px">Promo Code</div>
+                                <div style="width:140px;display:table-cell"><input style="height:22px;padding-left:5px;width:140px;font-size:14px" type="text" id="txtDiscountCode" maxlength="50" /><br />
+                                <span style="color:#5B6770" id="spnDiscount"></span>
+                                </div>
+                                <div style="display:table-cell;padding-left:3px">
+                                    <button id="btnDone" type="button" class="btn btn-xs ajaxbtn" style="background-color:transparent!important;border:none!important" onclick="ValidateDiscountCode(false)"><img src="../assets/common/images/selected-joiful.png" height="23" width="23"/></button>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <input style="padding-left:5px;display:none" type="text" id="txtMobileNumber" maxlength="15" />
+
+                        <div class="row" style="padding-top:0px;padding-bottom:10px;width:100%;margin:0 auto">
+                            <div class="col-xs-12  noPadding" id="gTotalLine"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="footer-auto">
+
+                    <!--<div class="page1">
+                        <div class="row" style="padding-top:5px;width:100%">
+                            <div class="col-xs-12 noPadding" id="lnkNext1"></div>
+                        </div>
+                    </div>-->
+                    <div class="page2" >
+                        <div class="row" style="padding-top:0px;width:100%">
+                            <div class="col-xs-12 noPadding" id="lnkNext"></div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div> <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp-bas.js"></script>
+
+<script src="../assets/common/js/angApp.js"></script>
+<script src="../assets/common/js/angAddressEditorCtrl.js"></script>
+<script type="text/javascript">
+
+    var RebookJobID = getParameterByName("RebookJobID");
+    var PreferredProviderID = getParameterByName("PreferredProviderID");
+    var bFinishCart = (getParameterByName("finishcart") == "true" ? true : false);
+
+    //var lnkNext = '&nbsp;';
+    var lnkNext1 = '<button id="btnNext" type="button" class="btn btn-lg btn-success btn-block ajaxbtn btn-notround grad btnHeight" onclick="Page2()">NEXT</button>';
+    var lnkNext = '<button id="btnDone" type="button" class="btn btn-lg btn-success btn-block ajaxbtn btn-notround grad btnHeight" onclick="Done()">CONFIRM</button>';
+    var cartQuestionArray = new Array();
+
+    var cartItemArray = new Array();
+    var cartItem = new Object();
+    var cart = new Object();
+    var now = new Date();
+    var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+
+    var gProviderListLatLong = "";
+    var gZoom = 11;
+    var gToAddress = "";
+    var gAvailableProviderCount = 0;
+    var gToLat = 0;
+    var gToLng = 0;
+
+    //-----------------------------
+    // These variables are about
+    // 1 click purchase - 2 actually
+    //-----------------------------
+
+    var inServiceOfferingID = getParameterByName("iSO");
+    var inServiceSubOfferingID = getParameterByName("iSSO");
+    var inDiscountCode = getParameterByName("iDC");
+    var inServiceID = getParameterByName("iS");
+    var inMarketingLinkID = getParameterByName("iML");
+    var inServiceQuestionArray = new Array();
+
+
+    var serviceAdditionalQuestions = new Array();
+    var serviceAdditionalQuestionsAnswer = new Array();
+
+    app.controller('WhereCtrl', function ($scope, $http) {
+
+        //-------------------------------
+        // Lets get the States...
+        // ------------------------------
+
+        if (GetCookieItem("cStateList").length > 0) {
+            $scope.StateList = JSON.parse(GetCookieItem("cStateList"));
+        }
+        else {
+            var uri = ServicePrefix + "/api/getstatelist";
+
+            $http.get(uri).then(function (result) {
+
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+
+                    return;
+                }
+
+                if (result.data.Results.length > 0) {
+
+                    UpdateCookieItem("cStateList", JSON.stringify(result.data.Results));
+                    $scope.StateList = result.data.Results;
+                }
+
+
+
+            });
+        }
+
+        //----------------------------------
+        // Lets get the Countries...
+        //----------------------------------
+
+        if (GetCookieItem("cCountryList").length > 0) {
+            $scope.CountryList = JSON.parse(GetCookieItem("cCountryList"));
+        }
+        else {
+            var uri = ServicePrefix + "/api/getcountrylist";
+            $http.get(uri).then(function (result) {
+
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+
+                    return;
+                }
+
+                if (result.data.Results.length > 0) {
+                    UpdateCookieItem("cCountryList", JSON.stringify(result.data.Results));
+                    $scope.CountryList = result.data.Results;
+                }
+
+            });
+        }
+
+    });
+
+    $(document).ready(function ()
+    {
+
+        if (CheckLogin() == true)
+        {
+            $("#lnkNext").html(lnkNext);
+            $("#lnkNext1").html(lnkNext1);
+
+            BuildCommonUI();
+
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+
+            //-----------------------------
+            // Load abandonded cart
+            //-----------------------------
+            if (bFinishCart == true) {
+                console.log('GetUserInfo');
+                GetUserInfo(user.UserID, user.Persona);
+                console.log('LoadAbandonedCart');
+                LoadAbandonedCart();
+            }
+            else {
+                //-----------------------------
+                // This is making sure we 
+                // have a cart
+                // NON-Rebook
+                //-----------------------------
+                if (RebookJobID.length == 0) {
+                    //console.log(GetCookieItem("cart"));
+                    if (GetCookieItem("cart").length == 0 && inServiceOfferingID.length == 0) {
+                        showAlert('problem with your order - start again please', 'SendUserHome()');
+                    }
+                    else
+                    {
+                        // This process continues 
+                        // loading the page
+                        GetDefaultTipANDLoadPage();
+                    }
+                }
+                else {
+                    // This process continues 
+                    // loading the page
+                    GetDefaultTipANDLoadPage();
+                }
+            }
+
+            var MobileNumber = GetCookieItem("MobileNumber");
+
+            if (MobileNumber.length == 10) {
+                $("#txtMobileNumber").val("(" + MobileNumber.substr(0, 3) + ") " + MobileNumber.substr(3, 3) + "-" + MobileNumber.substr(6, 4));
+            }
+            else {
+                $("#txtMobileNumber").val(MobileNumber);
+            }
+
+
+        }
+
+    });
+
+    function LoadAbandonedCart() {
+
+        if (user.UserID.length > 1) {
+            var uri = ServicePrefix + "/api/GetAbandonedCart/?userid=" + user.UserID;
+
+            $.get(uri).then(function (result) {
+
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.Status != null) {
+                    if (result.Status != "SUCCESS") {
+                        showAlert(result.Message);
+
+                        return;
+                    }
+                    else {
+
+
+                        if (result.Cart.length == 0) {
+                            showAlert('problem with your order - start again please', 'SendUserHome()');
+                        }
+                        else
+                        {
+                            console.log(result.Cart);
+                            cart = JSON.parse(result.Cart);
+
+                            gToLat = cart.locationLat;
+                            gToLng = cart.locationLng;
+
+                            for (var i = 0; i < cart.cartItems.length; i++) {
+                                console.log(cart.cartItems[i].itemServiceID);
+                                UpdateCookieItem("ServiceID", cart.cartItems[i].itemServiceID);
+                            }
+                            UpdateCookieItem("cart", result.Cart);
+                            // This process continues 
+                            // loading the page
+                            GetDefaultTipANDLoadPage();
+                        }
+                        return;
+                    }
+                }
+                else {
+                    return ;
+                }
+            });
+
+        }
+        else
+        {
+            return "";
+        }
+
+    }
+    function FillScreenValues()
+    {
+        //-----------------------------------
+        // This means we need to build a cart
+        // coming from a marketing link
+        // we have a sku
+        //-----------------------------------
+        if (inServiceOfferingID.length > 0 || inServiceSubOfferingID.length > 0)
+        {
+            if (inDiscountCode.length > 0)
+            {
+                UpdateCookieItem("enteredDiscountCode", inDiscountCode);
+            }
+
+            gToAddress = GetCookieItem("my_lat") + ", " + GetCookieItem("my_lng");
+
+            GetCurrentLocationAddress();
+
+            inServiceQuestionArray = new Array();
+
+            BuildMarketingLinkData();
+
+            $(".form-signin").show();
+
+            RecordMarketingLinkClick();
+
+
+            if (user.UserID == '0') {
+                Done();
+            }
+        }
+
+            //------------------------------
+            // Load Cart Obj
+            // Standard way to get here
+            //------------------------------
+        else if (RebookJobID.length == 0)
+        {
+            cart = LoadCart();
+            //--------------------------------
+            // This means 0, -1, blank
+            //--------------------------------
+
+            if (cart.locationID == -1)
+            {
+                gToAddress = GetCookieItem("my_lat") + ", " + GetCookieItem("my_lng");
+                setTimeout('LoadCartDisplay(cart, false, "divCartDisplay")', 1000);
+            }
+            else
+            {
+                LoadCartDisplay(cart, false, "divCartDisplay");
+            }
+
+            BuildQuestionArray(GetCookieItem("ServiceID"));
+            setTimeout("updateMarketingInfoCart(cart)", 3000);
+            $(".form-signin").show();
+        }
+        else
+        {
+            //-------------------------
+            // Rebook logic stats here
+            //-------------------------
+            $(".form-signin").show();
+            BuildCartFromHistory();
+        }
+    }
+    function RecordMarketingLinkClick()
+    {
+
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/UpdateMarketingLink/';
+
+        data = {
+            userid: user.UserID,
+            marketinglinkid: inMarketingLinkID
+        };
+
+        $.ajax(
+                {
+                    data: data,
+                    dataType: "json",
+                    url: url,
+                    method: "POST",
+                    success: RecordMarketingLinkClickSuccess,
+                    error: RecordMarketingLinkClickError
+                });
+
+    }
+
+    function RecordMarketingLinkClickSuccess(result)
+    {
+
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+
+            return;
+        }
+        else {
+            return;
+        }
+    }
+
+    function RecordMarketingLinkClickError(jqXHR, textStatus, err)
+    {
+            showAlert(textStatus);
+            return false;
+    }
+
+    function SaveAddress()
+    {
+        // update data
+        if (GetCookieItem("old_address").length == 0) {
+            UpdateCookieItem("old_address", GetCookieItem("my_address"));
+            UpdateCookieItem("old_address2", GetCookieItem("my_address2"));
+            UpdateCookieItem("old_city", GetCookieItem("my_address"));
+            UpdateCookieItem("old_zip", GetCookieItem("my_zip"));
+            UpdateCookieItem("old_state", GetCookieItem("my_zip"));
+            UpdateCookieItem("old_country", GetCookieItem("my_country"));
+            UpdateCookieItem("old_lat", GetCookieItem("my_lat"));
+            UpdateCookieItem("old_lng", GetCookieItem("my_lng"));
+        }
+
+        // Load UI
+        UpdateCookieItem("my_address", $("#inputAddress1").val());
+        UpdateCookieItem("my_address2", $("#inputAddress2").val());
+
+        UpdateCookieItem("my_city", $("#inputCity").val());
+
+        UpdateCookieItem("my_zip", $("#inputZipCode").val());
+
+        UpdateCookieItem("my_state", $('#inputState option:selected').attr('spa-stateCode'));
+        UpdateCookieItem("my_country", $('#inputCountry option:selected').attr('spa-countryCode'));
+
+        $("#sAddress1").html(GetCookieItem("my_address"));
+        $("#sAddress2").html(GetCookieItem("my_address2"));
+        $("#sZipCode").html(GetCookieItem("my_zip"));
+        $("#sCity").html(GetCookieItem("my_city"));
+        $("#sState").html(GetCookieItem("my_state"));
+        $("#sCountry").html(GetCookieItem("my_country"));
+
+        gCustomerToAddressForReview = GetCookieItem("my_address") + " " + GetCookieItem("my_city") + ', ' + GetCookieItem("my_state") + ' ' + GetCookieItem("my_zip");
+        $("#divCurrentLocationAddress").hide();
+
+
+        // now get the new lat / lng
+        var callback = 'updatelocationdisplay("' + gCustomerToAddressForReview + '", ' + gZoom + ');';
+
+        AddressToGPS($("#inputAddress1").val() + " " + $("#inputCity").val() + " " + $("#inputState").val() + " " + $("#inputCountry").val(), "my", callback);
+
+
+    }
+
+    function CancelAddress()
+    {
+        LoadAddressDialog();
+        $("#divCurrentLocationAddress").hide();
+    }
+
+    function GetCurrentLocationAddress()
+    {
+        var mylat = GetCookieItem("my_lat");
+        var mylng = GetCookieItem("my_lng");
+        //alert(11);
+        getAddress(mylat, mylng, "my");
+    }
+    function BuildMarketingLinkData()
+    {
+        // get questions by service id
+        // if we have some
+        // get custom answers
+        // else 
+        // build cart
+
+        var uri = ServicePrefix + "/api/GetServiceAdditionalQuestions/?serviceid=" + inServiceID;
+
+        $.get(uri).then(function (result) {
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.Status != null) {
+                if (result.Status != "SUCCESS") {
+                    showAlert(result.Message);
+
+                    return;
+                }
+                else {
+
+                    if (result.Results.length > 0) {
+
+                        for (var i = 0; i < result.Results.length; i++)
+                        {
+                            var AQ = new Object();
+                            AQ = {
+                                ID: result.Results[i].AdditionalQuestionID,
+                                answer: "",
+                                token: result.Results[i].AdditionalQuestionType
+                            }
+                            inServiceQuestionArray.push(AQ);
+                        }
+                        BuildMarketingLinkAnswers();
+                    }
+                    else {
+                        BuildMarketingLinkCart();
+                    }
+                }
+            }
+            else {
+                return;
+            }
+        });
+
+
+    }
+
+    function BuildMarketingLinkAnswers(results)
+    {
+
+        if (inServiceQuestionArray.length == 0) {
+            BuildMarketingLinkCart();
+        }
+        else {
+            for (var i = 0; i < inServiceQuestionArray.length; i++) {
+                LoadTheAnswer(i, (i + 1 == inServiceQuestionArray.length ? true : false));
+            }
+        }
+
+    }
+
+    function LoadTheAnswer(index, bLastOne)
+    {
+        if (user.UserID == '0')
+        {
+            BuildMarketingLinkCart();
+            return;
+        }
+
+        var uri = ServicePrefix + "/api/GetUserAdditionalQuestionAnswer/?userid=" + user.UserID + "&additionalquestiontoken=" + inServiceQuestionArray[index].token;
+
+        $.get(uri).then(function (result) {
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.Status != null) {
+                if (result.Status != "SUCCESS") {
+                    showAlert(result.Message);
+
+                    return;
+                }
+                else {
+
+                    inServiceQuestionArray[index].answer = result.ID;
+                    if (bLastOne == true) {
+                        BuildMarketingLinkCart();
+                    }
+                }
+            }
+        });
+    }
+
+    function BuildMarketingLinkCart()
+    {
+
+
+        var CreditCardID = GetCookieItem("PrimaryCreditCardID");
+        //var AddressID = GetCookieItem("PrimaryAddressID");
+        var NewDate = new Date();
+        var now = new Date();
+        var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+        var cartArray = new Array();
+
+        var cartArrayItem = new Object();
+
+        UpdateCookieItem("ServiceID", inServiceID);
+        BuildQuestionArray(GetCookieItem("ServiceID"));
+
+        // Create ServiceOffering
+        cartArrayItem = {
+            itemID: inServiceOfferingID.toUpperCase(),
+            itemSubID: "0",
+            itemType: "ServiceOffering",
+            itemServiceID: inServiceID.toUpperCase(),
+            itemDiscountApplied: 0,
+            itemDiscountCodeID: '0',
+            itemCost: 0
+        }
+        cartArray.push(cartArrayItem);
+
+        // Conditional Create SubServiceOffering
+        if (inServiceSubOfferingID.length > 1)
+        {
+            cartArrayItem = new Object();
+
+            cartArrayItem = {
+                itemID: inServiceOfferingID.toUpperCase(),
+                itemSubID: inServiceSubOfferingID.toUpperCase(),
+                itemType: "ServiceSubOffering",
+                itemServiceID: inServiceID.toUpperCase(),
+                itemDiscountApplied: 0,
+                itemDiscountCodeID: '0',
+                itemCost: 0
+            }
+            cartArray.push(cartArrayItem);
+        }
+
+        cart = {
+            FirstName: user.FirstName,
+            LastName: user.LastName,
+            UserMobile:"",
+            cartID:"1",
+            WhenIndex:"0",
+//            "serviceItemEntry":-1,
+            parentID: inServiceOfferingID,
+            locationID: -1,
+            providerUserID: 0,
+            creditCardID: (CreditCardID == "0" ? -1 : CreditCardID),
+            userID:user.UserID,
+            cartDateTime: now_utc,
+            serviceDeliveryDateTime: NewDate.toString(),
+            cartItems: cartArray,
+            additionalQuestions: inServiceQuestionArray,
+            discountCode:"",
+            tipAmount: "0"
+        }
+
+
+        UpdateCookieItem("cart", JSON.stringify(cart));
+
+        cart = LoadCart();
+
+        LoadCartDisplay(cart, false, "divCartDisplay");
+        ////console.log(JSON.stringify(cart));
+
+        if (cart.locationID == "-1") {
+            //-------------------------------
+            // Make sure Angular load is done
+            //-------------------------------
+            setTimeout("LoadAddressDialog()", 500);
+        }
+
+        setTimeout("updateMarketingInfoCart(cart)", 3000);
+    }
+
+
+    function resetpic(val) {
+
+        gZoom = parseInt(gZoom) + val;
+        if (gZoom < 1) {
+            gZoom = 1;
+        }
+
+        updatelocationdisplay(gToAddress, gZoom);
+    }
+    function LoadAddressDialog()
+    {
+        // Load UI
+        $("#inputAddress1").val(GetCookieItem("my_address"));
+        $("#inputAddress2").val("");
+        $("#inputCity").val(GetCookieItem("my_city"));
+
+        $("#inputZipCode").val(GetCookieItem("my_zip"));
+
+
+        // Select Country
+        $("#inputCountry option:selected").removeAttr("selected");
+        $('#inputCountry option[spa-countryCode="' + GetCookieItem("my_country") + '"]').prop('selected', true);
+        // Select State
+        $("#inputState option:selected").removeAttr("selected");
+        $('#inputState option[spa-stateCode="' + GetCookieItem("my_state") + '"]').prop('selected', true);
+    }
+
+    function updatelocationdisplay(toaddress, zoom) {
+
+        gToAddress = toaddress;
+        gZoom = zoom;
+        gProviderListLatLong = "";
+        //var address = toaddress.split(',');
+
+        //if (address.length == 0) {
+        //    return;
+        //}
+
+        var ServiceID = GetCookieItem("ServiceID");
+
+        var uri = ServicePrefix + "/api/GetAvailableProviderList/?serviceid=" + ServiceID + "&latitude=" + gToLat + "&longitude=" + gToLng + "&milesradius=" + "30";
+
+        $.get(uri).then(function (result) {
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.Status != null) {
+                if (result.Status != "SUCCESS") {
+                    showAlert(result.Message);
+
+                    return;
+                }
+                else {
+                    gAvailableProviderCount = result.Results.length;
+
+                    for (var i = 0; i < result.Results.length; i++) {
+                        if (result.Results[i].ProviderID != user.UserID) {
+                            gProviderListLatLong = gProviderListLatLong + "&markers=icon:https://dev.spapp.com/assets/common/images/bullet_sm.jpg|" + result.Results[i].CurrentLatitude + "," + result.Results[i].CurrentLongitude + "|";
+                        }
+                        else
+                        {
+                            gAvailableProviderCount = gAvailableProviderCount - 1;
+                        }
+                    }
+
+                    if (cart.locationID == -1)
+                    {
+                        gToAddress = GetCookieItem("my_lat") + ", " + GetCookieItem("my_lng");
+                    }
+                    
+                    //GetMap();
+                }
+            }
+            else {
+                return;
+            }
+        });
+
+
+    }
+
+    function GetMap()
+    {
+
+        var w = $(".appcontainer").width();
+        if (w == "0") {
+            return;
+        }
+
+        if ((gToLat == 0) || (gToLng == 0)) {
+            $(".mapzoom").hide();
+            return;
+        }
+
+        if (typeof gToAddress == "undefined") {
+            $(".mapzoom").hide();
+            return;
+        }
+
+        var w = $(".appcontainer").width();
+
+        if (w == "0") {
+            $(".mapzoom").hide();
+            return;
+        }
+
+        $(".mapzoom").show();
+        //alert($(".scrollme").width());
+        var w = parseInt(parseInt($(".appcontainer").width()) * 1);
+        //if (w => 570)
+        //{
+        //    w = 570;
+        //}
+
+        var img_url = "https://maps.googleapis.com/maps/api/staticmap?center=" + gToAddress + "&zoom=" + gZoom + "&maptype=roadmap&size=" + w.toString() + "x150&sensor=false" + "&markers=icon:" + ImagePrefix + "/service/" + GetCookieItem("ServiceID") + "-icon.jpg|" + gToAddress + "&sensor=false" + gProviderListLatLong;
+
+        ////console.log(img_url);
+
+
+        $("#imgServicePic").attr("src", img_url);
+        //$("#imgServicePic").show();
+    }
+
+    //------------------------------------------------
+    // Geo functions
+    //------------------------------------------------
+    function HideGeoAddress(val) {
+        //var lat = $('input[name="radLocation"]:checked').attr("spapp-lat");
+        //var long = $('input[name="radLocation"]:checked').attr("spapp-long");
+
+        $("#divCurrentLocationAddress").hide();
+
+        cart.locationID = val;
+    }
+    function ShowGeoAddress() {
+        //ResetAddress();
+        $("#divCurrentLocationAddress").show();
+    }
+
+    function getWhereLocation() {
+        blockUI();
+        //setTimeout("unblockUI();", 3600);
+        cart.locationID = "-1";
+        $("#divCurrentLocationAddress").show();
+        getLocation("updateAddressLocation()");
+    }
+
+    function updateAddressLocation() {
+        var my_lat = GetCookieItem("my_lat");
+        var my_lng = GetCookieItem("my_lng");
+
+        if (my_lat.toString().length == 0 || my_lng.toString().length == 0) {
+            ResetAddress();
+            $("#divLocation").hide();
+            showAlert("Problem with current location functionality - please select or create an address");
+        }
+        else {
+            ResetAddress();
+            $("#divLocation").show();
+            showPosition(my_lat, my_lng);
+        }
+        //unblockUI();
+    }
+
+    function showPosition(lat, long) {
+        //alert('NO GPS');
+        //return;
+
+        var latlon = lat + "," + long;
+
+
+        gToLat = lat;
+        gToLng = long;
+
+        ResetAddress();
+
+        $("#divLocation").show();
+
+
+        getAddress(lat, long, "my");
+
+        if ($('input[name="radLocation"]:checked').val() == "-1") {
+
+            var ToAddress = GetCookieItem("my_address") + " ";
+            ToAddress = ToAddress + GetCookieItem("my_city") + ", ";
+            ToAddress = ToAddress + GetCookieItem("my_state") + " ";
+            ToAddress = ToAddress + GetCookieItem("my_zip");
+            updatelocationdisplay(ToAddress, gZoom);
+
+            // Load UI
+            $("#inputAddress1").val(GetCookieItem("my_address"));
+            $("#inputAddress2").val("");
+            $("#inputCity").val(GetCookieItem("my_city"));
+
+            $("#inputZipCode").val(GetCookieItem("my_zip"));
+
+
+            // Select Country
+            $("#inputCountry option:selected").removeAttr("selected");
+            $('#inputCountry option[spa-countryCode="' + GetCookieItem("my_country") + '"]').prop('selected', true);
+            // Select State
+            $("#inputState option:selected").removeAttr("selected");
+            $('#inputState option[spa-stateCode="' + GetCookieItem("my_state") + '"]').prop('selected', true);
+
+
+        }
+
+    }
+
+    function ResetAddress() {
+
+        $("#inputAddress1").val("");
+        $("#inputAddress2").val("");
+        $("#inputCity").val("");
+        $("#inputZipCode").val("");
+        // Select Country
+        $("#inputCountry option:selected").removeAttr("selected");
+        // Select State
+        $("#inputState option:selected").removeAttr("selected");
+    }
+
+    //function updatelocationdisplay(toaddress, zoom)
+    //{
+    //    var w = parseInt($("#spa-menu-container").width());
+
+    //    w = parseInt(w * .9);
+
+    //    var img_url = "https://maps.googleapis.com/maps/api/staticmap?center=" + toaddress + "&zoom=" + zoom + "&maptype=roadmap&size=" + w.toString() + "x200&sensor=false&markers=color:red|label:C|" + toaddress + "&sensor=false";
+
+    //    $("#imgServicePic").attr("src", img_url);
+
+    //    $("#imgServicePic").show();
+    //}
+    function generateTip(pct)
+    {
+        gPreTip = (gTotalCost * pct).toFixed(2);
+
+        $("#spnpreTip").html(gPreTip);
+        $("#page2Tip").html(gPreTip);
+        if (gPreTip > 0)
+        {
+            $("#preTip").show();
+            $("#divSubTotal").show();
+        }
+        else
+        {
+            $("#preTip").hide();
+            $("#divSubTotal").hide();
+        }
+        //var tCost = parseFloat(gPreTip) + parseFloat(gTotalCost);
+
+        //$("#totalCost").html(tCost.toFixed(2));
+
+        //------------------------
+        // Reset Totals
+        //------------------------
+        var tipCart = JSON.parse(GetCookieItem("cart"));
+
+        CalculateCartDisplayTotals(tipCart);
+
+    }
+
+
+
+    function GetDefaultTipANDLoadPage() {
+
+        //return;
+        console.log('GetDefaultTipANDLoadPage');
+        var UserID = user.UserID;
+        if (UserID == "0")
+        {
+            return;
+        }
+
+        var url = ServicePrefix + "/api/GetUserDefaultGratuity/?userid=" + UserID;
+
+        $.ajax(
+               {
+                   dataType: "json",
+                   url: url,
+                   method: "GET",
+                   success: BuildDefaultTipANDLoadPage,
+                   error: DefaultTipeError
+               });
+    }
+
+    function BuildDefaultTipANDLoadPage(result)
+    {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            
+            return;
+        }
+        else {
+            $("#txtTip").val(result.DefaultGratuity);
+            var pct = parseFloat($("#txtTip").val());
+            gPreTipPct = pct;
+
+            LogIt('Default');
+            LogIt(gPreTipPct);
+
+            FillScreenValues();
+
+            //generateTip(result.DefaultGratuity);
+        }
+    }
+
+    function DefaultTipeError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+
+    function BuildCartFromHistory()
+    {
+        var JobID = RebookJobID;
+
+        var url = ServicePrefix + "/api/GetAdditionalQuestionsByJobCartType/?jobid=" + RebookJobID + "&carttype=service";
+
+        $.ajax(
+               {
+                   dataType: "json",
+                   url: url,
+                   method: "GET",
+                   success: BuildAdditionalQuestionArraySuccess,
+                   error: BuildAdditionalQuestionArrayError
+               });
+    }
+
+    function BuildAdditionalQuestionArraySuccess(result)
+    {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            
+            return;
+        }
+        else {
+            // Questions
+            //alert(result.Results.length);
+            if (result.Results.length > 0)
+            {
+                for (var i = 0; i < result.Results.length; i++) {
+                    var cartQuestion = new Object();
+                    cartQuestion.ID = result.Results[i].AdditionalQuestionID;
+                    cartQuestion.answer = result.Results[i].AdditionalQuestionAnswer;
+                    cartQuestionArray.push(cartQuestion);
+                }
+            }
+            BuildCartFromHistory();
+        }
+    }
+
+    function BuildAdditionalQuestionArrayError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+    function BuildCartFromHistory()
+    {
+        var JobID = RebookJobID;
+
+        var url = ServicePrefix + "/api/GetJobList/?userid=" + user.UserID.toString() + "&jobid=" + JobID + "&statusgroup=&usertype=user";
+
+        $.ajax(
+               {
+                   dataType: "json",
+                   url: url,
+                   method: "GET",
+                   success: BuildCartFromHistorySuccess,
+                   error: APIUpdateError
+               });
+    }
+
+    function BuildCartFromHistorySuccess(result)
+    {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            
+            return;
+        }
+        else
+        {
+            LoadCartFromHistory(result);
+        }
+    }
+
+    function LoadCartFromHistory(result)
+    {
+
+        if (result.Results.length < 1)
+        {
+            SilentLogout();
+        }
+
+        if (user.UserID != result.Results[0].UserID)
+        {
+            SilentLogout();
+        }
+
+        var obj = result.Results[0];
+        // Location
+        var LocationID = obj.CartAddress.UserAddressID;
+
+        // Credit Card ID
+        var CreditCardID = obj.CartCreditCard.UserCreditCardID;
+
+        var ServiceID = "0";
+        var OfferingArray = new Array();
+
+        for (var i=0; i < obj.CartItems.length; i++)
+        {
+            if (i == 0) {
+                ServiceID = obj.CartItems[i].CartServiceID;
+            }
+            if (obj.CartItems[i].CartOfferingID != "-1") {
+                OfferingObject = new Object();
+                OfferingObject =
+                    {
+                        itemID: obj.CartItems[i].CartOfferingID,
+                        itemSubID: obj.CartItems[i].CartSubOfferingID,
+                        itemType: obj.CartItems[i].CartOfferingType,
+                        itemServiceID: obj.CartItems[i].CartServiceID,
+                        itemDiscountApplied: 0,
+                        itemDiscountCodeID: 0,
+                        itemCost: 0
+                    }
+                OfferingArray.push(OfferingObject);
+            }
+        }
+
+        var cDate = new Date();
+        cart = {
+            FirstName: user.FirstName,
+            LastName: user.LastName,
+            UserMobile: "",
+            cartID: "1",
+            WhenIndex: "0",
+            serviceDeliveryDateTime: cDate.toString(),
+            serviceItemEntry: -1,
+            parentID: 0,
+            locationID: LocationID,
+            providerUserID: 0,
+            creditCardID: CreditCardID,
+            userID: user.UserID,
+            cartDateTime: now_utc,
+            serviceDeliveryDateTime: now,
+            cartItems: OfferingArray,
+            additionalQuestions: cartQuestionArray
+        }
+
+        BuildQuestionArray(ServiceID);
+
+        // save settings
+        UpdateCookieItem("cart", JSON.stringify(cart));
+        UpdateCookieItem("ServiceID", ServiceID);
+        LoadCartDisplay(cart, false, "divCartDisplay");
+        setTimeout("updateMarketingInfoCart(cart)", 3000);
+
+    }
+
+    function BuildCartFromHistoryError(jqXHR, textStatus, err)
+    {
+        showAlert(textStatus);
+        return false;
+    }
+
+    function UpdateCart() {
+        // save settings
+        UpdateCookieItem("cart", JSON.stringify(cart));
+    }
+    //---------------------------------
+    // Navigation
+    //---------------------------------
+    function Prev(file) {
+
+        UpdateCart();
+        window.location = "../cart/" + file;
+    }
+
+    function CartIsValid()
+    {
+
+        //alert(JSON.stringify(cart))
+        // Check for CartItems
+        if (!cart.cartItems)
+        {
+            showAlert('No Service selected.');
+            return false;
+        }
+
+        if (cart.cartItems.length <=0) {
+            showAlert('No Service selected');
+            return false;
+        }
+
+
+        // Location Address
+        if (cart.locationID == "-1") 
+        {
+            showAlert('No Location selected');
+            return false;
+
+        }
+
+        // Credit Card
+        if (cart.creditCardID == "-1")   {
+            showAlert('There seems to be an issue with your Credit Card - Please select a new one');
+            return false;
+        }
+
+        // Expiration of CC ?
+        var ccOK = true;
+        var dt = new Date();
+        var ExpYear = gCCEXYYYY;
+
+        if (ExpYear == dt.getFullYear())
+        {
+            var ExpMonth = gCCEXMM;
+
+            if (ExpMonth < 1 + dt.getMonth())
+            {
+                ccOK = false;
+            }
+        }
+        else
+        {
+            if (ExpYear < dt.getFullYear())
+            {
+                ccOK = false;
+            }
+        }
+
+        if (ccOK==false)
+        {
+            var url = "../cart/payment.html";
+            showAlert('There seems to be an issue with your Credit Card - Please select a new one', url);
+            return false;
+        }
+
+        if (serviceAdditionalQuestions.length > 0) {
+            for (var i = 0; i < serviceAdditionalQuestions.length; i++) {
+                if ($("input[name='q_" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID.toString() + "']").is(':checked') == false) {
+                    showAlert('Plese answer all Treatment questions');
+                    return false;
+                }
+            }
+
+        }
+
+        // Mobile
+        return ValidMobile(RemoveTags($("#txtMobileNumber").val()));
+
+    }
+
+    function ValidateLocation() {
+
+        if (RemoveTags($("#inputCountry").val()) == "") {
+            showAlert('A Country must be selected');
+            return false;
+        }
+
+        if (DataLength(RemoveTags($("#inputAddress1").val())) == 0) {
+            showAlert('Address must be entered');
+            return false;
+        }
+
+        if (DataLength(RemoveTags($("#inputCity").val())) == 0) {
+            showAlert('City must be entered');
+            return false;
+        }
+
+        if (RemoveTags($("#inputState").val()) == "") {
+            showAlert('A State must be selected');
+            return false;
+        }
+
+        var countryCode = $('#inputCountry option:selected').attr('spa-countrycode');
+
+        if (isValidPostalCode(RemoveTags($("#inputZipCode").val()), countryCode) == false) {
+            showAlert('A valid Zip Code must be entered');
+            return false;
+        }
+
+        //------------------------------------------
+        //---------------------
+        // More Edits needed on Zip Code
+        // based on country
+        //---------------------
+        //------------------------------------------
+
+        return true;
+    }
+
+    // form submit with enter key
+     document.onkeydown=function(evt){
+        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+        if(keyCode == 13){  
+            Done();
+        }
+    }
+
+    function Done()
+    {
+        cart = JSON.parse(GetCookieItem("cart"));
+
+        ////////////////////////
+        // Questions
+        ////////////////////////
+        cartQuestionArray = new Array();
+
+        if (serviceAdditionalQuestions.length > 0)
+        {
+            for (var i = 0; i < serviceAdditionalQuestions.length; i++)
+            {
+                var answers = document.getElementsByName('q_' + serviceAdditionalQuestions[i].serviceAdditionalQuestionID);
+                for (var y = 0; y < answers.length; y++) {
+
+                    if (answers[y].checked == true) {
+
+                        var cartQuestion = new Object();
+                        cartQuestion.ID = serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                        cartQuestion.answer = answers[y].value;
+                        cartQuestionArray.push(cartQuestion);
+
+                    }
+                }
+            }
+
+            cart.additionalQuestions = cartQuestionArray;
+            UpdateCart();
+        }
+        
+
+        if (user.UserID == '0') {
+
+            showConfirm("Sorry! You must login or create a Joiful account to proceed...", "Login", "Register", "Login()", "Register()");
+
+            return;
+        }
+
+        blockUI();
+
+        if (gAvailableProviderCount == 0 && gNoArtistOption==true) {
+            showAlert("Sorry! We don't have any artists available in your area. Pick another location or try back later.");
+        }
+        else {
+
+            if (cart.locationID != "-1")
+            {
+                APICall();
+            }
+            else {
+                // Add it in
+                if (ValidateLocation() == true) {
+                    RemoveCookie("cUserAddressList");
+                    APICallLocation();
+                }
+            }
+
+
+        }
+
+    }
+    function APICallLocation() {
+
+        RemoveCookie("cUserAddressList");
+
+        var my_lat = GetCookieItem("my_lat");
+        var my_lng = GetCookieItem("my_lng");
+
+        if (my_lat == "") {
+            my_lat = "34.019266";
+        }
+
+        if (my_lng == "") {
+            my_lng = "-118.498728";
+        }
+
+
+        var callback = APICallLocationSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/updateuseraddress/';
+
+        data = {
+            userid: user.UserID,
+            addressid: 0,
+            address1: RemoveTags($("#inputAddress1").val()),
+            address2: RemoveTags($("#inputAddress2").val()),
+            city: RemoveTags($("#inputCity").val()),
+            stateid: RemoveTags($("#inputState").val()),
+            countryid: RemoveTags($("#inputCountry").val()),
+            zipcode: RemoveTags($("#inputZipCode").val()),
+            latitude: my_lat,
+            longitude: my_lng
+        };
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: APIUpdateLocationError
+               });
+
+    }
+
+    function APICallLocationSuccess(result) {
+
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+
+            return;
+        }
+        else {
+            UpdateNewCartLocation(result.ID);
+        }
+    }
+    function UpdateNewCartLocation(ID) {
+
+        cart.locationID = ID;
+
+        UpdateCart();
+
+        APICall();
+    }
+    function APIUpdateLocationError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+
+    function APICall()
+    {
+        if (CartIsValid() == false) {
+            return;
+        }
+
+        var callback = APICallSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/InsertCartTransaction/';
+        //showAlert(JSON.stringify(cart));
+
+        // Additional Cart Updates
+        cart.Note = RemoveTags($("#txtNote").val());
+        cart.tipAmount = RemoveTags($("#txtTip").val());
+        //cart.UserMobile = GetCookieItem("MobileNumber");
+        cart.UserMobile = RemoveTags($("#txtMobileNumber").val());
+
+        cart.MarketingLinkID = RemoveTags(inMarketingLinkID);
+
+        cart.RebookJobID = RemoveTags(RebookJobID);
+        cart.ProviderUserID = RemoveTags(PreferredProviderID);
+
+        // Update Mobile Cookie
+        UpdateCookieItem("MobileNumber", cart.UserMobile);
+
+        var data = BuildCartInputObject(cart);
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: APIUpdateError
+               });
+
+    }
+
+    function APICallSuccess(result) {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS")
+        {
+            showAlert(result.Message);
+            
+            return;
+        }
+        else {
+                RemoveCookie("cart");
+                RemoveCookieItem("enteredDiscountCode");
+                var uri = "../cart/jobdetail.html?jobid=" + result.ID + "&provider=false";
+                //showAlert('Request Received. Stand by for Confirmation.', uri);
+                window.location = uri;
+        }
+    }
+
+    function APIUpdateError(jqXHR, textStatus, err)
+    {
+        showAlert(textStatus);
+        return false;
+    }
+
+    function ValidateDiscountCode(silentmode) {
+
+        
+
+        var item = RemoveTags($("#txtDiscountCode").val());
+
+        if (item.length <= 0) {
+            showAlert("A Promo Code must be entered.");
+            return;
+        }
+        else {
+            $("#txtDiscountCode").val("");
+
+            var callback = 'CheckDiscountCode("' + item + '", ' + silentmode.toString() + ');';
+
+            if (GetCookieItem("enteredDiscountCode").length > 0)
+            {
+                showConfirm("You are already using a promo code. Are you sure you want to replace it?", "Yes", "No", callback);
+                return;
+            }
+            else
+            {
+                CheckDiscountCode(item, silentmode);
+            }
+        }
+    }
+    function AutoApplyDiscountCode(code, silentmode) {
+
+
+
+        var item = code;
+
+        if (item.length <= 0) {
+            return;
+        }
+        else
+        {
+            CheckDiscountCode(item, silentmode);
+        }
+    }
+
+    
+    function Register()
+    {
+        UpdateCart(true);
+        window.location = '../account/register.html';
+    }
+    function Login()
+    {
+        UpdateCart(true);
+        window.location = '../account/login.html';
+    }
+
+    function internalChangeLabelColorAQ(classname, id, val) {
+        console.log(classname);
+        console.log(id);
+        var checked = "<img src='../assets/common/images/selected.png' height='23' width='23' />";
+        var notchecked = "<img src='../assets/common/images/unselected-silver.png' height='23' width='23' />";
+
+        $('input[name="q_' + id + '"][value="' + val + '"]').prop('checked', true);
+        //resetCreditCardUI(val);
+
+        $(".C_" + classname).html(notchecked);
+        $(".C_" + classname).addClass('resetRadioButton');
+
+
+        $("#C_" + id).removeClass('resetRadioButton');
+        $("#C_" + id).html(checked);
+
+        //ChangeLabelColor(classname, id);
+    }
+    function BuildQuestionArray(ServiceID) {
+
+        // Start with Additional Questions
+
+        var uri = ServicePrefix + "/api/GetServiceAdditionalQuestions/?serviceid=" + ServiceID;
+
+        $.get(uri).then(function (result) {
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.Status != null) {
+                if (result.Status != "SUCCESS") {
+                    showAlert(result.Message);
+
+                    return;
+                }
+                else {
+                    BuildAdditionalQuestionArray(result.Results)
+                    //showAlert(JSON.stringify(result.Results));
+                    return;
+                }
+            }
+            else {
+                return;
+            }
+        });
+
+
+
+    }
+
+    function BuildAdditionalQuestionArray(results) {
+
+        for (var i = 0; i < results.length; i++)
+        {
+            // -------------------------------------
+            // This service has this question
+            // -------------------------------------
+            if (results[i].AdditionalServiceQuestionID.length > 1) {
+                var serviceAdditionalQuestion = new Array();
+
+                serviceAdditionalQuestion = {
+                    serviceAdditionalQuestionType: results[i].AdditionalQuestionType,
+                    serviceAdditionalQuestionID: results[i].AdditionalQuestionID,
+                    serviceAdditionalQuestionText: results[i].AdditionalQuestionText
+                }
+                serviceAdditionalQuestions.push(serviceAdditionalQuestion);
+            }
+        }
+
+        GetUserAdditionalQuestionAnswerList();
+        //GetAllServiceOfferings(ServiceID);
+    }
+
+    function GetUserAdditionalQuestionAnswerList() {
+
+        for (var i = 0; i < serviceAdditionalQuestions.length; i++) {
+            if (user.UserID.length > 1)
+            {
+                var bDone = false;
+                if (i + 1 == serviceAdditionalQuestions.length) {
+                    bDone = true;
+                }
+                GetUserAdditionalQuestionAnswerItem(serviceAdditionalQuestions[i].serviceAdditionalQuestionType, bDone);
+ 
+            }
+        }
+
+
+
+    }
+
+    function GetUserAdditionalQuestionAnswerItem(additionalquestiontoken, bDone) {
+        // Start with Additional Questions
+
+        var uri = ServicePrefix + "/api/GetUserAdditionalQuestionAnswer/?userid=" + user.UserID + "&additionalquestiontoken=" + additionalquestiontoken;
+
+        $.get(uri).then(function (result) {
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.Status != null) {
+                if (result.Status != "SUCCESS") {
+                    showAlert(result.Message);
+
+                    return;
+                }
+                else {
+
+                    serviceAdditionalQuestionsAnswer.push(result.ID);
+
+                    if (bDone == true) {
+                        BuildQuestions();
+                    }
+                    else {
+                        return;
+                    }
+                }
+            }
+            else {
+                return;
+            }
+        });
+
+    }
+
+    function BuildQuestions() {
+
+        //GetAdditionalQuestionDefaults();
+        var checked = "<img src='../assets/common/images/selected.png' height='23' width='23' />";
+        var notchecked = "<img src='../assets/common/images/unselected-silver.png' height='23' width='23' />";
+        var work = '';
+        for (var i = 0; i < serviceAdditionalQuestions.length; i++) {
+            //var answer = GetAdditionalQuestionAnswer(serviceAdditionalQuestions[i].serviceAdditionalQuestionType);
+
+            var usersavedanswer = serviceAdditionalQuestionsAnswer[i];
+            //alert(usersavedanswer);
+
+            if (serviceAdditionalQuestions[i].serviceAdditionalQuestionType == "gender") {
+                work = work + '<div style="width:100%;margin: 0 auto;padding-top:5px;padding-bottom:5px;border-top:solid #808080 1px;border-radius:0px;">';
+                work = work + '<div style="font-size:14px;text-align:center;color:#535354;white-space:normal;word-wrap:normal;padding-top:5px;padding-left:0px;padding-right:0px; padding-bottom: 5px;">' + serviceAdditionalQuestions[i].serviceAdditionalQuestionText + '</div>';
+
+                work = work + '<div class="row" style="margin-left:0px;margin-right:0px;margin-top:5px">';
+
+
+
+                //--------------------------------------
+                // Male
+                //--------------------------------------
+                var tempAnswer = "male";
+                var btnColor = "btn-default";
+                var selected = "";
+                if (tempAnswer.toLowerCase() == usersavedanswer.toLowerCase())
+                {
+                    //btnColor = "btn-primary";
+                    selected = "checked";
+                }
+
+                var cNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                var iNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID + tempAnswer;
+                var oNameRAD = "q_" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                var iNameRAD = oNameRAD + tempAnswer;
+                var vNameRAD = tempAnswer;
+                var vlNameRAD = "Male";
+
+                var link = "internalChangeLabelColorAQ('" + cNameLBL + "','" + iNameLBL + "','" + vNameRAD + "');";
+                work = work + '<div class="col-xs-4 noPadding">';
+                work = work + '<label onclick="' + link + '" id="' + iNameLBL + '" class="' + cNameLBL + ' btn btn-xs btn-block ' + btnColor + '" style="margin-left:0px;margin-right:0px;border:none">'
+                work = work + '<input ' + selected + '  style="display:none" id="' + iNameRAD + '" type="radio" name="' + oNameRAD + '" value="' + vNameRAD + '"/>' ;
+                work = work + "<div class='C_" + cNameLBL + "' id='C_" + iNameLBL + "' style='display:table-cell;border:none;'>" + (selected.length > 0 ? checked : notchecked) + "</div><div style='height:auto;width:23px;padding-left:5px;color:#5B6770;display:table-cell;font-size:14px;vertical-align:bottom'>" + vlNameRAD + "</div>";
+                work = work + '</label>';
+                work = work + '</div>';
+
+                //--------------------------------------
+                // Female
+                //--------------------------------------
+                tempAnswer = "female";
+                btnColor = "btn-default";
+                selected = "";
+
+                if (tempAnswer.toLowerCase() == usersavedanswer.toLowerCase()) {
+                    // btnColor = "btn-primary";
+                    selected = "checked";
+                }
+
+                var cNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                var iNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID + tempAnswer;
+                var oNameRAD = "q_" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                //var iNameRAD = "AQgender1";
+                var iNameRAD = oNameRAD + tempAnswer;
+                var vNameRAD = tempAnswer;
+                var vlNameRAD = "Female";
+
+                var link = "internalChangeLabelColorAQ('" + cNameLBL + "','" + iNameLBL + "','" + vNameRAD + "');";
+                work = work + '<div class="col-xs-4 noPadding">';
+                work = work + '<label onclick="' + link + '" id="' + iNameLBL + '" class="' + cNameLBL + ' btn btn-xs btn-block ' + btnColor + '" style="margin-left:0px;margin-right:0px;border:none">'
+                work = work + '<input ' + selected + '  style="display:none" id="' + iNameRAD + '" type="radio" name="' + oNameRAD + '" value="' + vNameRAD + '"/>';
+                work = work + "<div class='C_" + cNameLBL + "' id='C_" + iNameLBL + "' style='display:table-cell;border-radius:0%;border:none;'>" + (selected.length > 0 ? checked : notchecked) + "</div><div style='height:auto;width:23px;padding-left:5px;color:#5B6770;display:table-cell;font-size:14px;vertical-align:bottom'>" + vlNameRAD + "</div>";
+
+                work = work + '</label>';
+                work = work + '</div>';
+
+                //--------------------------------------
+                // Either
+                //--------------------------------------
+                tempAnswer = "na";
+                btnColor = "btn-default";
+                selected = "";
+
+                if (tempAnswer.toLowerCase() == usersavedanswer.toLowerCase()) {
+                    //  btnColor = "btn-primary";
+                    selected = "checked";
+                }
+
+                var cNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                var iNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID + tempAnswer;
+                var oNameRAD = "q_" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                //var iNameRAD = "AQgender2";
+                var iNameRAD = oNameRAD + tempAnswer;
+                var vNameRAD = tempAnswer;
+                var vlNameRAD = "Either";
+
+                var link = "internalChangeLabelColorAQ('" + cNameLBL + "','" + iNameLBL + "','" + vNameRAD + "');";
+                work = work + '<div class="col-xs-4 noPadding">';
+                work = work + '<label onclick="' + link + '" id="' + iNameLBL + '" class="' + cNameLBL + ' btn btn-xs btn-block ' + btnColor + '" style="margin-left:0px;margin-right:0px;border:none">'
+                work = work + '<input ' + selected + '  style="display:none" id="' + iNameRAD + '" type="radio" name="' + oNameRAD + '" value="' + vNameRAD + '"/>';
+                work = work + "<div class='C_" + cNameLBL + "' id='C_" + iNameLBL + "' style='display:table-cell;border-radius:0%;border:none;'>" + (selected.length > 0 ? checked : notchecked) + "</div><div style='height:auto;width:23px;padding-left:5px;color:#5B6770;display:table-cell;font-size:14px;vertical-align:bottom'>" + vlNameRAD + "</div>";
+                work = work + '</label>';
+                work = work + '</div>';
+
+
+
+                work = work + '</div></div>';
+            }
+            //alert(work);
+        }
+        $("#AdditionalQuestions").html(work);
+    }
+
+    function Page2()
+    {
+        console.log(GetCookieItem("cart"));
+        //$(".cartDisplay").hide();
+        $(".page1").hide();
+        $(".page2").show();
+    }
+
+
+</script>
+

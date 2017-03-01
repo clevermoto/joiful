@@ -1,0 +1,541 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+  <body>
+      <div class="appcontainer">
+
+
+          <script>document.write(DynamicMenu("white", "black", "X", "SendUserHome()", "TELL A FRIEND", true, "", ""));</script>
+
+          <div class="container">
+
+              <form class="form-signin">
+
+                <div class="scrollmenewheaderfooter scrollmenewbase">
+                    <div class="row">
+                        <div id="contacts"></div>
+                    </div>
+
+                </div>
+                  <div id="menuforcontacts" style="padding-top:60px;padding-right:20px;bottom:061px;right:0;position:fixed;max-width:600px;z-index:999;float:right;text-align:right"></div>
+                  <div class="row footer-auto">
+                      <button id="btnSend" class="btn btn-lg btn-success btn-block btn-notround grad btnHeight" type="button" onclick="SendRequests()">SEND INVITATIONS</button>
+                  </div>
+
+              </form>
+
+          </div> <!-- /container -->
+
+      </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<script>
+
+  var UserID = "";
+  
+  if (gMobileVersion == true) {
+      document.addEventListener("deviceready", onDeviceReadyContacts, false);
+  }
+
+  function onDeviceReadyContacts()
+  {  
+    if (gMobileVersion == true)
+    {
+      function onSuccess(contacts) {
+        //alert('Found ' + contacts.length + ' contacts.');
+	    BuildContactList(contacts);
+      };
+
+      function onError(contactError) {
+	    showAlert('Issue getting contacts: ' + contactError);
+      };
+
+      var fields = [navigator.contacts.fieldType.displayName, navigator.contacts.fieldType.phoneNumbers, navigator.contacts.fieldType.emails];
+      navigator.contacts.find(fields, onSuccess, onError);
+      
+      
+    }
+  }
+  var contactMaster = new Array();
+
+  $(document).ready(function ()
+  {
+
+
+
+      if (gMobileVersion == false) {
+          var contacts = new Array();
+          BuildContactList(contacts);
+      }
+
+      if (CheckLogin() == true)
+      {
+          BuildCommonUI();
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+      }
+
+
+  });
+  function showcontacts(control) {
+      $(".showall").hide();
+      //console.log(control);
+      $("." + control).show();
+  }
+  function showall()
+  {
+      blockUI();
+
+      $(".showall").show();
+      unblockUI();
+  }
+  function BuildContactList(contactsarray)
+  {
+    
+      var contacts = new Array();
+      var objContact = new Object();
+ 
+      if (gMobileVersion == false) {
+          objContact = new Object();
+          objContact = {
+              name: "Carl",
+              email: "carl@joiful.com",
+              phone: "8181818811"
+          }
+          contacts.push(objContact); objContact = new Object();
+          objContact = {
+              name: "Carl",
+              email: "carl@joiful.com",
+              phone: "8181818811"
+          }
+          contacts.push(objContact); objContact = new Object();
+      }
+          /* 
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact); objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact);
+      objContact = new Object();
+      objContact = {
+          name: "Carl",
+          email: "carl@joiful.com",
+          phone: "8182191528"
+      }
+      contacts.push(objContact);
+
+
+      objContact = new Object();
+      objContact = {
+          name: "Cam",
+          email: "cam@joiful.com",
+          phone: ""
+      }
+      contacts.push(objContact);
+
+      objContact = new Object();
+      objContact = {
+          name: "Brian",
+          email: "",
+          phone: "8182191528"
+      }
+      contacts.push(objContact);
+      */
+
+      for (var i = 0; i < contactsarray.length; i++) {
+          var email = "";
+          if (contactsarray[i].emails == null) {
+              email = "";
+          }
+          else if (contactsarray[i].emails.length > 0) {
+              email = contactsarray[i].emails[0].value;
+          }
+          else {
+              email = "";
+          }
+
+          var phone = "";
+
+          if (contactsarray[i].phoneNumbers == null) {
+              phone = "";
+          }
+          else if (contactsarray[i].phoneNumbers.length > 0) {
+              phone = contactsarray[i].phoneNumbers[0].value;
+          }
+          else {
+              phone = "";
+          }
+
+          objContact = new Object();
+          objContact = {
+              name: (contactsarray[i].name.givenName != null ? contactsarray[i].name.givenName + ' ' : '') + (contactsarray[i].name.familyName != null ? contactsarray[i].name.familyName : ''),
+              email: email,
+              phone: phone
+          }
+          contacts.push(objContact);
+          
+      }
+
+
+    var work = "";
+    //work = "<div class='row'>";
+
+    //work = work + "<div class='col-xs-6'>";
+    //work = work + "Contact";
+    //work = work + "</div>";
+
+    //  // Build Text Strings
+    //work = work + "<div class='col-xs-3 phonecol'>";
+    //work = work + "<a href='#' onclick='SelectCol(\"phonecol\")'>text</a>";
+    //work = work + "</div>";
+
+    //  // Build Text Strings
+    //work = work + "<div class='col-xs-3 emailcol'>";
+    //work = work + "<a href='#' onclick='SelectCol(\"emailcol\")'>email</a>";
+    //work = work + "</div>";
+
+      //work = work + "</div>";
+
+
+    contacts.sort(function (a, b) { // sort object by Employee Name
+        var nameA = a.name.toLowerCase(), nameB = b.name.toLowerCase()
+        if (nameA < nameB) //sort string ascending
+            return -1
+        if (nameA > nameB)
+            return 1
+        return 0 //default return value (no sorting)
+    })
+
+    var lastinitial = "";
+    var ContactInitMenu = "<a  style='width:50px;font-weight:800;padding-top:10px;padding-bottom:10px;color:" + gColors.PeacefulGray + "' href='#' onclick='showall()'>ALL</a>";
+    for (var i=0; i < contacts.length; i++)
+    {
+        if (contacts[i].name.length > 0)
+        {
+            var row = "";
+
+            if (contacts[i].name.substring(0, 1).toUpperCase() != lastinitial && (contacts[i].email.length > 0 || contacts[i].phone.length>0))
+            {
+                row = "<div style='padding-left:5px;background-color:" + "#808080" + "' class='border-bottom showall row " + contacts[i].name.substr(0, 1) + "'>";
+
+                row = row + "<div class='col-xs-12'>";
+
+                row = row + contacts[i].name.substr(0, 1).toUpperCase();
+                row = row + "</div>";
+
+                row = row + "</div>";
+
+                work = work + row;
+                ContactInitMenu = ContactInitMenu + "<br><a style='width:50px;padding-left:10px;padding-top:10px;padding-bottom:10px;font-weight:800;color:" + gColors.PeacefulGray + "' href='#' onclick='showcontacts(\"" + contacts[i].name.substring(0, 1).toUpperCase() + "\")'>" + contacts[i].name.substring(0, 1).toUpperCase() + "</a>";
+            }
+
+            lastinitial = contacts[i].name.substring(0, 1).toUpperCase();
+
+            // Build Text Strings
+            if (contacts[i].phone.length > 0) {
+
+                var id = i.toString();
+
+                row = "<div onclick='CheckThisContact(\""+ id +"\", true)' style='margin-top:5px;margin-bottom:5px'class='border-bottom showall row " + contacts[i].name.substring(0, 1).toUpperCase() + "'>";
+
+                row = row + "<div class='col-xs-3' style='margin-top:5px;'>";
+                row = row + "<div class='contact' id='contactPhone" + i.toString() + "' style='display:table-cell;border:none;height:23px;width:23px;color:white'><img src='../assets/common/images/unselected-silver.png' width='23' height='23' /></div>";
+
+                row = row + "<input id='chkPhone" + i.toString() + "' style='display:none;' type='checkbox' contacttype='phone' name='contacts' value='" + contacts[i].phone + "' />";
+                row = row + "</div>";
+
+                row = row + "<div class='col-xs-9'>";
+                row = row + contacts[i].name;
+ 
+
+                row = row + "<br>" + contacts[i].phone;
+                row = row + "</div>";
+                row = row + "</div>";
+                work = work + row;
+
+            }
+            if (contacts[i].email.length > 0) {
+
+                var id = i.toString();
+                row = "<div  onclick='CheckThisContact(\"" + id + "\", false)' style='margin-top:5px;margin-bottom:5px'class='border-bottom showall row " + contacts[i].name.substring(0, 1).toUpperCase() + "'>";
+
+                row = row + "<div class='col-xs-3' style='margin-top:5px;'>";
+                row = row + "<div class='contact' id='contactEmail" + i.toString() + "' style='display:table-cell;border:none;height:23px;width:23px;color:white'><img src='../assets/common/images/unselected-silver.png' width='23' height='23' /></div>";
+
+                row = row + "<input id='chkEmail" + i.toString() + "' style='display:none;'  type='checkbox' contacttype='email' name='contacts' value='" + contacts[i].email + "' />";
+                row = row + "</div>";
+
+                row = row + "<div class='col-xs-9'>";
+                row = row + contacts[i].name;
+
+
+                row = row + "<br>" + contacts[i].email;
+                row = row + "</div>";
+                row = row + "</div>";
+                work = work + row;
+
+            }
+        }
+    }
+
+
+    $("#menuforcontacts").html(ContactInitMenu);
+
+    $("#contacts").html(work);
+  }
+  function CheckThisContact(id, bPhone)
+  {
+      blockUI();
+      //console.log(id);
+      //console.log(bPhone);
+
+      var ControlTypeString = ""
+      if (bPhone == true)
+      {
+          ControlTypeString = "Phone";
+      }
+      else
+      {
+          ControlTypeString = "Email";
+
+      }
+
+      if ($("#chk" + ControlTypeString + id).is(":checked") == true)
+      {
+          $("#chk" + ControlTypeString + id).attr("checked", false);
+          $("#contact" + ControlTypeString + id).html(GetCheckMark(23, "unselected-silver"));
+          //$("#contact" + ControlTypeString + id).css("border-color", gColors.PeacefulGray);
+          //$("#contact" + ControlTypeString + id).css("background-color", "white");
+          //$("#contact" + ControlTypeString + id).css("color", "white");
+      }
+      else
+      {
+          $("#chk" + ControlTypeString + id).attr("checked", true);
+          $("#contact" + ControlTypeString + id).html(GetCheckMark(23, "joifulcheck"));
+          //$("#contact" + ControlTypeString + id).css("border-color", gColors.EvolutionOrange);
+          //$("#contact" + ControlTypeString + id).css("background-color", gColors.EvolutionOrange);
+          //$("#contact" + ControlTypeString + id).css("color", "white");
+      }
+
+      unblockUI();
+  }
+
+  function SendRequests()
+  {
+      var ContactsToSendArray = new Array();
+
+      var c = document.getElementsByName("contacts");
+      //console.log(c.length);
+      for (var i = 0; i < c.length; i++)
+      {
+          //console.log(i);
+          //console.log(c[i].checked);
+
+          if (c[i].checked == true)
+          {
+              item = new Object();
+              item = {
+                  "destination": c[i].value,
+                  "destinationType": c[i].attributes.getNamedItem("contacttype").value
+              }
+              //console.log(JSON.stringify(item));
+              ContactsToSendArray.push(item);
+          }
+      }
+
+      if (ContactsToSendArray.length == 0)
+      {
+          showAlert("Please select a contact to invite to Joiful.");
+          return;
+      }
+
+      var UserId = user.UserID;
+      var Persona = (user.Persona.toLowerCase()=="provider" ? "provider" : "user");
+
+      var uri = ServicePrefix + '/api/SendReferralMessage/';
+
+      var postData = {
+          userid: user.UserID,
+          contacts: ContactsToSendArray
+      }
+      console.log(JSON.stringify(postData));
+      $.ajax(
+             {
+                 data: postData,
+                 dataType: "json",
+                 url: uri,
+                 method: "POST",
+                 success: APISuccessUpdate,
+                 error: APIUpdateError
+             });
+
+  }
+
+  function APISuccessUpdate(result)
+  {
+  	  unblockUI();
+      if (result == null) {
+          showAlert('returned no data');
+          return;
+      }
+
+      if (result.Status != "SUCCESS") {
+          showAlert(result.Message);
+          return;
+      }
+
+      showAlert('Invites sent successfully.', "SendUserHome()");
+
+  }
+
+  function APIUpdateError(result, textStatus, err) {
+	  
+      var url = gCustomerHomePage;
+
+	  showAlert(err, url);
+
+  }
+
+    
+</script>

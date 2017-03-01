@@ -1,0 +1,23 @@
+﻿    <div style="margin-top:0px;margin-bottom:0px;padding-top:11px" ng-style="{'height' : 
+                (providerview == false ? '60px' : '30px')
+         }">
+        <div ng-if="y.ProviderUserID !='0' && 
+                (y.JobStatus !='complete' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel') 
+             && y.CartAddress.AddressLine1 != null">
+            {{y.CartAddress.AddressLine1}}<span ng-if="y.CartAddress.AddressLine2 != null">&nbsp;{{y.CartAddress.AddressLine2}}</span>
+        </div>
+
+        <div ng-if="y.CartAddress.City != null">{{y.CartAddress.City}}, {{y.CartAddress.State}}  {{y.CartAddress.ZipCode}}</div>
+
+            <!--<div ng-if="providerview==true">
+                <div style="border-bottom: 1px solid #5B6770;margin-bottom:5px;" ng-show="MobileVersion==true && (y.JobStatus !='complete' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel')">
+                    <button style="margin-top:5px;margin-bottom:5px" id="jlSendSMS{{$index}}" ng-click="sendSms(y.UserMobile, 'Hello ' + y.FirstName + ' this is ' + y.ProviderFirstName + ' your Joiful artist');" class="btn btn-sm btn-success spapp-joblist-button ajaxbtn" type="button">text</button>
+                    <button style="margin-top:5px;margin-bottom:5px" id="jlSendPhone{{$index}}" ng-click="callPhone(y.UserMobile);" class="btn btn-sm btn-success spapp-joblist-button ajaxbtn" type="button">call</button>
+
+                </div>
+
+            </div>-->
+        </div>
+<div style="width:80%;margin:0 auto;padding-top:10px;padding-bottom:10px" ng-show="y.ProviderUserID !='0' && providerview==true && MobileVersion==true && (y.JobStatus !='complete' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel')">
+    <button ng-click="TakeMeThere()" class="btn btn-md btn-primary btn-block btn-notround grad" type="button">TAKE ME THERE</button>
+</div>

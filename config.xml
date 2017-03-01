@@ -1,0 +1,148 @@
+<widget xmlns="http://www.w3.org/ns/widgets"
+        xmlns:gap="http://phonegap.com/ns/1.0"
+        id="com.tatbeq.joiful"
+        version="1.42">
+  <name>Joiful</name>
+  <description>Description</description>
+  <author href="http://joiful.com" email="carl@joiful.com">Joiful Team</author>
+  <preference name="permissions" value="none"/>
+  <access origin="http://phonegap.com" subdomains="true" />
+  <access origin="*" subdomains="true" />
+  <content src="index.html"/>
+  <access origin="*"/>
+  <preference name="DisallowOverscroll" value="true"/>
+  <preference name="android-minSdkVersion" value="15"/>
+  <preference name="orientation" value="portrait" />
+  <plugin name="cordova-plugin-googleplus" source="npm" >
+    <param name="REVERSED_CLIENT_ID" value="com.googleusercontent.apps.486513408762-gi9o06ehcuphna1kj9ca19ch7un04to7" />
+  </plugin>
+  <preference name="target-device" value="handset" />
+  <plugin name="cordova-plugin-facebook4" source="npm" >
+    <!-- <param name="APP_ID" value="630094987164718" /> -->
+  <param name="APP_ID" value="1847821442155336" />
+  <param name="APP_NAME" value="joiful-test" />
+  </plugin>
+  <plugin name="card.io.cordova.mobilesdk" source="npm"  />
+  <plugin name="mp-cordova-plugin-contacts" source="npm"/>
+  <plugin name="cordova-plugin-device" source="npm" spec="~1.1.1"/>
+  <plugin name="cordova-plugin-device-motion" source="npm" spec="~1.2.0"/>
+  <plugin name="cordova-plugin-device-orientation" source="npm" spec="~1.0.2"/>
+  <plugin name="cordova-plugin-geolocation" source="npm" spec="~2.1.0"/>  
+  <plugin name="cordova-plugin-inappbrowser" source="npm" spec="~1.3.0"/>
+  <plugin name="cordova-plugin-network-information" source="npm" spec="~1.2.0"/>
+  <plugin name="cordova-plugin-splashscreen" source="npm" spec="~3.2.1"/>
+  <plugin name="cordova-plugin-statusbar" source="npm" spec="~2.1.2">
+
+  </plugin>
+  <plugin name="cordova-plugin-whitelist" source="npm" spec="~1.2.1"/>
+  <plugin name="cordova-sms-plugin" source="npm" />
+  <plugin name="cordova-plugin-phonecaller" source="npm" />
+  <plugin name="cordova-plugin-media-capture" source="npm" spec="*">
+  <variable name="CAMERA_USAGE_DESCRIPTION" value="Joiful would like to access the camera." />
+  <variable name="MICROPHONE_USAGE_DESCRIPTION" value="Joiful would like to access the microphone." />
+  <variable name="PHOTOLIBRARY_USAGE_DESCRIPTION" value="Joiful would like to access the library." />
+</plugin>
+  <plugin name="cordova-plugin-x-socialsharing" source="npm">
+  </plugin>
+  <plugin name="pushwoosh-pgb-plugin" source="npm">
+    <param name="IOS_FOREGROUND_ALERT_TYPE" value="ALERT" />
+    <param name="ANDROID_FOREGROUND_PUSH" value="true" />
+  </plugin>
+  <plugin name="uk.co.workingedge.phonegap.plugin.launchnavigator" source="npm"/>
+  <icon src="icon.png"/>
+   <platform name="android">  
+    <icon src="assets/lib/phonegap/icons/android/mipmap-ldpi/ic_launcher.png" density="ldpi"/>
+    <icon src="assets/lib/phonegap/icons/android/mipmap-mdpi/ic_launcher.png" density="mdpi"/>
+    <icon src="assets/lib/phonegap/icons/android/mipmap-hdpi/ic_launcher.png" density="hdpi"/>
+    <icon src="assets/lib/phonegap/icons/android/mipmap-xhdpi/ic_launcher.png" density="xhdpi"/>
+    <icon src="assets/lib/phonegap/icons/android/mipmap-xxhdpi/ic_launcher.png" density="xxhdpi"/>
+    <icon src="assets/lib/phonegap/icons/android/mipmap-xxxhdpi/ic_launcher.png" density="xxxhdpi"/>
+
+    <splash src="assets/lib/phonegap/screens/android/screen-ldpi-portrait.png" density="port-ldpi"/>
+    <splash src="assets/lib/phonegap/screens/android/screen-mdpi-portrait.pngg" density="port-mdpi"/>
+    <splash src="assets/lib/phonegap/screens/android/screen-hdpi-portrait.png" density="port-hdpi"/>
+    <splash src="assets/lib/phonegap/screens/android/screen-xhdpi-portrait.png" density="port-xhdpi"/>
+  <uses-permission name="android.permission.WRITE_EXTERNAL_STORAGE" />
+  </platform>
+  <platform name="ios">
+    <icon src="assets/lib/phonegap/icons/ios/icon.png" platform="ios" width="57" height="57"/>
+    <icon src="assets/lib/phonegap/icons/ios/icon-2x.png" platform="ios" width="114" height="114"/>
+
+    <icon src="assets/lib/phonegap/icons/ios/Icon-App-40x40@1x.png" platform="ios" width="40" height="40"/>
+    <icon src="assets/lib/phonegap/icons/ios/Icon-App-40x40@2x.png" platform="ios" width="80" height="80"/>
+
+    <icon src="assets/lib/phonegap/icons/ios/icon-50.png" platform="ios" width="50" height="50"/>
+    <icon src="assets/lib/phonegap/icons/ios/icon-50-2x.png" platform="ios" width="100" height="100"/>
+
+    <icon src="assets/lib/phonegap/icons/ios/Icon-App-60x60@1x.png" platform="ios" width="60" height="60"/>
+    <icon src="assets/lib/phonegap/icons/ios/Icon-App-60x60@2x.png" platform="ios" width="120" height="120"/>
+    <icon src="assets/lib/phonegap/icons/ios/Icon-App-60x60@3x.png" platform="ios" width="180" height="180"/>
+
+    <icon src="assets/lib/phonegap/icons/ios/icon-72.png" platform="ios" width="72" height="72"/>
+    <icon src="assets/lib/phonegap/icons/ios/icon-72-2x.png" platform="ios" width="144" height="144"/>
+
+    <icon src="assets/lib/phonegap/icons/ios/Icon-App-76x76@1x.png" platform="ios" width="76" height="76"/>
+    <icon src="assets/lib/phonegap/icons/ios/Icon-App-76x76@2x.png" platform="ios" width="152" height="152"/>
+
+    <icon src="assets/lib/phonegap/icons/ios/Icon-App-29x29@1x.png" platform="ios" width="29" height="29"/>
+    <icon src="assets/lib/phonegap/icons/ios/Icon-App-29x29@2x.png" platform="ios" width="58" height="58"/>
+    <icon src="assets/lib/phonegap/icons/ios/Icon-App-29x29@3x.png" platform="ios" width="87" height="87"/>
+
+    <splash src="assets/lib/phonegap/screens/ios/screen-iphone-portrait-568h-2x.png" platform="ios" width="640" height="1136"/>
+    <splash src="assets/lib/phonegap/screens/ios/screen-iphone-portrait-667h.png" platform="ios" width="750" height="1334"/>
+    <splash src="assets/lib/phonegap/screens/ios/screen-iphone-portrait-736h.png" platform="ios" width="1242" height="2208"/>
+    <splash src="assets/lib/phonegap/screens/ios/screen-ipad-portrait-2x.png" platform="ios" width="1536" height="2048"/>
+    <splash src="assets/lib/phonegap/screens/ios/screen-ipad-portrait.png" platform="ios" width="768" height="1024"/>
+    <splash src="assets/lib/phonegap/screens/ios/screen-iphone-portrait-2x.png" platform="ios" width="640" height="960"/>
+    <splash src="assets/lib/phonegap/screens/ios/screen-iphone-portrait.png" platform="ios" width="320" height="480"/>
+  </platform>
+  <platform name="wp8">
+    <icon src="assets/lib/phonegap/icons/wp8/ApplicationIcon.png" platform="wp8" width="99" height="99"/>
+    <icon src="assets/lib/phonegap/icons/wp8/Background.png" platform="wp8" width="159" height="159"/>
+    <splash src="assets/lib/phonegap/screens/wp8/SplashScreenImage.jpg" platform="wp8" width="768" height="1280"/>
+  </platform>
+  <platform name="windows">
+    <icon src="assets/lib/phonegap/icons/windows/logo.png" platform="windows" width="150" height="150"/>
+    <icon src="assets/lib/phonegap/icons/windows/smalllogo.png" platform="windows" width="30" height="30"/>
+    <icon src="assets/lib/phonegap/icons/windows/storelogo.png" platform="windows" width="50" height="50"/>
+    <splash src="assets/lib/phonegap/screens/windows/splashscreen.png" platform="windows" width="620" height="300"/>
+  </platform>
+  <feature name="SocialSharing">
+  <param name="ios-package" value="SocialSharing" />
+</feature>
+
+<!-- for Android (you will find one in res/xml) -->
+<feature name="SocialSharing">
+  <param name="android-package" value="nl.xservices.plugins.SocialSharing" />
+</feature>
+  <preference name="StatusBarOverlaysWebView" value="true" />
+  <preference name="android-build-tool" value="gradle" />   
+  <access origin="tel:*" launch-external="yes" />
+  <access origin="mailto:*" launch-external="yes" />
+  <allow-intent href="http://*/*"/>
+  <access origin="*.pushwoosh.com"/>
+  <access origin="*.addthis.com"/>
+  <allow-navigation href="https://*/*"/>
+  <!-- allow pushwoosh service -->
+  <allow-intent href="https://*/*"/>
+  <allow-intent href="tel:*"/>
+  <allow-intent href="sms:*"/>
+  <allow-intent href="mailto:*"/>
+  <allow-intent href="geo:*"/>
+  <allow-intent href="maps:*"/>
+  <platform name="android">
+    <allow-intent href="market:*"/>
+    <allow-intent href="maps:*"/>
+  </platform>
+  <platform name="ios">
+    <allow-intent href="itms:*"/>
+    <allow-intent href="itms-apps:*"/>
+    <allow-intent href="maps:*"/>
+  </platform>
+  <gap:config-file platform="ios" parent="ITSAppUsesNonExemptEncryption" mode="add">
+    <false/>
+  </gap:config-file>
+  <feature name="Geolocation">
+    <param name="ios-package" value="CDVLocation" />
+   </feature>
+</widget>

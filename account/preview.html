@@ -1,0 +1,202 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Joiful</title>
+    <style>
+        .carousel-inner>.item>img,
+        .carousel-inner>.item>a>img {
+            width: 90%;
+            margin: auto;
+        }
+    </style>
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+</head>
+<body>
+    <div class="appcontainer preview" style="display:none">
+        <div class="container">
+            <form class="form-signin">
+                <div class="scrollmenewpreviewfooter scrollmenewbase">
+                    <div id="myCarousel" class="carousel slide " data-ride="carousel" xdata-interval="false" xdata-wrap="false">
+                        <div class="carousel-inner centerofpage" role="listbox">
+                            <div class="item active">
+                                <div style="width:100%;text-align:center">
+                                    <div id="firstname" style="width:100%;text-align:center;font-size:24px;color:white;"></div>
+                                    <div style="width:100%;text-align:center;font-size:34px;color:white;">Welcome to</div>
+                                    <div style="width:100%;text-align:center;padding:60px 0px 30px 0px"><img src="../assets/common/images/joiful.png" style="height:120px;width:auto" /></div>
+                                    <div style="width:100%;text-align:center">
+                                        <hr style="width:60px" />
+                                    </div>
+                                    <div style="margin:0 auto;width:240px;text-align:center;font-size:14px;padding:20px 0px 00px 0px;color:white;">Congratulations on taking the first step toward a lifetime of Beauty &amp; Wellness at Your Service.</div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div style="width:100%;">
+                                    <div style="text-align:center">
+                                        <div style="text-align:center;width:100%;z-index:3">
+                                            <div style="margin:0 auto;text-align:center;width:80%;height:20px;background-color:rgba(255,255,255,0.5);z-index:1">
+                                            </div>
+                                            <div style="margin:0 auto;text-align:center;width:90%;height:20px;background-color:rgba(255,255,255,0.75);z-index:2">
+                                            </div>
+                                            <div style="background-color:white;width:100%;padding-top:25px">
+                                                <div style="padding-top:5px;font-weight:800;font-size:18pt;vertical-align:middle;display:inline-block;text-align:center;height:50px;width:50px;border-radius:50%;border:solid 2px #00A499;color:#00A499">1</div>
+                                                <div style="color:#5B6770;width:100%;text-align:center;font-size:12px;padding:30px 5px 20px 5px">We can't wait to customize<br /> your treatment and blow-outs,<br /> make-up, massage, facials,<br /> manicure/pedicure.<br />Decisions, decisions...</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div style="width:100%;">
+                                    <div style="text-align:center">
+                                        <div style="text-align:center;width:100%;z-index:3">
+                                            <div style="margin:0 auto;text-align:center;width:90%;height:20px;background-color:rgba(255,255,255,0.75);z-index:2">
+                                            </div>
+                                            <div style="background-color:white;width:100%;padding-top:25px">
+                                                <div style="padding-top:5px;font-weight:800;font-size:18pt;vertical-align:middle;display:inline-block;text-align:center;height:50px;width:50px;border-radius:50%;border:solid 2px #00A499;color:#00A499">2</div>
+                                                <div style="color:#5B6770;width:100%;text-align:center;font-size:12px;padding:30px 5px 20px 5px">We know you're busy and we<br /> celebrate your fabulousness<br /> for believing in the future of<br /> beauty on demand.</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="item">
+                                <div style="width:100%;">
+                                    <div style="text-align:center">
+                                        <div style="text-align:center;width:100%;z-index:3">
+                                            <div style="background-color:white;width:100%;padding-top:25px">
+                                                <div style="padding-top:5px;font-weight:800;font-size:18pt;vertical-align:middle;display:inline-block;text-align:center;height:50px;width:50px;border-radius:50%;border:solid 2px #00A499;color:#00A499">3</div>
+                                                <div style="color:#5B6770;width:100%;text-align:center;font-size:12px;padding:30px 5px 20px 5px">With the tap of this<br /> app, you'll never go<br /> back. See you in a<br /> few minutes!</div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Arrows-->
+                        <!--
+                        <a class="left carousel-control" href="#myCarousel" onclick="PrevDot()" role="button">
+                            <span class="glyphicon glyphicon-chevron-left" style="margin-left:-20px;font-weight:100" aria-hidden="true"></span>
+                            <span class="sr-only">Previous</span>
+                        </a>
+                        <a class="right carousel-control" href="#myCarousel" onclick="NextDot()" role="button">
+                            <span class="glyphicon glyphicon-chevron-right" style="margin-left:-20px;font-weight:100" aria-hidden="true"></span>
+                            <span class="sr-only">Next</span>        
+                        </a>
+                        -->
+
+                    </div>
+                </div>
+                <div class="footer-auto" style="width:100%;z-index:8888">
+                    <div class="senduserhome" onclick="SendToEditor()" style="display:none;padding:10px 0px 10px 0px;color:white;margin:0 auto;text-align:center;width:100%;background-color:rgba(0,0,0,0.5);z-index:1">
+                        Book my treatment now, please!
+                    </div>
+                    <div class="row" style="height:100%;">
+                        <div class="col-xs-4 noPadding" style="text-align:center;height:100%;border-top:solid 1px white;border-right:solid 1px white;font-size:10pt;">
+                            <button id="lnkBack" onclick="PrevDot()" class="btn btn-md btn-clear-white btnHeight" style="border-top:none;border-bottom:none;color:white" type="button"><img src="../assets/common/images/leftarrow-white.png" height="15">&nbsp;&nbsp;back</button>
+
+                        </div>
+                        <div class="col-xs-4 noPadding" style="border-top:solid 1px white;border-bottom:none;">
+                            <ol style="margin-top:20px;z-index:9999;padding-left:0px;bottom:-53px;padding-right:0px;width:auto!important" class="carousel-indicators" style="bottom:inherit; top:20px;">
+                                <li id="dot_0" data-target="#myCarousel" onclick="HitTheDot(0);" data-slide-to="1" class="dots active"></li>
+                                <li id="dot_1" data-target="#myCarousel" onclick="HitTheDot(1);" data-slide-to="2" class="dots "></li>
+                                <li id="dot_2" data-target="#myCarousel" onclick="HitTheDot(2);" data-slide-to="3" class="dots "></li>
+                                <li id="dot_3" data-target="#myCarousel" onclick="HitTheDot(3);" data-slide-to="0" class="dots "></li>
+                            </ol>
+                        </div>
+
+                        <div class="col-xs-4 noPadding" style="float:right;text-align:center;height:100%;border-top:solid 1px white;border-left:solid 1px white;font-size:10pt;">
+                            <button id="lnkPassword" onclick="SendToEditor()" class="btn btn-md btn-clear-white btnHeight" style="border-top:none;border-bottom:none;color:white" type="button">skip&nbsp;&nbsp; <img src="../assets/common/images/rightarrow.png" height="15"></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<script src="../assets/lib/jquery/carousel.js"></script>
+
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- spapp-BAS -->
+<script src="../assets/common/js/spapp-bas.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function() {
+        $('.carousel').carousel({
+            interval: 2000
+        })
+        $('#myCarousel').on('slide.bs.carousel', function () { 
+            $holder = $( "ol li.active" );
+            $holder.next( "li" ).addClass("active");  
+            if($holder.is(':last-child'))
+            {
+            $holder.removeClass("active");
+            $("ol li:first").addClass("active");
+            }
+            $holder.removeClass("active");
+        }) 
+
+        maxDots = 3;
+        var h = $(".container").height();
+        //$(".container").height(h + "px");
+        //$(".form-signin").height(h + "px");
+        $("#myCarousel").height(h + "px");
+        //$(".carousel-inner").height(h + "px");
+        if (CheckLogin()) {
+            // BuildCommonUI();
+            $("#firstname").html(user.FirstName);
+        }
+        setTimeout(adjustpreviewwidthtoimage, 1500);
+    });
+
+    $(window).ready(function() {
+        adjustpreviewwidthtoimage();
+        $(".form-signin").show();
+    });
+
+    function SendToEditor() {
+        window.location = "../profile/editprofile.html";
+    }
+</script>

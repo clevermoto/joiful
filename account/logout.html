@@ -1,0 +1,327 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+
+<body>
+
+    <div class="appcontainer open-bg">
+        <script>document.write(DynamicMenu("none", "black", "", "", "", false, "", ""));</script>
+
+        <!-- Image -->
+        <!--<img src="..\assets\common\images\open@3x.png" class="img-responsive" alt="" style="z-index:-1" />-->
+        <div class="container">
+
+            <form class="form-signin">
+                <div class="centerofpage" style="text-align:center">
+                    <img src="../assets/common/images/joiful.png" style="height:120px;width:auto" />
+                </div>
+                <div class="footer-auto">
+                    <div class="row noPadding" style="color:white;margin-left:10px;margin-right:10px;margin-bottom:10px">
+                        Sorry to see you go...
+                        Hope you return for more Joiful experiences in the near future!
+                    </div>
+
+
+                    <button id="lnkLogin" onclick="window.location = '../account/login.html';" class="btn btn-lg btn-clear-silver btn-block btnHeight" style="margin-top: 10px;border-top:solid 1px white" type="button">SIGN IN</button>
+                </div>
+
+            </form>
+
+        </div> <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<script type="text/javascript">  
+
+    if (gMobileVersion == false) 
+    {
+        // FB login
+        LoadExternalFile("https://connect.facebook.net/en_US/all.js");
+        // Google login 
+        LoadExternalFile("https://apis.google.com/js/api:client.js");
+    }
+
+
+    $(document).ready(function ()
+    {
+        $(".header-auto").css("position", "fixed")
+        $(".header-auto").css("top", "0px");
+        RemoveCookieItem("enteredDiscountCode");
+        BuildCommonUI();
+
+        if (gMobileVersion == true)
+        {
+            UpdateCookieItem("pushregtoken", "");
+        }
+
+        SilentLogout();
+        setTimeout(adjustwidthtoimage, 500);
+     });
+            
+    $(window).ready(function () {
+
+        adjustwidthtoimage();
+        $(".form-signin").show();
+
+
+    });
+
+    function GetFBToken()
+    {
+
+        // ---------------------------------
+        // Facebook Auth
+        // ---------------------------------
+        $.ajax({
+            dataType: "json",
+            url: ServicePrefix + "/api/getsetting/?settingkey=fbid",
+            method: "GET",
+            success: function (data) {
+                if (data.SettingValue) 
+                {
+                    //alert(data.SettingValue);
+                        $("#fbid").val(data.SettingValue);
+
+                        if (typeof FB === "undefined") {
+                            $("#btnFacebook").hide();
+                        }
+                        else {
+                            $("#btnFacebook").show();
+                            FB.init({
+                                appId: $("#fbid").val(),
+                                oauth: true,
+                                status: true, // check login status
+                                cookie: true, // enable cookies to allow the server to access the session
+                                xfbml: true // parse XFBML
+                            });
+                        }
+                } else {
+                    $("#btnFacebook").hide();
+                }
+            },
+            error: function (err) {
+                $("#btnFacebook").hide();
+            }
+        });
+
+    }
+	
+	
+	function fbLogin() {
+	    FB.login(function(response) {
+	      if (response.authResponse) {
+	        //User fully authorize the app.
+	        var url = '/me?fields=first_name,last_name,email';
+			FB.api(url, function (response_me) {  
+				var fb_data = "spat=" + encodeURIComponent(response.authResponse.accessToken)
+				+ "&spid=" + encodeURIComponent(response.authResponse.userID)
+				+ "&sea=" + encodeURIComponent(response_me.email)
+				+ "&sfn=" + encodeURIComponent(response_me.first_name)
+				+ "&sln=" + encodeURIComponent(response_me.last_name);
+				window.location.replace("socialredirect.html?spt=fb&logintoken=true&"+fb_data);
+			 });
+	      } else {
+	        	showAlert('');
+	      }
+	    }, { scope: 'public_profile,email' });
+	}
+
+	// ---------------------------------
+	// Google Auth
+	// ---------------------------------
+	
+	var googleUser = {};
+	var startApp = function ()
+	{
+	    gapi.load('auth2', function() {
+	        // Retrieve the singleton for the GoogleAuth library and set up the client.
+	        auth2 = gapi.auth2.init({
+	            client_id: $("#googleid").val(),
+	            cookiepolicy: 'single_host_origin',
+	            // Request scopes in addition to 'profile' and 'email'
+	            //scope: 'additional_scope'
+	        });
+	        auth2.then(function() {
+				$("#btnGoogle").show();
+			});     
+			attachSignin(document.getElementById('btnGoogle'));
+
+	    });
+	};
+
+	function attachSignin(element)
+	{
+	    auth2.attachClickHandler(element, {},
+	        function(googleUser) {
+	            var google_data = "spat=" + encodeURIComponent(googleUser.getAuthResponse().id_token) +
+	                "&spid=" + encodeURIComponent(googleUser.getBasicProfile().getId()) +
+	                "&sea=" + encodeURIComponent(googleUser.getBasicProfile().getEmail()) +
+	                "&sfn=" + encodeURIComponent(googleUser.getBasicProfile().getGivenName()) +
+	                "&sln=" + encodeURIComponent(googleUser.getBasicProfile().getFamilyName());
+	            window.location.replace("socialredirect.html?spt=gl&logintoken=true&" + google_data);
+	        },
+	        function(error) {
+	            showAlert(JSON.stringify(error, undefined, 2));
+	        });
+	}
+
+	function GetGoogleToken() {
+	    $.ajax({
+	        dataType: "json",
+	        url: ServicePrefix + "/api/getsetting/?settingkey=googleoauth2",
+	        method: "GET",
+	        success: function (data) {
+	            $("#googleid").val(data.SettingValue);
+	            if (data.SettingValue) {
+	                startApp();
+	            } else {
+	                $("#btnGoogle").hide();
+	            }
+	        }, error: function () {
+	            $("#btnGoogle").hide();
+	        }
+	    });
+
+	}
+
+    function ValidateInput()
+    {
+        var emailaddress = RemoveTags($("#inputEmail").val());
+        var password = RemoveTags($("#inputPassword").val());
+
+        if (DataLength(emailaddress) == 0) {
+            showAlert('Email must be entered');
+            $("#inputPassword").val("");
+            return false;
+        }
+
+        if (ValidEmailAddress(emailaddress) == false)
+        {
+            showAlert('Invalid Email Address');
+            $("#inputPassword").val("");
+            return false;
+        }
+
+        if (DataLength(password) == 0) {
+            $("#inputPassword").val("");
+            showAlert('Password must be entered');
+            return false;
+        }
+    }
+
+  function Login()
+  {
+  	  blockUI();		
+      if (ValidateInput() == false)
+      {
+          unblockUI();
+          return;
+      }
+      else
+      {
+          APICall();
+      }
+
+    
+  }
+ 
+  function APICall()
+  {
+    var pushregtoken = GetCookieItem("pushregtoken");
+    // This will need to be a post
+    var emailaddress = encodeURIComponent(RemoveTags($("#inputEmail").val()));
+    var password = encodeURIComponent(RemoveTags($("#inputPassword").val()));
+    var ret = false; 
+    var uri = ServicePrefix + '/api/login/?emailaddress=' + emailaddress + '&password=' + password + '&deviceid=' + pushregtoken;
+
+    $.ajax(
+           {
+               dataType: "json",
+               url: uri,
+               success: APISuccess,
+               error: APIError
+           });
+    
+  }
+
+  function APIError(result, textStatus, err)
+  {
+	  unblockUI();
+      showAlert(err);
+      return;
+  }
+  
+  function APISuccess(result)
+  {
+
+        if (result == null)
+        {
+            showAlert('returned no data');
+            $("#inputPassword").val("");
+            return;
+        }
+
+
+        if (result.Status != "SUCCESS")
+        {
+            showAlert(result.Message);
+            $("#inputPassword").val("");
+            return;
+        }
+
+        user.UserID = result.UserID;
+        user.FirstName = result.FirstName;
+        user.LastName = result.LastName;
+        user.Validated = result.Validated;
+        user.WaiverSigned = (result.WaiverSigned=="0" ? "false" : "true");
+        user.Persona = result.Persona;
+        user.ProviderWaiverSigned = (result.ProviderWaiverSigned=="0" ? "false" : "true");
+        user.ExternalProfileID = result.ExternalProfileID;
+      
+        if (UpdateCookie(user.UserID, user.FirstName, user.LastName, user.Persona, user.Validated, user.WaiverSigned, user.ProviderWaiverSigned, user.ExternalProfileID) == true)
+        {
+            AccountPageRedirector(false);
+        }
+
+
+  }
+    
+</script>

@@ -1,0 +1,45 @@
+﻿
+<div style="width:100%;margin:0 auto">
+    <div class="row noPadding" style="width:90%;border-bottom:1px solid #5B6770; margin:0 auto; padding-top:0px; padding-bottom:0px;">
+
+        <div class="col-xs-2 noPadding" style="min-height:56px;border-left:none;border-right:none;vertical-align:middle;padding-top:10px">
+
+                <button style="display:table-cell;border:none;border-radius:0%;height:33px;width:33px;padding:0px;background-color:transparent!important" 
+                        id="jlBid{{$index}}"  ng-if="y.JobStatus=='open' && y.ProviderBidStatus !='Bid Made'" ng-click="BidJob(y.OpenBidID)"
+                        class="btn btn-md btn-primary jlBid{{y.OpenBidID}}" type="button">
+                    <img src='../assets/common/images/selected-joiful.png' height='33' width='33' />
+                </button>
+
+                <div style="display:table-cell;border:none;border-radius:0%;height:33px;width:33px;padding:0px"
+                     ng-if="y.ProviderBidStatus=='Bid Made'" class="btn btn-md btn-info jlBidMade{{y.OpenBidID}}">&nbsp;</div>
+
+        </div>
+        <div class="col-xs-8 noPadding" style="padding:5px 5px 5px 5px;min-height:56px;border-right:none;">
+
+            <div style="font-size:12pt;padding:0px 0px 0px 0px;">
+                <div ng-bind-html="GetFullDescription(y.CartItems)">
+
+                </div>
+            </div>
+            <div style="font-size:10pt"ng-if="y.CartAddress.City != null">{{y.CartAddress.City}}, {{y.CartAddress.State}}  {{y.CartAddress.ZipCode}}</div>
+        </div>
+
+
+        <!--<div class="col-xs-6 noPadding" style="min-height:50px;border-left:1px solid #5B6770;border-right:1px solid #5B6770">
+            <div>
+                <button style="min-height:50px;margin-top:0px;margin-bottom:0px" id="jlBid{{$index}}" ng-if="y.JobStatus=='open' && y.ProviderBidStatus !='Bid Made'" ng-click="BidJob(y.OpenBidID)" 
+                            class="btn btn-md btn-primary btn-notround grad" type="button"></button>
+            </div>
+
+            <div >
+                <div style="min-height:50px;margin-top:0px;margin-bottom:0px;color:red;padding-top:14px" 
+                     ng-if="y.ProviderBidStatus=='Bid Made'"  class="btn btn-md btn-info btn-block btn-notround">request made</div>
+            </div>
+        </div>-->
+
+        <div class="col-xs-2 noPadding" style="height:100%;text-align:center;min-height:56px;border-left:none;border-right:none">
+            <div ng-include="'../assets/common/html/angJobListCostCell.html'"></div>
+        </div>
+
+    </div>
+</div>

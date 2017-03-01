@@ -1,0 +1,174 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Joiful</title>
+  </head>
+
+  <body></body>
+</html>
+<script src="../assets/lib/jquery/jquery.js"></script>
+
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+
+<!-- FastClick -->
+<script src="../assets/lib/fastclick/fastclick.js"></script>
+
+
+<script type="text/javascript">
+
+    var SocialProviderToken = getParameterByName("spt");
+    var bLoginToken = (getParameterByName("logintoken") == "true" ? true : false);
+
+    $(document).ready(function ()
+    {
+
+        //-------------------------------
+        // Facebook
+        //-------------------------------
+        if (SocialProviderToken == "fb") {
+
+            var SocialProviderID = getParameterByName("spid");
+            var SocialProviderAuthToken =  getParameterByName("spat");
+            var SocialEmailAddress =  getParameterByName("sea");
+            var SocialFirstName =  getParameterByName("sfn");
+            var SocialLastName = getParameterByName("sln");
+
+            APICall(bLoginToken, SocialProviderToken, SocialProviderID, SocialProviderAuthToken, SocialEmailAddress, SocialFirstName, SocialLastName);
+
+        }
+        //-------------------------------
+        // Google
+        //-------------------------------
+        else if (SocialProviderToken == "gl") {
+
+            var SocialProviderID = getParameterByName("spid");
+            var SocialProviderAuthToken =  getParameterByName("spat");
+            var SocialEmailAddress =  getParameterByName("sea");
+            var SocialFirstName =  getParameterByName("sfn");
+            var SocialLastName = getParameterByName("sln");
+
+            APICall(bLoginToken, SocialProviderToken, SocialProviderID, SocialProviderAuthToken, SocialEmailAddress, SocialFirstName, SocialLastName);
+
+        }
+        else
+        {
+            alert('Invalid Social Token Passed', '../index.html');
+            return;
+        }
+
+    });
+  
+    function APICall(bLoginToken, SocialProviderLoginToken, SocialProviderID, SocialProviderAuthToken, SocialEmailAddress, SocialFirstName, SocialLastName)
+    {
+
+        // This will need to be a post
+        var socialprovidertoken = encodeURIComponent(RemoveTags(SocialProviderToken));
+        var socialproviderid = encodeURIComponent(RemoveTags(SocialProviderID));
+        var socialproviderauthtoken = encodeURIComponent(RemoveTags(SocialProviderAuthToken));
+        var socialemailaddress = encodeURIComponent(RemoveTags(SocialEmailAddress));
+        var socialfirstname = encodeURIComponent(RemoveTags(SocialFirstName));
+        var sociallastname = encodeURIComponent(RemoveTags(SocialLastName));
+
+        var uri = "";
+        var postData = null;
+
+        var uReferral = GetCookieItem("uReferral");
+        var lReferral = GetCookieItem("lReferral");
+
+        RemoveCookie("uReferral");
+        RemoveCookie("lReferral");
+
+        if (bLoginToken == true)
+        {
+            uri = ServicePrefix + "/api/SocialMediaLogin/?socialmediatype=" + socialprovidertoken + "&socialmediaauthtoken=" + SocialProviderAuthToken + "&socialmedialogintoken=" + socialproviderid + "&deviceid=" + pushregtoken + "&emailaddress=" + socialemailaddress;
+    
+            $.ajax(
+               {
+                   dataType: "json",
+                   url: uri,
+                   method: "GET",
+                   success: APISuccessUpdate,
+                   error: APIUpdateError
+               });
+    }
+        else
+        {
+            uri = ServicePrefix + "/api/SocialMediaRegister";
+            postData = 
+                {
+                    socialmediatype: SocialProviderToken,
+                    socialmediaauthtoken: SocialProviderAuthToken,
+                    socialmedialogintoken: SocialProviderLoginToken,
+                    ureferral: uReferral,
+                    lreferral: lReferral,
+                    deviceid: pushregtoken,
+                    firstname: socialfirstname, 
+                    lastname: sociallastname, 
+                    emailaddress: socialemailaddress
+                }
+
+            $.ajax(
+               {
+                   data: postData,
+                   dataType: "json",
+                   url: uri,
+                   method: "POST",
+                   success: APISuccessUpdate,
+                   error: APIUpdateError
+               });
+        }
+
+  }
+
+    function APIUpdateError(result, textStatus, err)
+  {
+      alert(err);
+      return;
+  }
+  
+  function APISuccessUpdate(result)
+  {
+
+        if (result == null)
+        {
+            alert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS")
+        {
+            alert(result.Message);
+            return;
+        }
+
+        user.UserID = result.UserID;
+        user.FirstName = result.FirstName;
+        user.LastName = result.LastName;
+        user.Validated = result.Validated;
+        user.WaiverSigned = result.WaiverSigned;
+        user.Persona = result.Persona;
+        user.ProviderWaiverSigned = (result.ProviderWaiverSigned == "0" ? "false" : "true");
+        user.ExternalProfileID = result.ExternalProfileID;
+        UpdateCookieItem("pushregtoken", "");
+        user.ReferralCode = result.ReferralCode;
+        if (UpdateCookie(user.UserID, user.FirstName, user.LastName, user.Persona, user.Validated, user.WaiverSigned, user.ProviderWaiverSigned, user.ExternalProfileID, user.ReferralCode) == true)
+        {
+
+            SendUserHome();
+            return true;
+        }
+
+
+  }
+  
+</script>

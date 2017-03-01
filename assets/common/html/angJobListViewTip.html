@@ -1,0 +1,73 @@
+﻿<!-- TIP PAGE -->
+<div  style="width:100%;margin:0 auto">
+    <div class="row" style="width:100%; margin:0 auto; padding-top:0px; padding-bottom:0px;height:60px">
+
+        <div class="col-xs-6 noPadding" style="border-right:1px solid #5B6770;height:60px">
+
+            <div class="row">
+                <div class="col-xs-6 noPadding">
+                    <div id="imgProviderContainer" style="margin:0 auto; text-align:center;padding-top:5px;padding-bottom:2px">
+                        <img ng-src="{{imglib + '/profile/'+y.ProviderUserID+'.jpg'}}" class="img-circle" style='max-height:50px;border-radius:50%;border:solid 2px #d86018' id="imgProvider" name="imgProvider" />
+                    </div>
+                </div>
+                <div class="col-xs-6 noPadding">
+                    <div style="margin:0 auto; text-align:left;padding-top:10px">
+                        <div ng-if="y.ProviderUserID!='0'" style="font-weight:600">
+                            {{y.ProviderFirstName}}
+                        </div>
+                        <div style="color:#00A499;vertical-align:bottom">
+                            <span> {{y.ProviderAvgReview}}</span>&nbsp;<span><img style="height:18px;margin-top:-5px" src="../assets/common/images/stars.png" />s</span>
+                        </div>
+
+
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-xs-6 noPadding" style="padding-top:3px;height:60px">
+            <div style="margin: 0 auto; word-wrap: break-word; white-space:normal;width:100%">
+                <div style="font-size:smaller;color:#5B6770;text-align:center;">{{y.TransactionDateDisplay}}</div>
+                <div style="margin:0 auto;">
+                    <div class="row noPadding" style="padding-top:18px; text-align:center;">
+                        <div class="col-xs-6" style="text-align:right;padding-left:0px;padding-right:2px">Charged:</div>
+                        <div class="col-xs-6" style="text-align:left;padding-left:2px;padding-right:0px">
+                            <span style="font-weight:600;color:#00A499">{{ getTotal($index) | currency }}</span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="row border-top" style="width:100%; margin:0 auto; padding-top:5px; padding-bottom:5px;">
+
+        <div class="col-xs-12 noPadding" style="border-right:1px solid #5B6770">
+            <div class="col-xs-12" style="text-align:center">
+                <div ng-bind-html="GetFullDescription(y.CartItems)">
+                </div>
+            </div>
+            <div class="row" ng-if="y.JobStatus !='complete'" style="color:#CE3232;text-align:center;font-size:smaller" ng-bind="GetStatusName(y.JobStatus)"></div>
+        </div>
+
+    </div>
+
+
+    <!--<div id="jlMore{{$index}}" style="display:none">
+        <div class="row border-top" style="padding-top:10px; padding-bottom:10px">
+            <div class="col-xs-6 noPadding">
+                Your Rating:
+            </div>
+            <div class="col-xs-6 noPadding" style="text-align:right">
+                Rating Here
+            </div>
+        </div>
+        <div class="row  border-top" style="padding-top:10px; padding-bottom:10px">
+            <div class="col-xs-6 noPadding">Charged:</div>
+            <div class="col-xs-6 noPadding" style="text-align:right">
+                <span style="font-weight:600">{{ getTotal($index) | currency }}</span>
+            </div>
+        </div>
+    </div>-->
+</div>

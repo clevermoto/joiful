@@ -1,0 +1,150 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+  <body>
+      <div class="appcontainer">
+          <div class="row spaheader" id="spaheader"><script>document.write(BuildHeaderNew());</script></div>
+              <div class="container">
+
+                  <form class="form-signin">
+
+
+                      <div id="message" class="spaMessage">
+                          <h3 id="messageHeading" class="spaMessageHeading"></h3>
+                          <p id="messageDetail" class="spaMessageDetail"></p>
+                      </div>
+                      <hr>
+                      <button id="btnSendEmail" onclick="SendEmail()" class="btn btn-lg btn-success btn-block ajaxbtn" type="button">Resend Verification Email</button>
+                      <hr>
+                      <div id="tempRequest" style="display:none;margin-top:15px"><a id="lnkTempRequest" onclick="TempValidateMe()" href="#">Temp Validation Step</a></div>
+
+                      <div style="margin-top:15px"><a id="linkHome" onclick="GoHome()" href="#">Joiful Home</a></div>
+
+
+                  </form>
+
+              </div> <!-- /container -->
+          </div>
+          <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+          <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<script type="text/javascript">
+    
+    $(document).ready(function ()
+    {
+	    BuildCommonUI();
+        $("#messageHeading").html("Sorry!")
+        $("#messageDetail").html("Your Joiful Account Email Address has not been verified. Please check your email and follow instructions to start booking!")
+
+        CheckLogin();
+
+    });
+    
+    function GoHome()
+    {
+        if (SilentLogout() == true)
+        {
+            window.location = "../index.html";
+        }
+
+
+    }
+
+    function ValidateInput()
+    {
+        // Dummy call for consistency
+        return true;
+    }
+
+    function SendEmail() {
+		blockUI();
+        if (ValidateInput() == true)
+        {
+            APICall();
+        }
+    }
+
+    function APICall()
+    {
+
+        // Temp Code
+        APICallSuccess();
+        return;
+
+        var ret = false;
+        var id = 2;
+        var uri = ServicePrefix + '/api/products/' + id;
+
+        //$("#inputFirstName").val(), $("#inputLastName").val()
+        // Rest of data
+
+        $.ajax(
+               {
+                   dataType: "json",
+                   url: uri,
+                   success: APICallSuccess,
+                   error: (function (jqXHR, textStatus, err) {
+                       showAlert(textStatus);
+                       return false;
+                   })
+               });
+
+
+    }
+
+    function APICallSuccess()
+    {
+		unblockUI();
+        SilentLogout();
+
+        showAlert('your email should be on the way. Thank you.')
+
+        $("#tempRequest").show();
+        //window.location.href = "../index.html";
+
+    }
+
+    function TempValidateMe()
+    {
+        
+        window.location.href = "../account/validate.html?vet=1234567899"
+    }
+    
+</script>

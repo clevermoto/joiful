@@ -1,0 +1,297 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    
+    <script src="../cordova.js"></script>
+
+</head>
+
+  <body ng-app="manageProviderServiceManagerApp">
+      <div class="appcontainer">
+          <script>document.write(DynamicMenu("white", "black", "X", "SendToArtistTools()", "SETUP", true, "", ""));</script>
+          <div class="container">
+
+              <form class="form-signin" style="display:none;">
+                 <div class="scrollmenewbase scrollmenewheader">
+                    <div style="width: 100%; margin-bottom: 0px">
+                        <div style="width:100%; margin:0 auto">
+ 
+                            <div class="row" ng-controller="manageServiceCtrl">
+                                <div ng-repeat="x in Services">
+                                    <div class="row noPadding" ng-class="$index==Services.length-1 ? '' : 'border-bottom'">
+                                        <div class="col-xs-2 noPadding" style="padding-top:10px;height:50px;vertical-align: middle; margin-top:0px;padding-left:0px; text-align: center">
+
+                                            <label style="height:33px;width:33px;border-radius:50%;background:transparent!important;border:none!important" id="addService{{$index}}" ng-if="x.ProviderID=='0'" ng-click="ChangeState(inputProviderID, x.ServiceGroupID, true)" class="checkmarkfont lblRpt btn btn-md btn-success">
+                                                <img src='../assets/common/images/selected-joiful.png' width="30" height="30" />
+                                            </label>
+                                            <label style="height:33px;width:33px;border-radius:50%;;background:transparent!important;border:none!important" id="suspendService{{$index}}" ng-if="x.ProviderID==inputProviderID" ng-click="ChangeState(inputProviderID, x.ServiceGroupID, false)" class="checkmarkfont lblRpt btn btn-md btn-info">
+                                                <img src='../assets/common/images/close.png' width="30" height="30" />
+                                            </label>
+
+                                            <!--&nbsp;<a href="#" id="addService{{$index}}" ng-if="x.ProviderID=='0'" ng-click="ChangeState(inputProviderID, x.ServiceID, true)">add</a>
+        &nbsp;<a id="suspendService{{$index}}" href="#" ng-if="x.ProviderID==inputProviderID" ng-click="ChangeState(inputProviderID, x.ServiceID, false)">suspend</a>-->
+                                        </div>
+                                         <div class="col-xs-10 noPadding" style="padding-top:6px;height:50px;" >
+                                            <span style="font-weight:800">{{x.ServiceGroupName}}</span>
+                                            <br />
+                                            <span ng-style="{color: (x.ApprovalStatus.length>0 ? '#d86018' : '#5B6770')}">{{x.ApprovalStatus.length>0 ? x.ApprovalStatus: 'not elected'}}</span>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                                      <div class="row" ng-controller="manageServiceOfferingCtrl">
+                                          <div class="row" ng-show="Service.getServiceOfferings().length > 0" style="margin-left:0px; margin-right: 0px;border:solid 1px #808080; background-color:lightblue;margin-top:25px">
+                                              <div class="col-sm-6">
+                                                  Service Offering
+                                              </div>
+                                              <div class="col-sm-2" style="text-align:center">
+                                                  &nbsp;
+                                              </div>
+                                              <div class="col-sm-2" style="text-align:center">
+                                                  Avg Mins
+                                              </div>
+                                              <div class="col-sm-2" style="text-align:right">
+                                                  &nbsp;
+                                              </div>
+                                          </div>
+                                          <div class="row" ng-style="{'background-color' : (y.ServiceType=='ServiceOffering') ? '#808080' : 'white'}" style="border:solid 1px #808080;margin-left:0px; margin-right:0px" ng-repeat="y in Service.getServiceOfferings()">
+                                              <div class="col-sm-6">
+                                                  <div ng-if="y.ServiceType!='ServiceOffering'" style="padding-left:20px;">{{y.Name}}</div>
+                                                  <div ng-if="y.ServiceType=='ServiceOffering'" style="padding-left:0px;">{{y.Name}}</div>
+                                              </div>
+                                              <div ng-if="y.ServiceType=='ServiceOffering'" class="col-sm-2" style="text-align:center">
+                                                  <span ng-if="y.Cost==0">Group</span>
+                                              </div>
+                                              <div ng-if="y.ServiceType!='ServiceOffering'" class="col-sm-2" style="text-align:center">
+                                                  <span ng-if="y.Required==true">Required Selection</span>
+                                                  <span ng-if="y.Required==false">Add-on</span>
+                                              </div>
+
+                                              <div class="col-sm-2" style="text-align:center">
+                                                  {{y.TimeDisplay}}
+                                              </div>
+
+                                              <div class="col-sm-2" style="text-align:right">
+                                                  <span ng-if="y.Cost==0">&nbsp;</span>
+                                                  <span ng-if="y.Cost!=0">{{y.Cost | currency:"$"}}</span>
+                                              </div>
+
+                                          </div>
+                                      </div>
+
+
+                                  <!--</div>
+                              </div>-->
+                          </div>
+                    </div>
+                </div>
+
+
+              </form>
+
+          </div> <!-- /container -->
+
+      </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<script type="text/javascript">
+
+    var userID = GetCookieItem("UserID");
+
+    var app = angular.module('manageProviderServiceManagerApp', []);
+
+    app.factory("Service", function ($http) {
+        var number = 1;
+        var ServiceOfferings;
+
+        function getServiceOfferings() {
+            return ServiceOfferings;
+        }
+
+        function setNumber(ServiceID) {
+
+            number = ServiceID;
+
+            var uri = ServicePrefix + "/api/GetAllOfferingsByServiceID/?userid=" + userID + "&serviceID=" + ServiceID;
+
+            $http.get(uri).then(function (result) {
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != null) {
+                    if (result.data.Status != "SUCCESS") {
+                        showAlert(result.data.Message);
+                        return;
+                    }
+                    ServiceOfferings = result.data.Results;
+                }
+            });
+
+        }
+
+        return {
+            getServiceOfferings: getServiceOfferings,
+            setNumber: setNumber,
+        }
+    });
+
+    app.controller('manageServiceCtrl', function ($scope, $http, Service) {
+
+        $scope.GetData = function ()
+        {
+            var uri = ServicePrefix + "/api/GetServiceGroupWithProvider/?userid=" + userID;
+
+            $scope.inputProviderID = userID.toUpperCase();
+
+            $http.get(uri).then(function (result) {
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != null) {
+                    if (result.data.Status != "SUCCESS") {
+                        showAlert(result.data.Message);
+                        return;
+                    }
+                    $scope.Services = result.data.Results;
+                }
+            });
+        }
+
+        $scope.GetData();
+
+        $scope.ChangeState = function (userid, servicegroupid, activate) {
+
+            APIUpdateProviderServiceState(userid, servicegroupid, activate);
+            setTimeout($scope.GetData(), 1500);
+        }
+
+        $scope.refreshServiceOfferings = function (id) {
+            $scope.setNumber = Service.setNumber(id);
+        }
+    });
+
+    app.controller('manageServiceOfferingCtrl', function ($scope, Service) {
+
+        $scope.Service = Service;
+
+    });
+
+    $(document).ready(function ()
+    {
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            if (ProviderAccess() == false) {
+                return;
+            }
+
+            InitNotificationPoll();
+
+            //$("#messageHeading").html("TREATMENT MAINT.");
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+            $(".form-signin").show();
+            //alert(user.UserID);
+       }
+    });
+  
+    function Done()
+    {
+        SendUserHome();
+    }
+
+    var gActivateFlag = false;
+    function APIUpdateProviderServiceState(userid, servicegroupid, activate)
+    {
+        gActivateFlag = activate;
+
+        blockUI();
+
+        var uri = ServicePrefix + "/api/UpdateProviderServiceGroupState";
+
+        data = {
+            userid: RemoveTags(user.UserID),
+            servicegroupid: RemoveTags(servicegroupid),
+            activate: RemoveTags(activate)
+        };
+
+        $.ajax(
+        {
+            data: data,
+            dataType: "json",
+            url: uri,
+            method: "POST",
+            success: APIUpdateProviderServiceStateSuccess,
+            error: APIUpdateProviderServiceStateError
+        });
+    }
+
+    function APIUpdateProviderServiceStateSuccess(result) {
+        unblockUI();
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+       // showAlert('Update Successful!');
+
+    }
+
+    function APIUpdateProviderServiceStateError(jqXHR, textStatus, err) {
+	    unblockUI();
+        showAlert(textStatus);
+        return false;
+    }
+
+</script>
+

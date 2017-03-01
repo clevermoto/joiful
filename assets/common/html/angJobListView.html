@@ -1,0 +1,353 @@
+<div ng-controller="JobListCtrl" style="margin:0 auto;width:100%;" class="angContainer">
+    <!--<h3 id="divHistory" style="display:none;height:60px;border-right:solid #e5e5e6 2px;border-left:solid #e5e5e6 2px;border-bottom:solid #e5e5e6 2px;padding-top:20px"class="spaMessageHeading" ng-if="(providerview==false) && (ReturnRecordCount==3)">History&nbsp;<a id="lnkHistory" href="#" onclick="setView('divView', 'lnkHistory')">show</a></h3>
+    <div id="divView" ng-style="{'display': ((providerview==false) && (ReturnRecordCount==3)) ? 'none' : ''}">-->
+    <div id="divView" ng-if="JobList.length > 0">
+        <!--<div class="row" style="padding-bottom:6px;padding-top:4px" ng-show="1==2">
+
+            <div class="col-xs-6 noPadding" style="padding-left:5px;padding-right:5px">
+                <label id="lblBtnOpen" onclick="ChangeLabelColor('lblRpt', 'lblBtnOpen');" class="lblRpt btn btn-lg btn-default btn-block">
+                    <input ng-click="ReportViewChange('provider-open', true)" style="display:none" type="radio" id="radBtnOpen" name="btnRpt" value="provider-open" />Open
+                </label>
+            </div>
+            <div class="col-xs-4 noPadding" style="padding-left:5px;padding-right:5px">
+                <label id="lblBtnActive" onclick="ChangeLabelColor('lblRpt', 'lblBtnActive');" class="lblRpt btn btn-lg btn-default btn-block">
+                    <input ng-click="ReportViewChange('provider-active', true)" style="display:none" type="radio" id="radBtnActive" name="btnRpt" value="provider-open" />Active
+                </label>
+            </div>
+                     <div class="col-xs-6 noPadding" style="padding-left:5px;padding-right:5px">
+                <label id="lblBtnHistory" onclick="ChangeLabelColor('lblRpt', 'lblBtnHistory');" class="lblRpt btn btn-lg btn-default btn-block">
+                    <input ng-click="ReportViewChange('history', true)" style="display:none" type="radio" id="radBtnHistory" name="btnRpt" value="provider-open" />History
+                </label>
+            </div>
+
+        </div>
+            -->
+
+        <!-- Do we scroll??? -->
+        <div ng-class="(
+                            (   (JobList.length==1 
+                             ? '' :  'scrollmeheaderfooter')
+                        )">
+
+            <!-- Loop thru Jobs -->
+            <div class="row noPadding" ng-repeat="y in JobList" id="jl{{$index}}">
+                <!-- TIP -->
+
+                <div ng-if="StatusGroup=='provider-open'" style="margin: 0px 0px 0px 0px; border-bottom:none">
+                    <div ng-include="'../assets/common/html/angJobListViewProviderOpen.html'"></div>
+                </div>
+                <div ng-if="bTipPage==true">
+                    <div ng-include="'../assets/common/html/angJobListViewTip.html'" style="margin: 0px 0px 0px 0px; border-bottom:1px solid #5B6770"></div>
+                </div>
+                <!-- History -->
+                <div ng-if="StatusGroup=='history' || StatusGroup=='artist-history'">
+                    <div ng-include="'../assets/common/html/angJobListViewHistory.html'" style="margin: 0px 0px 0px 0px; border-bottom:1px solid #5B6770"></div>
+                </div>
+
+                <!-- Provider -->
+                <div ng-if="providerview==true && (y.JobStatus =='providerassign' || y.JobStatus=='providertravel' || y.JobStatus=='servicestarted' )">
+                    <div ng-include="'../assets/common/html/angJobListViewJobProvider.html'" style="margin: 0px 0px 0px 0px; border-bottom:1px solid #5B6770"></div>
+                </div>
+                <!-- User -->
+                <div ng-if="providerview==false && (y.JobStatus =='providerassign' || y.JobStatus=='providertravel' || y.JobStatus=='servicestarted' )">
+
+                    <div ng-include="'../assets/common/html/angJobListViewJobUser.html'" style="margin: 0px 0px 0px 0px; border-bottom:1px solid #5B6770"></div>
+
+                </div>
+
+                <!-- User Searching Mode-->
+
+                <div ng-if="1==2 && StatusGroup!='history' && StatusGroup!='provider-open'">
+                    <!-- NON Searching Mode -->
+                    <div ng-if="((y.ProviderUserID!='0' || providerview != false || y.JobStatus !='open') && bTipPage==false)">
+
+                        <!-- Name, Pic, Contact Info -->
+                        <div class="row noPadding border-top" style="width:100%; margin:0 auto; border-radius:0px;">
+
+                            <div class="row border-bottom noPadding" style="width:98%; margin:0 auto;" ng-show="(y.JobStatus != 'systemcancel' && y.JobStatus != 'usercancel') && JobID!='0'">
+
+                                <!--<div class="row" style="border-radius:25px; position:absolute; z-index:999; width:98%; margin:0 auto; padding-top:2px; padding-bottom:2px" ng-show="(y.JobStatus != 'systemcancel' && y.JobStatus != 'usercancel') && (providerview==false && bDetailPage==true)">
+                                <div class="elementToFadeInAndOut" ng-show="ShowStillLooking==true" id="divStillLooking" style="border-radius:10px;text-align:center;padding:3px 3px 3px 3px;width:80%;color:white;background-color:#d86018;margin: 0 auto;  word-wrap: break-word; white-space:normal">
+                                Don't worry- we didn't forget you. We are still looking for an Artist!
+                                </div>
+                                </div>-->
+
+                                <div class="col-xs-6 noPadding border-right" style="text-align:center">
+                                    <div id="imgProviderContainer" style="margin:0 auto; text-align:center;padding-top:5px;padding-bottom:3px">
+                                        <img ng-if="providerview==false" ng-src="{{imglib + '/profile/'+y.ProviderUserID+'.jpg'}}" class="img-circle" style='max-height:120px;border-radius:50%;border:solid 2px #d86018' id="imgProvider" name="imgProvider" />
+                                        <div ng-if="providerview==true" style='margin:0 auto;padding-top:25px;font-size:small;border-radius:50%;border:solid 2px #d86018;height:75px;width:75px;vertical-align:middle' id="imgProvider" name="imgProvider">{{y.FirstName}}</div>
+                                    </div>
+
+                                    <!-- Provider Name, LIC, Review-->
+                                    <div ng-if="providerview==false">
+                                        <div ng-if="y.ProviderUserID!='0'" style="margin:0 auto; text-align:center;padding-top:5px">
+                                            <div style="font-weight:600">
+                                                {{y.ProviderFirstName}}
+                                            </div>
+                                            <div style="color:#00A499;vertical-align:bottom">
+                                                <span> {{y.ProviderAvgReview}}</span>&nbsp;<span><img style="height:18px;margin-top:-5px" src="../assets/common/images/stars.png" /></span>
+                                            </div>
+                                            <div ng-show="y.ProviderLicense.length > 0">License: {{y.ProviderLicense}}</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="col-xs-6 noPadding" style="text-align:right;height:100%">
+                                    <div style="margin: 0 auto; word-wrap: break-word; white-space:normal;text-align:center;vertical-align:middle">
+                                        <div ng-if="providerview==false">
+                                            <div ng-if="y.ProviderUserID!='0'" style="font-size:smaller;text-align:center;padding-left:5px;padding-right:5px">
+                                                {{ProviderBio}}
+                                            </div>
+                                        </div>
+                                        <div ng-style="{'margin-top': providerview==true ? '25px' : '10px'}">
+                                            <button id="jlCustContact{{$index}}" ng-click="showme('#contactme', $index)" class="btn btn-sm btn-primary" type="button">contact {{(providerview == false ? y.ProviderFirstName : y.FirstName)}}</button>
+
+                                            <div id="contactme{{$index}}" style="margin-top:3px; border-radius:0%;display:none;padding:3px 3px 3px 3px;border:none;width:100%;text-align:center;height:100%">
+                                                <div ng-show="MobileVersion==true">
+                                                    <button style="margin-top:5px" id="jlSendProviderSMS{{$index}}" ng-click="sendSms(y.ProviderMobile, 'Hello ' + y.ProviderFirstName + ' this is ' + y.FirstName + ' your Joiful client');" class="btn btn-sm btn-success spapp-joblist-button" type="button">text</button>
+                                                    <button style="margin-top:5px" id="jlSendProviderPhone{{$index}}" ng-click="callPhone(y.ProviderMobile);" class="btn btn-sm btn-success spapp-joblist-button" type="button">call</button>
+                                                </div>
+
+                                                <div ng-show="MobileVersion==false">
+                                                    <div ng-show="y.ProviderMobile.length==10" style="font-size:smaller">({{y.ProviderMobile.substr(0,3)}}) {{y.ProviderMobile.substr(3,3)}}-{{y.ProviderMobile.substr(6,4)}}</div>
+
+                                                    <div ng-show="y.ProviderMobile.length!=10" style="font-size:smaller">{{y.ProviderMobile}}</div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!--<div class="row" style="background-color:white;width:100%; margin:0 auto;">
+                                <div class="row" style="background-color:#5B6770">
+                                    <div class="col-sm-12 col-xs-12" style="text-align:center">
+                                        <div class="small" style="color:white">{{y.TransactionDateDisplay}}</div>
+                                    </div>
+                                </div>
+
+                            </div>-->
+                            <!--<div ng-if="JobID !='0'" class="row" style="width:100%; text-align:center;margin-top:0px;margin-bottom:3px;background-color:white;color:#d86018;">
+                                <div class="col-sm-12 col-xs-12">
+                                    <div class="small" style="text-align:center;font-size:medium" ng-bind="GetStatusName(y.JobStatus)"></div>
+                                </div>
+
+                            </div>-->
+                        </div>
+                        <!-- Service and Cost -->
+                        <!-- Row 2-->
+                        <div class="row noPadding" style="width:100%; margin:0 auto; border-radius:0px;">
+
+                            <div class="row noPadding border-bottom" style="width:100%; margin:0 auto;height:75px">
+                                <div class="col-xs-6 noPadding border-right" style="height:100%">
+                                    <div class="row noPadding" style="padding-top:25px; text-align:center">
+                                        <div style="font-weight:600;font-size:larger;text-align:center">{{y.Service}}</div>
+
+                                        <div ng-if="y.JobNote.length > 0 && (y.JobStatus !='complete' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel')" style="padding-top:10px;"><span style="font-weight:400">NOTE:</span> {{y.JobNote}}</div>
+                                    </div>
+                                </div>
+
+                                <!--<div ng-repeat="x in y.CartItems">
+                                    <div class="col-xs-8" ng-if="(providerview==false) || (x.CartOfferingDescription.indexOf('Tip')==-1 && providerview==true) || (y.JobStatus=='complete')">{{x.CartOfferingDescription}}</div>
+                                    <div class="col-xs-4" style="text-align:right" ng-if="(providerview==false) || (x.CartOfferingDescription.indexOf('Tip')==-1 && providerview==true) || (y.JobStatus=='complete')">
+                                        <span ng-if="x.CartOfferingCost !='0'">{{x.CartOfferingCost | currency}}</span>
+                                    </div>
+                                </div>-->
+                                <!--<div class="row" ng-if="getTotalNeeded($index) > '1'">
+
+                                    <div class="col-xs-8" ng-if="(providerview==false) || (x.CartOfferingDescription.indexOf('Tip')==-1 && providerview==true)">Total</div>
+                                    <div class="col-xs-4" style="text-align:right" ng-if="(providerview==false) || (x.CartOfferingDescription.indexOf('Tip')==-1 && providerview==true)">
+                                </div>-->
+                                <div class="col-xs-6">
+                                    <div class="row noPadding" style="padding-top:25px; text-align:center">
+                                        <div class="col-xs-6" style="text-align:right;padding-left:0px;padding-right:2px">Charged:</div>
+                                        <div class="col-xs-6" style="text-align:left;padding-left:2px;padding-right:0px">
+                                            <span style="font-weight:600;color:#00A499">{{ getTotal($index) | currency }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ADDRESS -->
+                            <div class="row noPadding border-bottom" style="height:50px">
+                                <div class="col-xs-12" style="text-align:center">
+                                    <!--<div ng-if="providerview==true">
+                                        <div ng-if="y.ProviderUserID !='0' && (y.JobStatus !='complete' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel')" style="font-weight:600">{{y.FirstName}}</div>
+                                    </div>-->
+                                    <div style="margin-top:5px">
+                                        <div ng-if="y.ProviderUserID !='0' && (y.JobStatus !='complete' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel') && y.CartAddress.AddressLine1 != null">{{y.CartAddress.AddressLine1}}<span ng-if="y.CartAddress.AddressLine2 != null">&nbsp;{{y.CartAddress.AddressLine2}}</span></div>
+
+                                        <div ng-if="y.CartAddress.City != null">{{y.CartAddress.City}}, {{y.CartAddress.State}} {{y.CartAddress.ZipCode}}</div>
+                                        <div ng-show="y.ProviderUserID !='0' && providerview==true && MobileVersion==true && (y.JobStatus !='complete' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel')">
+                                            <button style="margin-top:5px;" ng-click="TakeMeThere()" class="btn btn-sm btn-primary btn-blok ajaxbtn grad" type="button">take me there</button>
+                                        </div>
+                                        <div ng-if="providerview==true">
+                                            <div style="border-bottom: 1px solid #5B6770;margin-bottom:5px;" ng-show="MobileVersion==true && (y.JobStatus !='complete' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel')">
+                                                <button style="margin-top:5px;margin-bottom:5px" id="jlSendSMS{{$index}}" ng-click="sendSms(y.UserMobile, 'Hello ' + y.FirstName + ' this is ' + y.ProviderFirstName + ' your Joiful artist');" class="btn btn-sm btn-success spapp-joblist-button ajaxbtn" type="button">text</button>
+                                                <button style="margin-top:5px;margin-bottom:5px" id="jlSendPhone{{$index}}" ng-click="callPhone(y.UserMobile);" class="btn btn-sm btn-success spapp-joblist-button ajaxbtn" type="button">call</button>
+
+                                            </div>
+                                            <!--<div ng-if="MobileVersion==false && y.ProviderUserID !='0' && (y.JobStatus !='complete' && y.JobStatus !='open' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel')">
+                                                <div ng-if="y.UserMobile.length!=10">{{y.UserMobile}}</div>
+                                                <div ng-if="y.UserMobile.length==10">({{y.UserMobile.substr(0,3)}}) {{y.UserMobile.substr(3,3)}}-{{y.UserMobile.substr(6,4)}}</div>
+                                            </div>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- MINOR ITEMS-->
+
+                    <div class="row" style="width:100%; margin:0 auto; height:50px">
+                        <div class="col-sm-12 col-xs-12" style="margin-right:0px;margin-top:10px" ng-show="JobListDisplayMode==false">
+
+                            <!-- Provider Minor Buttons -->
+                            <div class="row" ng-show="providerview==true">
+                                <div class="col-xs-12" style="padding-bottom:3px;text-align:center">
+
+                                    <!-- Minor Entries-->
+                                    <span ng-show="y.JobStatus=='complete'">
+                                        <button id="jlProviderReview{{$index}}" ng-if="y.ProviderReviewID=='0'" ng-click="ReviewJob(y.JobID, providerview)" class="btn btn-sm btn-success spapp-joblist-button ajaxbtn" type="button">r</button>
+                                    </span>
+                                    <span>
+                                        <button id="jlProviderCancel{{$index}}" ng-show="y.JobStatus =='providerassign' || y.JobStatus=='providertravel' || y.JobStatus=='servicestarted'" ng-click="CancelJob(y.JobID, providerview)" class="btn btn-sm btn-success spapp-joblist-button ajaxbtn" type="button">X</button>
+                                    </span>
+
+                                </div>
+                            </div>
+
+                            <!-- Customer View -->
+                            <div class="col-sm-12 col-xs-12 noPadding" style="text-align:center">
+                                <div>
+                                    <span ng-show="y.JobStatus=='complete'">
+                                        <span ng-show="y.ReviewID == '0'">
+                                            <button id="jlUserReview{{$index}}" ng-click="ReviewJob(y.JobID, providerview)" class="btn btn-sm btn-success spapp-joblist-button ajaxbtn" type="button">r</button>
+                                        </span>
+                                    <span ng-show="y.GratuityID=='0'">
+                                            <button id="jlTip{{$index}}" ng-click="AddTipToJob(y.JobID)" class="btn btn-sm btn-success spapp-joblist-button ajaxbtn" type="button">$</button>
+                                        </span>
+
+                                    </span>
+
+                                    <span ng-show="y.JobStatus =='providerassign' || y.JobStatus=='providertravel' || y.JobStatus=='servicestarted' || y.JobStatus=='open'">
+                                        <button id="jlUserCancel{{$index}}" ng-click="CancelJob(y.JobID, providerview)" class="btn btn-sm btn-success spapp-joblist-button" type="button">X</button>
+                                    </span>
+
+                                    <!--<span ng-show="JobID=='0'">
+                                        <button id="jlUserReceipt{{$index}}" ng-click="ViewDetails(y.JobID)" class="btn btn-sm btn-success spapp-joblist-button ajaxbtn" type="button">details</button>
+                                    </span>-->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!--</div>
+                </div>-->
+                <!-- MAJOR ITEMS -->
+                <div ng-if="1==2" class="row divJobViewImage noPadding" style="margin:0 auto;padding-top:0px">
+                    <!-- This is the Button CELL / ROW -->
+                    <div class="row noPadding">
+                        <div class="col-xs-12 noPadding" style="text-align:center;margin:0 auto;">
+
+                            <!-- Provider View -->
+                            <div style="margin:0 auto;padding:0px 0px 0px 0px" ng-show="providerview==true">
+
+                                <!-- Major Entries -->
+                                <div>
+                                    <button style="margin-top:5px;margin-bottom:5px" id="jlBid{{$index}}" ng-if="y.JobStatus=='open' && y.ProviderBidStatus !='Bid Made'" ng-click="BidJob(y.OpenBidID)" class="btn btn-md btn-primary btn-block btn-notround" type="button">request</button>
+                                </div>
+
+                                <div>
+                                    <!--<span style="margin:0 auto;margin-top:5px;display:table; font-size:medium;color:white;margin:0 auto" class='' >request made</span>-->
+                                    <button style="margin-top:5px;margin-bottom:5px;color:red;background-color:transparent;border:none" ng-if="y.ProviderBidStatus=='Bid Made'" class="btn-info ">request made</button>
+
+                                </div>
+                                <div>
+                                    <button style="margin-top:5px;margin-bottom:5px" id="jlTravel{{$index}}" ng-if="y.JobStatus=='providerassign'" ng-click="TravelJob(y.JobID)" class="btn btn-lg btn-primary btn-block btn-notround" type="button">start travel</button>
+                                </div>
+                                <div>
+                                    <button style="margin-top:5px;margin-bottom:5px" id="jlStart{{$index}}" ng-if="y.JobStatus=='providertravel'" ng-click="StartJob(y.JobID)" class="btn  btn-md btn-primary btn-block  btn-notround" type="button">start session</button>
+                                </div>
+                                <div>
+                                    <button style="margin-top:5px;margin-bottom:5px" id="jlStop{{$index}}" ng-if="y.JobStatus=='servicestarted'" ng-click="EndJob(y.JobID)" class="btn btn-md btn-primary btn-block  btn-notround" type="button">complete session</button>
+                                </div>
+                            </div>
+
+                            <!-- Customer View -->
+                            <!-- Major Item-->
+
+                            <div style="margin:0 auto;padding:0px 0px 0px 0px;" ng-show="bReviewPage==false && bTipPage==false && bCancelJob==false && providerview==false && ((y.JobStatus=='complete') || (y.JobStatus=='usercancel') || (y.JobStatus=='providercancel'))">
+
+                                <div class="col-sm-12 col-xs-12">
+                                    <button style="margin-top:5px;margin-bottom:5px" id="jlBookAgain{{$index}}" ng-show="(y.JobStatus=='complete') || (y.JobStatus=='usercancel') || (y.JobStatus=='providercancel')" ng-click="RebookJob(y.JobID, y.ProviderUserID, y.ProviderFirstName)" class="btn btn-md btn-primary btn-block" type="button">book again</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+    </div>
+</div>
+
+<!--    <div ng-if="JobList.length > 4 || ReturnRecordCount > 3 || JobID=='0'" class="footer-auto" >
+        <button id="btnMore" ng-click="More()" class="btn btn-lg btn-success btn-block ajaxbtn btn-notround grad btnHeight" style="margin-bottom: 0px;z-index: 3147483647 !important;position: absolute;bottom: 0;left:0;" type="button">MORE</button>
+    </div> -->
+
+<div ng-if="DataAvailable==false" class="row" style="position:relative; top:0px; padding-top:20px; width:100%;max-width:600pxf; margin:0 auto;">
+    <div class="col-sm-12" ng-show="StatusGroup=='history' && providerview==true">
+        <div style='color:#d86018; font-size:small'>Hi there!<br><br>You don't have any session history...yet. Don't worry- this will change soon.</div>
+    </div>
+    <div class="col-sm-12" ng-show="StatusGroup=='history' && providerview==false">
+        <div style='color:#d86018; font-size:small'>Hi there!<br><br>You don't have any treatment history...yet. Let's get you started! <br />
+            <div style="width:100%;margin:0 auto;text-align:center;padding-top:10px">
+                <button class="btn btn-lg btn-success btn-notround grad" onclick="window.location='../customer/index.html'">GET STARTED!</button>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-12" ng-show="providerview==true && StatusGroup=='provider-open'">
+        <div style='color:#d86018; font-size:small'>Hi there!<br><br>No sessions available right now. Don't worry- this will change soon.</div>
+    </div>
+</div>
+
+</div>
+
+<!-- <div ng-if="JobList.length > 4 && ReturnRecordCount > 3 && JobID=='0'" class="footer-auto">
+    <button id="btnMore" ng-click="More()" class="btn btn-lg btn-success btn-block ajaxbtn btn-notround grad btnHeight" style="margin-bottom: 0px" type="button">MORE</button>
+</div> -->
+
+<!-- <div ng-if="JobList.length > 4 && ReturnRecordCount > 3 && JobID=='0'" class="footer-auto">
+    <button id="btnMore" ng-click="More()" class="btn btn-lg btn-success btn-block ajaxbtn btn-notround grad btnHeight" style="margin-bottom: 0px" type="button">MORE</button>
+</div> -->
+
+<div class="fixedContainer" id="divCancelQuestion" style="z-index:1000;display:none;width:100%;height:100% !important;top:0;background:rgba(0, 0, 0, .8);position: absolute;">
+<!-- <div class="fixedContainer" id="divCancelQuestion" style="max-width:600px;z-index:1000;display:none;background-color:black;background:rgba(0, 0, 0, .8);width:100%;height:100%"> -->
+    <div>
+        <div class="centerofpage">
+            <div style="margin: 0 auto;text-align:center"><img src="../assets/common/images/sadface-icon@3x.png" style="height:80px;width:80px" /></div>
+            <div style="margin: 0 auto;text-align:center;color:white;padding-top:20px;font-size:14pt">Are you sure you want to Cancel?</div>
+        </div>
+    </div>
+    <div class="footer-auto">
+        <button style="margin:0px 0px 0px 0px;border:none" id="btnPreCancel" onclick="GoToCancelScreen()" class="btn btn-lg btn-success btn-block btn-notround grad btnHeight" type="button">CANCEL</button>
+        <button style="margin:0px 0px 0px 0px;border:none;color:black!important" id="btnPreDone" onclick="CancelTheCancel()" class="btn btn-lg btn-info    btn-block btn-notround btnHeight" type="button">DON'T CANCEL</button>
+    </div>
+</div>
+<div id="searchMode" class="searchMode fixedContainer" style="display:none;margin: 0px 0px 0px 0px;
+                                background:#d86018;
+                                width:100%;height:100%;max-width:600px">
+
+<!--     <div class="header-auto row" style="color:white;width:100%;background:#d86018;height:60px">
+        <div class="col-xs-3 noPadding" style="text-align:left;height:60px">&nbsp;</div>
+        <div class="col-xs-6" style="height:60px">&nbsp;</div>
+        <div class="col-xs-3 noPadding" style="text-align:right">
+            <button onclick="CancelQuestion()" class="btn btn-md btn-notround btn-menu-right" style="color:white;height:60px" type="button"><img src='../assets/common/images/close-white.png' style='height:18px'></button>
+        </div>
+    </div> -->
+    <div class="centerofpage" style="-webkit-transform: translate(0%,-50%);-moz-transform: translate(0%,-50%);transform: translate(0%,-50%);" ng-include="'../assets/common/html/angJobListViewSearching.html'">
+    </div>
+
+   <!--  <div class="centerofpage" ng-include="'../assets/common/html/angJobListViewSearching.html'"> </div> -->
+</div>

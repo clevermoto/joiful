@@ -1,0 +1,350 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <title>Joiful</title>
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+</head>
+<body>
+    <div class="appcontainer open-bg">
+        <script>
+            document.write(DynamicMenu("none", "white", "<", "startover()", "REGISTER", false, "", ""));
+        </script>
+        <!-- Image -->
+        <!--<img src="..\assets\common\images\open@3x.png" class="img-responsive" alt="" style="z-index:-1" />-->
+        <div class="container">
+            <form class="form-signin">
+                <div>
+                    <div class="footer-auto">
+                        <input type="hidden" id="fbid" value="">
+                        <input type="hidden" id="googleid" value="">
+                        <div class="row whitetopborder  openingInputRows">
+                            <div class="col-xs-4 noPadding openninglabels">
+                                first name
+                            </div>
+                            <div class="col-xs-8 noPadding">
+                                <input type="text" id="inputFirstName" style="font-size:12px;" class="form-control control-clear openninglabels" required autofocus maxlength="50" />
+                            </div>
+                        </div>
+                        <div class="row whitetopborder openingInputRows">
+                            <div class="col-xs-4 noPadding openninglabels">
+                                last name
+                            </div>
+                            <div class="col-xs-8 noPadding">
+                                <input type="text" id="inputLastName" style="font-size:12px;" class="form-control control-clear openninglabels" required autofocus maxlength="50" />
+                            </div>
+                        </div>
+                        <div class="row whitetopborder openingInputRows">
+                            <div class="col-xs-4 noPadding openninglabels">email address</div>
+                            <div class="col-xs-8 noPadding">
+                                <input type="email" id="inputEmail" style="font-size:12px;" class="form-control control-clear openninglabels" required autofocus maxlength="150" />
+                            </div>
+                        </div>
+                        <div class="row whitetopborder openingInputRows">
+                            <div class="col-xs-4 noPadding openninglabels">
+                                password</div>
+                            <div class="col-xs-8 noPadding">
+                                <input type="password" id="inputPassword" style="font-size:12px;" class="form-control control-clear openninglabels" required maxlength="20" />
+                            </div>
+                        </div>
+                        <div class="row whitetopborder openingInputRows">
+                            <div class="col-xs-4 noPadding openninglabels" style="padding-top:6px!important">
+                                confirm <br />password</div>
+                            <div class="col-xs-8 noPadding">
+                                <input type="password" id="inputConfirmPassword" style="font-size:12px;" class="form-control control-clear openninglabels" required maxlength="20" />
+                            </div>
+                        </div>
+                        <div class="row socialrow whitetopborder" style="display:none;">
+                            <div class="col-xs-6" style="text-align:center;border-right: solid white 1px;">
+                                <button id='btnFacebook' onclick="fbRegister()" class="btn btn-lg btn-clear-sm btnHeight" style="font-family:ITCAvantGardePro-Bold" type="button">
+                                <img src="../assets/common/images/fb.png" style="height:20px;width:auto" />
+                                </button>
+                            </div>
+                            <div class="col-xs-6" style="text-align:center;">
+                                <button id='btnGoogle' class="btn btn-lg btn-clear-sm btnHeight" style="font-family:ITCAvantGardePro-Bold" type="button">
+                                <img src="../assets/common/images/google.png" style="height:20px;width:auto" />
+                                </button>
+                            </div>
+                        </div>
+                        <button id="btnRegister" onclick="Register()" class="btn btn-lg btn-clear-silver btn-block btnHeight" style="border-top:solid 1px white" type="button">CONTINUE</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<script src="https://connect.facebook.net/en_US/all.js"></script>
+<script src="https://apis.google.com/js/api:client.js"></script>
+<script type="text/javascript">
+    var where = window.location.toString();
+    var uReferral = getParameterByName("u");
+    var lReferral = getParameterByName("l");
+    UpdateCookieItem("uReferral", uReferral);
+    UpdateCookieItem("lReferral", lReferral);
+    $(document).ready(function() {
+        $(".header-auto").css("position", "fixed")
+        $(".header-auto").css("top", "0px");
+        //if (gMobileVersion == false) {
+        //    if (where.indexOf('file') == -1) {
+        GetGoogleToken();
+        GetFBToken();
+        //    }
+        //}
+        //else {
+        //    $("#btnFacebook").hide();
+        //    $("#btnGoogle").hide();
+        //    $(".socialrow").hide();
+
+        //}
+        // checking if Tracking Mode is ON. Facebook object
+        if (typeof FB === "undefined") {
+            $("#btnFacebook").hide();
+        }
+        SilentLogout();
+        CleanCookieForNewUser();
+        BuildCommonUI();
+        setTimeout(adjustwidthtoimage, 500);
+    });
+
+    $(window).ready(function() {
+        adjustwidthtoimage();
+        $(".form-signin").show();
+    });
+    function showForm() {
+        $(".form-signin").show();
+    }
+    function startover() {
+        window.location = '../index.html'
+    }
+    function GetFBToken() {
+        // ---------------------------------
+        // Facebook Auth
+        // ---------------------------------
+        $.ajax({
+            dataType: "json",
+            url: ServicePrefix + "/api/getsetting/?settingkey=fbid",
+            method: "GET",
+            success: function(data) {
+                
+                if (data.SettingValue) {
+                    $("#fbid").val(data.SettingValue);
+                    //$("#btnFacebook").show();
+                    //$(".socialrow").show();
+                    FB.init({
+                        appId: $("#fbid").val(),
+                        oauth: true,
+                        status: true, // check login status
+                        cookie: true, // enable cookies to allow the server to access the session
+                        xfbml: true // parse XFBML
+                    });
+                } else {
+                    $("#btnFacebook").hide();
+                    $(".socialrow").hide();
+                }
+            },
+            error: function(err) {
+                $("#btnFacebook").hide();
+                $(".socialrow").hide();
+            }
+        });
+    }
+    function GetGoogleToken() {
+        $.ajax({
+            dataType: "json",
+            url: ServicePrefix + "/api/getsetting/?settingkey=googleoauth2",
+            method: "GET",
+            success: function(data) {
+                $("#googleid").val(data.SettingValue);
+                if (data.SettingValue) {
+                    startApp();
+                } else {
+                    $("#btnGoogle").hide();
+                }
+            },
+            error: function() {
+                $("#btnGoogle").hide();
+            }
+        });
+    }
+    function fbRegister() {
+        FB.login(function(response) {
+            if (response.authResponse) {
+                //User fully authorize the app.
+                var url = '/me?fields=first_name,last_name,email';
+                FB.api(url, function(response_me) {
+                    var fb_data = "spat=" + response.authResponse.accessToken +
+                        "&spid=" + response.authResponse.userID +
+                        "&sea=" + response_me.email +
+                        "&sfn=" + response_me.first_name +
+                        "&sln=" + response_me.last_name;
+                    window.location.replace("socialredirect.html?spt=fb&logintoken=fale&" + fb_data);
+                });
+            } else {
+                showAlert('');
+            }
+        }, {
+            scope: 'public_profile,email'
+        });
+    }
+
+    // ---------------------------------
+    // Google Auth
+    // ---------------------------------
+    var googleUser = {};
+    var startApp = function() {
+        gapi.load('auth2', function() {
+            // Retrieve the singleton for the GoogleAuth library and set up the client.
+            auth2 = gapi.auth2.init({
+                client_id: $("#googleid").val(),
+                cookiepolicy: 'single_host_origin',
+                // Request scopes in addition to 'profile' and 'email'
+                //scope: 'additional_scope'
+            });
+            auth2.then(function() {
+               // $("#btnGoogle").show();
+                //$(".socialrow").show();
+
+            });
+            attachSignin(document.getElementById('btnGoogle'));
+        });
+    };
+
+    function attachSignin(element) {
+        auth2.attachClickHandler(element, {},
+            function(googleUser) {
+                var google_data = "spat=" + encodeURIComponent(googleUser.getAuthResponse().id_token) +
+                    "&spid=" + encodeURIComponent(googleUser.getBasicProfile().getId()) +
+                    "&sea=" + encodeURIComponent(googleUser.getBasicProfile().getEmail()) +
+                    "&sfn=" + encodeURIComponent(googleUser.getBasicProfile().getGivenName()) +
+                    "&sln=" + encodeURIComponent(googleUser.getBasicProfile().getFamilyName());
+                window.location.replace("socialredirect.html?spt=gl&logintoken=true&" + google_data);
+            },
+            function(error) {
+                showAlert(JSON.stringify(error, undefined, 2));
+            });
+    };
+    function ValidateInput() {
+        if (DataLength(RemoveTags($("#inputFirstName").val())) == 0) {
+            showAlert('First Name must be entered');
+            return false;
+        }
+        if (DataLength(RemoveTags($("#inputLastName").val())) == 0) {
+            showAlert('Last Name must be entered');
+            return false;
+        }
+        if (DataLength(RemoveTags($("#inputEmail").val())) == 0) {
+            showAlert('Email must be entered');
+            return false;
+        }
+        if (ValidEmailAddress(RemoveTags($("#inputEmail").val())) == false) {
+            showAlert('Invalid Email Address');
+            return false;
+        }
+        var password = RemoveTags($("#inputPassword").val());
+        var confirmedpassword = RemoveTags($("#inputConfirmPassword").val());
+        // Validate Input
+        if (ValidatedPassword(password, confirmedpassword) == false) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    // form submit with enter key
+    document.onkeydown=function(evt){
+        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+        if(keyCode == 13){  
+            blockUI();
+            if (ValidateInput() == false) {
+                unblockUI();
+                return;
+            } else {
+                APICall();
+            }
+        }
+    }
+
+    function Register() {
+        blockUI();
+        if (ValidateInput() == false) {
+            return;
+        } else {
+            APICall();
+        }
+    }
+    function APICall() {
+        var pushregtoken = GetCookieItem("pushregtoken");
+        var uri = ServicePrefix + '/api/register/';
+        var postData = {
+            ureferral: uReferral,
+            lreferral: lReferral,
+            deviceid: pushregtoken,
+            firstname: RemoveTags($("#inputFirstName").val()),
+            lastname: RemoveTags($("#inputLastName").val()),
+            emailaddress: RemoveTags($("#inputEmail").val()),
+            password: RemoveTags($("#inputPassword").val()),
+            confirmedpassword: RemoveTags($("#inputConfirmPassword").val())
+        }
+        $.ajax({
+            data: postData,
+            dataType: "json",
+            url: uri,
+            method: "POST",
+            success: APISuccess,
+            error: APIError
+        });
+    }
+    function APIError(result, textStatus, err) {
+        showAlert(err);
+        return;
+    }
+    function APISuccess(result) {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+        user.UserID = result.UserID;
+        user.FirstName = result.FirstName;
+        user.LastName = result.LastName;
+        user.Validated = result.Validated;
+        user.WaiverSigned = result.WaiverSigned;
+        user.Persona = result.Persona;
+        user.ProviderWaiverSigned = (result.ProviderWaiverSigned == "0" ? "false" : "true");
+        user.ExternalProfileID = result.ExternalProfileID;
+        user.ReferralCode = result.ReferralCode;
+        if (UpdateCookie(user.UserID, user.FirstName, user.LastName, user.Persona, user.Validated, user.WaiverSigned, user.ProviderWaiverSigned, user.ExternalProfileID, user.ReferralCode) == true) {
+            AccountPageRedirector(true);
+        }
+    }
+</script>

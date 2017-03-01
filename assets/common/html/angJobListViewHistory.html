@@ -1,0 +1,228 @@
+﻿<!-- HISTORY -->
+
+<div style="width:85%;margin:0 auto;padding-bottom:1px">
+    <div class="row" style="width:100%; margin:0 auto; padding-top:0px; padding-bottom:0px;" ng-style="{'min-height' : (providerview==true ? '50px' : '60px')}">
+        <div ng-if="providerview==false" class="col-xs-6 noPadding" style="min-height:50px;">
+
+            <div class="row" >
+                <div ng-if="y.ProviderUserID=='0'">
+                    <div class="col-xs-12 noPadding">
+                        <div style="margin:0 auto; text-align:center;padding-top:10px">
+                            <div>
+                                {{y.CartItems[0].CartOfferingDescription}}
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+                <div  ng-if="y.ProviderUserID!='0'">
+                    <div>
+<!--                         <div class="col-xs-6 noPadding">
+                            <div id="imgProviderContainer" style="margin:0 auto; text-align:center;padding-top:2px;padding-bottom:2px">
+                                <img ng-if="providerview==false" ng-src="{{imglib + '/profile/'+y.ProviderUserID+'.jpg'}}" class="img-circle" style='max-height:50px;border-radius:50%;border:solid 2px #d86018' id="imgProvider" name="imgProvider" />
+                                <div ng-if="providerview==true" style='max-height:50px;max-width:50px;font-size:smaller'>{{y.FirstName}}</div>
+                            </div>
+                        </div> -->
+                        <div class="col-xs-12 noPadding">
+                            <div style="text-align: center;/*margin:0 auto; text-align:left;padding-top:10px*/">
+                                <div ng-if="providerview==false">
+                                    <div style="font-weight:600">
+                                        {{y.ProviderFirstName}}
+                                    </div>
+                                    <div style="color:#00A499;vertical-align:bottom">
+                                        <span> {{y.ProviderAvgReview}}</span><span style="padding-left:5px"><img style="height:18px;margin-top:-5px" src="../assets/common/images/stars.png" />s</span>
+                                    </div>
+                                </div>
+                                <div ng-if="providerview==true">
+                                    <div ng-include="'../assets/common/html/angJobListAddressCellSmall.html'">
+
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div ng-if="providerview==true">
+                        <div class="col-xs-12 noPadding">
+                            <div>
+                                {{y.CartItems[0].CartOfferingDescription}}
+                            </div>
+                            <div id="imgProviderContainer" style="margin:0 auto; text-align:left;padding-top:0px;padding-bottom:0px">
+                                <div style='min-height:50px;max-width:50px;'>{{y.FirstName}}</div>
+                            </div>
+
+                            <div style="margin:0 auto; text-align:left;padding-top:0px">
+
+                                <div ng-if="providerview==true">
+                                    <div ng-include="'../assets/common/html/angJobListAddressCellSmall.html'"></div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row"  ng-if="providerview==false && y.ProviderUserID!='0'">
+                <div style="text-align:center" class="col-xs-12">
+                    {{y.CartItems[0].CartOfferingDescription}}
+                </div>
+
+            </div>
+        </div>
+        <div ng-if="providerview==true" class="col-xs-6 noPadding" style="min-height:50px;">
+
+            <div class="row">
+                <div >
+                    <div class="col-xs-12 noPadding">
+                        <div style="margin:0 auto; text-align:center;padding-top:0px">
+                            <div>
+                                {{y.CartItems[0].CartOfferingDescription}}
+                            </div>
+                            <!--<div class="row noPadding" ng-if="y.JobStatus !='complete'"
+                                 style="width:100%; color:#00A499;font-size:smaller;"
+                                 ng-bind="GetStatusName(y.JobStatus)">
+                            </div>-->
+                            <div>
+                                {{y.FirstName}}
+                            </div>
+                            <div>
+                                <div ng-include="'../assets/common/html/angJobListAddressCellSmall.html'"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--<div ng-if="y.ProviderUserID!='0'">
+                    <div>
+                        <div class="col-xs-6 noPadding">
+                            <div id="imgProviderContainer" style="margin:0 auto; text-align:center;padding-top:2px;padding-bottom:2px">
+                                <img ng-if="providerview==false" ng-src="{{imglib + '/profile/'+y.ProviderUserID+'.jpg'}}" class="img-circle" style='max-height:50px;border-radius:50%;border:solid 2px #d86018' id="imgProvider" name="imgProvider" />
+                                <div ng-if="providerview==true" style='max-height:50px;max-width:50px;font-size:smaller'>{{y.FirstName}}</div>
+                            </div>
+                        </div>
+                        <div class="col-xs-6 noPadding">
+                            <div style="margin:0 auto; text-align:left;padding-top:0px">
+                                <div ng-if="providerview==false">
+                                    <div style="font-weight:600">
+                                        {{y.ProviderFirstName}}
+                                    </div>
+                                    <div style="color:#00A499;vertical-align:bottom">
+                                        <span> {{y.ProviderAvgReview}}</span><span style="padding-left:5px"><img style="height:18px;margin-top:-5px" src="../assets/common/images/stars.png" />s</span>
+                                    </div>
+                                </div>
+                                <div ng-if="providerview==true">
+                                    <div ng-include="'../assets/common/html/angJobListAddressCellSmall.html'">
+
+                                    </div>
+                                </div>
+                                <div>
+                                    {{y.CartItems[0].CartOfferingDescription}}
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div ng-if="providerview==true">
+                        <div class="col-xs-12 noPadding">
+                            <div>
+                                {{y.CartItems[0].CartOfferingDescription}}
+                            </div>
+                            <div id="imgProviderContainer" style="margin:0 auto; text-align:left;padding-top:0px;padding-bottom:0px">
+                                <div style='min-height:50px;max-width:50px;'>{{y.FirstName}}</div>
+                            </div>
+
+                            <div style="margin:0 auto; text-align:left;padding-top:0px">
+
+                                <div ng-if="providerview==true">
+                                    <div ng-include="'../assets/common/html/angJobListAddressCellSmall.html'"></div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>-->
+            </div>
+
+
+        </div>
+
+        <div class="col-xs-6 noPadding" style="text-align:right;padding-top:0px;">
+            <div style="margin: 0 auto; word-wrap: break-word; white-space:normal">
+                <div style="font-size:smaller;color:#5B6770;text-align:center">{{y.TransactionDateDisplay}}</div>
+                <div class="row noPadding" ng-if="y.JobStatus !='complete' "
+                     style="width:100%; color:#00A499;font-size:smaller;padding-top:0px;"
+                     ng-bind="GetStatusName(y.JobStatus)">
+                </div>
+                <div class="row">
+                    <!-- Customer View -->
+                    <div class='col-xs-9 noPadding'  style="text-align:left;padding-left:0px;padding-bottom:0px;padding-top:0px;">
+                        <div>
+                            <div>
+                                <div style="padding-bottom:3px"ng-show="bReviewPage==false && bTipPage==false && bCancelJob==false && providerview==false && ((y.JobStatus=='complete'))">
+                                    <button style="border-radius:00%" id="jlBookAgain{{$index}}" ng-show="(y.JobStatus=='complete')" ng-click="RebookJob(y.JobID, y.ProviderUserID, y.ProviderFirstName)" class="btn btn-sm btn-block btn-primary grad" type="button">REBOOK</button>
+                                </div>
+
+
+
+                                <!--<span ng-show="y.JobStatus =='providerassign' || y.JobStatus=='providertravel' || y.JobStatus=='servicestarted' || y.JobStatus=='open'">
+                                    <button id="jlUserCancel{{$index}}" ng-click="CancelJob(y.JobID, providerview)" class="btn btn-sm btn-success spapp-joblist-button" style="border-radius:50%" type="button">X</button>
+                                </span>-->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div ng-if="y.JobStatus=='complete'" class='col-xs-3  noPadding' style="padding-top:5px; padding-left:5px; padding-right:0px;text-align:right">
+                        <a id="jlMoreIcon{{$index}}"href="#" style='color:#5B6770' ng-click="showme('#jlMore', $index)">&#9660;</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!--<div ng-if="y.ProviderUserID=='0'" class="col-xs-6 noPadding">
+            <div style="margin: 0 auto;height:100px;vertical-align:middle; padding-top:13px;  word-wrap: break-word; white-space:normal;text-align:center">
+                We are searching for the perfect Artist for you...please hold on...
+            </div>
+        </div>-->
+    </div>
+
+
+
+    <div id="jlMore{{$index}}" style="display:none">
+
+        <div class="row border-top" style="padding-top:10px; padding-bottom:10px" ng-if="providerview==true">
+            <div class="col-xs-12 noPadding" style="text-align:center;padding-right:3px">
+                <div ng-if="y.ProviderJobReviewRating > 0">
+                    <span>You gave <strong>{{y.FirstName}}</strong> {{y.ProviderJobReviewRating}}&nbsp;</span><img style="height:18px;margin-top:-5px" src="../assets/common/images/stars.png" /> s
+                </div>
+                <div ng-if="y.UserJobReviewRating > 0">
+                    <span><strong>{{y.FirstName}}</strong> gave you {{y.UserJobReviewRating}}&nbsp;</span><img style="height:18px;margin-top:-5px" src="../assets/common/images/stars.png" /> s
+                </div>
+            </div>
+        </div>
+        <div class="row border-top" style="padding-top:10px; padding-bottom:10px" ng-if="providerview==false">
+            <div class="col-xs-12 noPadding" style="text-align:center;padding-right:3px">
+                <div ng-if="y.UserJobReviewRating > 0">
+                    <span>You gave {{y.ProviderFirstName}} {{y.UserJobReviewRating}}&nbsp;</span><img style="height:18px;margin-top:-5px" src="../assets/common/images/stars.png" /> s
+                </div>
+            </div>
+        </div>
+
+        
+        <div ng-if="providerview==false" class="row noPadding border-top" style="padding-top:10px;padding-bottom:10px">
+            <div class="col-xs-12 noPadding" style="text-align:center;padding-left:0px;padding-right:0px">Charged:
+                <span style="font-weight:600;color:#00A499">{{ getTotal($index) | currency}}</span>
+            </div>
+        </div>
+
+        <div ng-show="providerview==false && y.JobStatus=='complete'" style="width:100%">
+            <div ng-show="y.GratuityID=='0'" style="padding-bottom:0px">
+                <button id="jlTip{{$index}}" ng-click="AddTipToJob(y.JobID)" class="btn btn-sm btn-block btn-primary grad" type="button" style="border-radius:00%">ADD TIP</button>
+            </div>
+        </div>
+    </div>
+</div>

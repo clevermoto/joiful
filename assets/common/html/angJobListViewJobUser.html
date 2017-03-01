@@ -1,0 +1,86 @@
+﻿<div style="width:100%;margin:0 auto;padding-top:0px; padding-bottom:0px;" >
+    <div class="row noPadding divGetReadyText border-bottom pullDown scrollmenewuserdetail scrollmenewbase" style="width:100%;display:none">
+        <div class="row noPadding">
+            <p class="col-sm-12 col-xs-12" style="text-align:center" ng-bind-html="NextSteps">
+               
+            </p>
+        </div>
+        <div class="row noPadding" style="padding-top:10px;">
+            <div class="col-sm-12 col-xs-12 noPadding" style="text-align:center;font-size:36pt;color:black">
+                Enjoy!
+            </div>
+        </div>
+    </div>
+    <div  ng-if="y.JobStatus != 'servicestarted'"class="row noPadding arrivalminutes border-bottom" style="width:100%; margin:0 auto; padding-top:0px; padding-bottom:0px;">
+        <div class="col-xs-12 noPadding" style="text-align:center;color:#00A499">
+            {{y.ProviderFirstName}} will arrive <span style="color:#00A499" id="arrivalminutes">shortly</span></div>
+        </div>
+        
+    <div id="jlNameLine{{$index}}" class="row noPadding" style="width:100%; margin:0 auto; padding-top:0px; padding-bottom:0px;">
+        <div class="col-xs-6 noPadding" style="border-right:1px solid #5B6770">
+            <div class="row noPadding">
+                <div class="col-xs-6 noPadding">
+                    <div ng-include="'../assets/common/html/angJobListPhotoCell.html'"></div>
+                </div>
+                <div class="col-xs-6 noPadding">
+                    <div style="margin:0 auto; text-align:left;padding:30px 5px 0px 5px;">
+                        <div>
+                            <div ng-bind-html="GetFullDescription(y.CartItems)">
+
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="divBio" style="margin:0 auto;width:100%;padding:5px 5px 5px 5px;display:none" ng-if="y.ProviderUserID!='0'">{{ProviderBio}}</div>
+        </div>
+
+        <div class="col-xs-6 noPadding">
+            <div style="margin: 0 auto;width:100%">
+                <div ng-include="'../assets/common/html/angJobListContactCell.html'"></div>
+
+            </div>
+        </div>
+
+    </div>
+
+
+    <!--<div id="jlAddressLine{{$index}}" class="row border-top" style="width:100%; margin:0 auto; padding-top:0px; padding-bottom:0px;">
+        <div class="col-xs-12" style="text-align:center">
+            <div ng-include="'../assets/common/html/angJobListAddressCell.html'"></div>
+        </div>
+    </div>-->
+
+    <div class="footer-auto">
+        <div class="row noPadding" id="divFollowProvider" style="width:100%;display:none" ng-if="y.JobStatus=='providerassign' || y.JobStatus=='providertravel'">
+            <div class="col-sm-12 col-xs-12 noPadding" style="text-align:center">
+                <div>
+                    <span>
+                        <button id="jlFollow" onclick="FollowProvider()" class="btn btn-lg btn-notround btn-success btn-block grad btnHeight" type="button">FOLLOW {{y.ProviderFirstName  | uppercase }}</button>
+                    </span>
+
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row noPadding divGetReadyBtn" >
+            <div class="col-sm-12 col-xs-12 noPadding" style="text-align:center">
+                <div>
+                    <span>
+                        <button id="jlGetReady" onclick="GetReady()" class="btn btn-lg btn-notround btn-success btn-block grad btnHeight" type="button">GET READY</button>
+                    </span>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<div class="row noPadding" id="AllSet" style="width:100%;display:none">
+    <div class="col-sm-12 col-xs-12 noPadding" style="text-align:center;color:white;font-size:36pt">
+        All Set!
+    </div>
+</div>

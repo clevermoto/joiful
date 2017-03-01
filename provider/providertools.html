@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+  
+    <script src="../cordova.js"></script>
+  </head>
+
+<body>
+    <div class="appcontainer">
+        <script>document.write(DynamicMenu("white", "black", "X", "SendUserHome()", "TOOLS", true, "", ""));</script>
+        <div class="container" ng-controller="manageProviderPayeeCtrl">
+
+            <form class="form-signin">
+
+                <div class="scrollmenewheader scrollmenewbase">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button id="btnDND" class="border-bottom btn btn-lg btn-notround btn-clear btn-block" style="text-align:left;height:43px;margin-top: 5px" type="button" onclick="window.location='../provider/donotdisturb.html'">
+                                Do Not Disturb
+                                <div style="top:-23px;display:table-cell;float:right">
+                                    <img src='../assets/common/images/nextarrow-gray.png' style='height:13px'>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button id="btnPayee"  class="border-bottom btn btn-lg btn-notround btn-clear btn-block" style="text-align:left;height:43px;" type="button" onclick="window.location='../provider/providerpayeeeditor.html'">
+                            Payee
+                            <div style="top:-23px;display:table-cell;float:right">
+                                <img src='../assets/common/images/nextarrow-gray.png' style='height:13px'>
+                            </div>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button id="btnServiceMaint"  class="border-bottom btn btn-lg btn-notround btn-clear btn-block" style="text-align:left;height:43px;" type="button" onclick="window.location='../provider/providerservicemaintenance.html'">
+                            Service Setup<div style="top:-23px;display:table-cell;float:right">                                    
+                                <img src='../assets/common/images/nextarrow-gray.png' style='height:13px'>
+                            </div></button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <button id="btnStatements"  class="border-bottom btn btn-lg btn-notround btn-clear btn-block" style="text-align:left;height:43px;" type="button" onclick="window.location='../provider/providerstatement.html'">
+                            Artist Statements
+                            <div style="top:-23px;display:table-cell;float:right">
+                                <img src='../assets/common/images/nextarrow-gray.png' style='height:13px'>
+                            </div></button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 ">
+                            <button id="btnHistory"  class="border-bottom btn btn-lg btn-notround btn-clear btn-block" style="text-align:left;height:43px;" type="button" onclick="window.location='../cart/jobs.html?jobid=0&provider=true&statusgroup=artist-history'">
+                            Artist History<div style="top:-23px;display:table-cell;float:right">
+                                        <img src='../assets/common/images/nextarrow-gray.png' style='height:13px'>
+                                </div></button>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-12 ">
+                            <button id="btnDashboard" class="border-bottom btn btn-lg btn-notround btn-clear btn-block" style="text-align:left;height:43px;" type="button" onclick="window.location='../provider/index.html'">
+                                Open Jobs<div style="top:-23px;display:table-cell;float:right">
+                                                                        <img src='../assets/common/images/nextarrow-gray.png' style='height:13px'>
+                                </div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <div style="display:none">
+
+
+
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="font-family:ITCAvantGardePro-Bk">ITCAvantGardePro-Bk</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="font-family:ITCAvantGardePro-BkObl">ITCAvantGardePro-BkObl</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="font-family:ITCAvantGardePro-Bold">ITCAvantGardePro-Bold</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="font-family:ITCAvantGardePro-Demi">ITCAvantGardePro-Demi</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="font-family:ITCAvantGardePro-DemiObl">ITCAvantGardePro-DemiObl</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="font-family:ITCAvantGardePro-Md">ITCAvantGardePro-Md</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="font-family:ITCAvantGardePro-MdObl">ITCAvantGardePro-MdObl</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="font-family:ITCAvantGardePro-XLt">ITCAvantGardePro-XLt</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="font-family:ITCAvantGardePro-XLtObl">ITCAvantGardePro-XLtObl</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <div style="font-family:ITCAvantGardePro-XLtCn"> ITCAvantGardePro-XLtCn</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </form>
+
+        </div> <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<script>
+
+    $(document).ready(function ()
+    {
+
+        if (CheckLogin() == true) {
+            BuildCommonUI();
+            if (ProviderAccess() == false)
+            {
+                return;
+            }
+
+            InitNotificationPoll();
+
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+            $(".form-signin").show();
+            //$("#messageHeading").html("ARTIST TOOLS");
+
+        }
+  });
+
+  function Done() {
+      SendUserHome();
+  }
+</script>

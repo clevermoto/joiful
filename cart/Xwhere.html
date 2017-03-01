@@ -1,0 +1,981 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+                      
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+	
+	<!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+  <body ng-app="WhereApp">
+      <div class="appcontainer">
+          <div class="row spaheader" id="spaheader"><script>document.write(BuildHeaderNew());</script></div>
+          <div id="message" class="spaMessage">
+              <h3 id="messageHeading" class="spaMessageHeading">Location</h3>
+          </div>
+          <div class="container">
+
+              <form class="form-signin" style="display:none"onsubmit="return false">
+
+                  <div id="spa-menu-wrap">
+                      <div id="spa-menu-list">
+                          <ul class="list-unstyled"></ul>
+                      </div>
+                      <div id="spa-menu-container">
+
+                          <div class="scrollme">
+                            <div style="margin:0 auto;padding-bottom:5px">
+                                <div style="padding-right:0px;padding-left:0px;text-align:center;position:relative">
+                                    <div style="position:absolute;top:59px;left:25px" class="mapzoom">
+                                        <button class="btn mapzoom" style="background-color:#d86018;color:white;display:none" onclick="resetpic(-1)">-</button>
+                                      </div>
+                                    <div style="position:absolute;top:109px;left:25px"class="mapzoom">
+                                        <button class="btn mapzoom"style="background-color:#d86018;color:white;display:none"onclick="resetpic(1)">+</button>
+                                    </div>
+                                    <!--<img class="img-circle" style="border:solid #d86018 2px;width:40px;height:40px;border-radius: 50%;" ng-src="{{imglib}}/service/{{x.ServiceID}}.jpg" />-->
+                                    <img style="border-radius:10px; height:200px;" id='imgServicePic'  alt='Joiful' />
+                                </div>
+                            </div>
+                              <div class="row" ng-controller="WhereCtrl">
+                                  <div class="col-sm-12 noPadding">
+                                      <label id="lblLoc99" style="margin-bottom:5px" ng-click="ChangeLabelColor('lblLoc', '99', '-1');" class="lblLoc btn btn-md btn-default btn-block">
+                                          <input style="display:none" type="radio" id="radCurrentLocation" name="radLocation" value="-1">&nbsp;Current or New Location
+                                      </label>
+
+                                      <div class="row" id="divCurrentLocationAddress" style="display:none; margin-left:0px;margin-right:0px;margin-bottom:5px">
+                                          <div style="vertical-align:middle;width:90%;margin: 0 auto">
+                                              <label for="inputCountry" class="sr-only">Country</label>
+                                              <select id="inputCountry" class="form-control" placeholder="Country" autofocus">
+                                                  <option ng-repeat="c in CountryList" spa-countrycode="{{c.CountryShortName}}" value="{{c.CountryID}}">{{c.CountryName}}</option>
+                                              </select>
+                                              <label for="inputAddress1" class="sr-only">Address</label>
+                                              <input type="text" id="inputAddress1" class="form-control" placeholder="Address" autofocus maxlength="50" value="">
+                                              <input type="text" id="inputAddress2" class="form-control" placeholder="" autofocus maxlength="50" value="">
+                                              <label for="inputCity" class="sr-only">City</label>
+                                              <input type="text" id="inputCity" class="form-control" placeholder="City" autofocus maxlength="50" value="">
+
+                                              <label for="inputState" class="sr-only">State</label>
+                                              <select id="inputState" class="form-control" placeholder="State" autofocus">
+                                                  <option ng-repeat="s in StateList" spa-statecode="{{s.StateShortName}}" value="{{s.StateID}}">{{s.StateName}}</option>
+                                              </select>
+                                              <label for="inputZipCode" class="sr-only">Zip Code</label>
+                                              <!--<select id="inputZipCode" class="form-control">
+                                                  <option ng-repeat="z in ZipCodeList" value="{{z.ZipCode}}">{{z.ZipCodeDesc}}</option>
+                                              </select>-->
+                                              <input type="text" id="inputZipCode" class="form-control" placeholder="Zip Code" autofocus maxlength="8" value="">
+                                          </div>
+                                      </div>
+                                      <div>
+                                          <div class="row" ng-repeat="x in AddressList" ng-if="x.Address1 != 'Credit Card Address Only'">
+                                              <div class="col-sm-12 noPadding">
+                                                  <label style="margin-bottom:5px"
+                                                         ng-class="(((x.PrimaryAddress && locationID=='-1') || (x.AddressID==locationID))  ? 'btn-primary' : 'btn-default')" 
+                                                         ng-click="ChangeLabelColor('lblLoc', $index, x.AddressID)" 
+                                                         id="lblLoc{{$index}}" 
+                                                         class="lblLoc btn btn-md btn-block">
+                                                         <input id="radAddress{{$index}}" 
+                                                             spapp-lat="{{x.AddressLatitude}}"
+                                                             spapp-long="{{x.AddressLongitude}}"
+                                                             spapp-address="{{x.Address1}}"
+                                                             spapp-city="{{x.City}}"
+                                                             spapp-state="{{x.State}}"
+                                                             spapp-zipcode="{{x.ZipCode}}"
+                                                             type="radio" 
+                                                             name="radLocation" 
+                                                             ng-checked="(x.PrimaryAddress && locationID=='-1') || (x.AddressID==locationID)" 
+                                                             style="display:none"
+                                                             value="{{x.AddressID}}" />
+                                                        <span>{{x.Address1}}</span><span ng-if="x.Address2.length > 0">&nbsp;{{x.Address2}}</span><br />
+                                                        <span ng-if="x.City.length > 0">&nbsp;{{x.City}},</span><span ng-if="x.State.length > 0">&nbsp;{{x.State}}</span><span ng-if="x.ZipCode.length > 0">&nbsp;{{x.ZipCode}}</span><br />
+                                                        <span ng-if="x.Country.length > 0">&nbsp;{{x.Country}}</span>
+                                                  </label>
+                                              </div>
+                                          </div>
+                                      </div>
+
+                                  </div>
+                              </div>
+
+                              <!--<div class="row">
+                                <div class="col-xs-12" style="min-width:240px; ">
+                                    <div id="divLocation" style="display:none; padding-top:10px; padding-bottom:10px">
+                                        <div>
+                                            <div id="location" style="width:100%; margin:0 auto;text-align:center"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>-->
+
+                                <div style="width:100%"><span id="spnCost" style="float:right">$0.00</span><span style="float:right">Your total cost:&nbsp;</span></div>
+                                
+                                <div class="row" style="padding-top:5px">   
+                                    <div class="col-xs-12 noPadding" id="lnkNext"></div>
+                                </div> 
+
+                              <div class="row" style="padding-top:5px; padding-bottom:3px">
+                                  <div class="col-xs-6" style="text-align:left">
+                                      <button onclick="viewCart()" class="btn btn-sm btn-default btn-block">Spa Bag</button>
+                                  </div>
+                                  <div class="col-xs-6" id="lnkQuit" style="text-align:right">
+                                      <button id="btnExit" type="button" class="btn btn-sm btn-danger btn-block" onclick="StartBAS()">Start Over</button>
+                                  </div>
+                              </div>
+
+                          </div>
+                      </div>
+                  </div>
+              </form>
+
+          </div> <!-- /container -->
+      </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- spapp-bas -->
+<script src="../assets/common/js/spapp-bas.js"></script>
+<script type="text/javascript">
+
+
+    var gProviderListLatLong = "";
+    var gToAddress = "";
+    var gAvailableProviderCount = 0;
+    var gZoom = 11;
+    var gToLat = 0;
+    var gToLng = 0;
+
+    //alert(GetCountryLimitArray());
+    var gNextFileLocation = "";
+
+    if (GetCookieItem("cart").length == 0) {
+        showAlert('problem with your order - start again please', 'SendUserHome();');
+    }
+
+   //blockUI();
+
+    var app = angular.module('WhereApp', []);
+
+
+
+    // Default Zip Array...
+    // Zip Stuff First...
+    var myArray = new Array();
+    var myObject = new Object();
+
+    app.controller('WhereCtrl', function ($scope, $http) 
+    {
+
+
+        var UserID = GetCookieItem("UserID");
+
+        if (!UserID) 
+        {
+            showAlert('Problem with Input.', 'SilentLogout();');
+        }
+
+        //////// Get Deliverable Zip Codes
+        //////if (GetCookieItem("bas_zip").length==0)
+        //////{
+        //////    $scope.ZipCodeList = JSON.parse(GetBASZipCode());
+        //////    gZipCodeLimitArray = BuildShortZipCodeList(JSON.parse(GetCookieItem("bas_zip")));
+        //////}
+        //////else
+        //////{
+        //////    gZipCodeLimitArray = BuildShortZipCodeList(JSON.parse(GetCookieItem("bas_zip")));
+        //////    $scope.ZipCodeList = JSON.parse(GetCookieItem("bas_zip"));
+        //////}
+
+
+        //-------------------------------
+        // Lets get the States...
+        // ------------------------------
+
+        var gUnfilteredStateArray = new Array();
+
+        if (GetCookieItem("cStateList").length > 0)
+        {
+            gUnfilteredStateArray = JSON.parse(GetCookieItem("cStateList"));
+            $scope.StateList = FilterState(JSON.parse(GetCookieItem("cStateList")));
+        }
+        else
+        {
+            var uri = ServicePrefix + "/api/getstatelist";
+
+            $http.get(uri).then(function (result)
+            {
+
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+                    
+                    return;
+                }
+
+                if (result.data.Results.length > 0)
+                {
+
+                    UpdateCookieItem("cStateList", JSON.stringify(result.data.Results));
+                    gUnfilteredCountryArray = result.data.Results;
+                    $scope.StateList = FilterState(result.data.Results);
+                }
+
+
+
+            });
+        }
+
+        //----------------------------------
+        // Lets get the Countries...
+        //----------------------------------
+
+
+        var gUnfilteredCountryArray = new Array();
+
+        if (GetCookieItem("cCountryList").length > 0)
+        {
+            gUnfilteredCountryArray = JSON.parse(GetCookieItem("cCountryList"));
+            $scope.CountryList = FilterCountry(gUnfilteredCountryArray);
+        }
+        else
+        {
+            var uri = ServicePrefix + "/api/getcountrylist";
+            $http.get(uri).then(function (result) {
+
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+                    
+                    return;
+                }
+
+                if (result.data.Results.length > 0) {
+                    UpdateCookieItem("cCountryList", JSON.stringify(result.data.Results));
+                    gUnfilteredCountryArray = result.data.Results;
+                    $scope.CountryList = FilterCountry(gUnfilteredCountryArray);
+                }
+
+            });
+        }
+
+        // Location Variable for Use
+        $scope.locationID = GetCartLocationID();
+        if ($scope.locationID == "")
+        {
+            $scope.locationID = "-1";
+        }
+      
+
+        // -------------------------
+        // ADDRESS
+        //--------------------------
+        var gUnFilteredAddressArray = new Array();
+
+        if (GetCookieItem("cUserAddressList").length > 0)
+        {
+            gUnFilteredAddressArray = JSON.parse(GetCookieItem("cUserAddressList"));
+            $scope.AddressList = FilterAddress(gUnFilteredAddressArray);
+        }
+        else
+        {
+            // Now get user Address records...
+            var uri = ServicePrefix + "/api/GetUserAddressList/?userid=" + UserID.toString();
+
+            $http.get(uri).then(function (result) {
+                if (!result) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+                    
+                    return;
+                }
+
+                if (result.data.Results.length > 0) {
+                    UpdateCookieItem("cUserAddressList", JSON.stringify(result.data.Results));
+                    gUnFilteredAddressArray = result.data.Results;
+                }
+
+                $scope.AddressList = FilterAddress(gUnFilteredAddressArray);
+                //unblockUI();
+            });
+        }
+                
+        $scope.ChangeLabelColor = function (classname, idname, val)
+        {
+
+            $('input[name="radLocation"][value="' + val + '"]').prop('checked', true);
+
+            if (val == "-1") {
+                getWhereLocation();
+            }
+            else {
+                var ToAddress = $('#radAddress' + idname).attr("spapp-address") + " ";
+                ToAddress = ToAddress + $('#radAddress' + idname).attr("spapp-city") + ", ";
+                ToAddress = ToAddress + $('#radAddress' + idname).attr("spapp-state") + " ";
+                ToAddress = ToAddress + $('#radAddress' + idname).attr("spapp-zipcode");
+
+                gToLat = $('#radAddress' + idname).attr("spapp-lat");
+                gToLng = $('#radAddress' + idname).attr("spapp-long");
+
+                updatelocationdisplayWithProviders(ToAddress, gZoom);
+                                                             //spapp-city{{$index}}="{{x.City}}"
+                                                             //spapp-state{{$index}}="{{x.State}}"
+                                                             //spapp-zipcode{{$index}}="{{x.ZipCode}}"
+                HideGeoAddress(val);
+
+            }
+            ChangeLabelColor(classname, classname + idname);
+        }
+
+
+        //});
+
+    });
+
+    function FilterState(unFilteredStateArray)
+    {
+        var StateList = new Array();
+        var StateItem = new Object();
+
+        StateItem =
+        {
+            StateID: "",
+            StateName: "Select a State",
+            StateShortName: ""
+        }
+        StateList.push(StateItem);
+
+        for (var i = 0; i < unFilteredStateArray.length; i++)
+        {
+
+            if (SearchArray(unFilteredStateArray[i].StateAbbreviation, gStateLimitArray) == true)
+            {
+                var StateItem = new Object();
+
+                StateItem =
+                {
+                    StateID: unFilteredStateArray[i].StateID,
+                    StateName: unFilteredStateArray[i].StateName,
+                    StateShortName: unFilteredStateArray[i].StateAbbreviation
+                }
+                StateList.push(StateItem);
+            }
+        }
+        //alert(JSON.stringify(StateList));
+        return StateList;
+
+    }
+    function FilterCountry(unFilteredCountryArray)
+    {
+
+
+        var CountryList = new Array();
+        var CountryItem = new Object();
+
+        CountryItem =
+        {
+            CountryID: "",
+            CountryName: "Select a Country",
+            CountryShortName: ""
+        }
+
+        CountryList.push(CountryItem);
+
+        for (var i = 0; i < unFilteredCountryArray.length; i++) {
+
+            if (SearchArray(unFilteredCountryArray[i].CountryCode, gCountryLimitArray) == true) {
+                CountryItem = new Object();
+
+                CountryItem =
+                {
+                    CountryID: unFilteredCountryArray[i].CountryID,
+                    CountryName: unFilteredCountryArray[i].CountryName,
+                    CountryShortName: unFilteredCountryArray[i].CountryCode
+                }
+                CountryList.push(CountryItem);
+            }
+        }
+
+        return CountryList;
+    }
+
+    function FilterAddress(UnFilteredAddressArray)
+    {
+        var AddressArray = new Array();
+        var AddressObject = new Object();
+
+
+        //alert(gCountryNameLimitArray.length);
+        //alert(gStateNameLimitArray.length);
+        //alert(gZipCodeLimitArray.length);
+        for (var i = 0; i < UnFilteredAddressArray.length; i++) {
+            if (
+                (SearchArray(UnFilteredAddressArray[i].Country, gCountryNameLimitArray) == true)
+                &&
+                (SearchArray(UnFilteredAddressArray[i].State, gStateNameLimitArray) == true)
+                &&
+                (SearchArray(UnFilteredAddressArray[i].ZipCode, gZipCodeLimitArray) == true)
+              )
+            {
+
+                AddressObject = new Object();
+                AddressObject =
+                {
+
+                    AddressLatitude: UnFilteredAddressArray[i].AddressLatitude,
+                    AddressLongitude: UnFilteredAddressArray[i].AddressLongitude,
+                    AddressID: UnFilteredAddressArray[i].AddressID,
+                    Address1: UnFilteredAddressArray[i].Address1,
+                    Address2: UnFilteredAddressArray[i].Address2,
+                    City: UnFilteredAddressArray[i].City,
+                    State: UnFilteredAddressArray[i].State,
+                    ZipCode: UnFilteredAddressArray[i].ZipCode,
+                    Country: UnFilteredAddressArray[i].Country,
+                    PrimaryAddress: UnFilteredAddressArray[i].PrimaryAddress
+                }
+                AddressArray.push(AddressObject);
+            }
+
+        }
+
+        return AddressArray;
+    }
+
+    var CreditCardID = GetCookieItem("PrimaryCreditCardID");
+    var AddressID = GetCookieItem("PrimaryAddressID");
+
+    //var lnkNext = '<button id="btnWhen" type="button" class="btn btn-md btn-success" style="width:100px;height:40px" onclick="CheckLocation(\'' + 'when.html' + '\')">When?</button>';
+    var lnkNext = '<button id="btnPayment" type="button" class="btn btn-lg btn-success btn-block ajaxbtn" onclick="CheckLocation(\'' + 'payment.html' + '\')">Payment?</button>';
+
+    if (getParameterByName("upd") == "y") {
+        lnkNext = '<button id="btnWhere" type="button" class="btn btn-lg btn-success btn-block ajaxbtn" onclick="CheckLocation(\'' + 'review.html' + '\')">Done</button>';
+    }
+    else if (CreditCardID != "0" && CreditCardID != "") {
+        lnkNext = '<button id="btnWhere" type="button" class="btn btn-lg btn-success btn-block ajaxbtn" onclick="CheckLocation(\'' + 'review.html' + '\')">Complete your Order</button>';
+    }
+
+
+    var cartItemArray = new Array();
+    var cartItem = new Object();
+    var cart = new Object();
+
+    $(document).ready(function ()
+    {
+        $(".mapzoom").hide();
+        //blockUI();
+        $("#lnkNext").html(lnkNext);
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            $("#spnCost").html(GetCookieItem("CartCost"));
+        
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+            // Load Cart Obj
+            cart = LoadCart();
+
+            if (typeof cart.locationID == "undefined" || cart.locationID == "0" || cart.locationID=="")
+            {
+                cart.locationID = "-1";
+            }
+
+            if (cart.creditCardID == "0" || cart.creditCardID == -1)
+            {
+                if (CreditCardID != "0" && CreditCardID != "")
+                {
+                    cart.creditCardID = (CreditCardID == "0" ? -1 : CreditCardID);
+                    UpdateCookieItem("cart", JSON.stringify(cart));
+                    cart = LoadCart();
+                }
+            }
+
+
+
+            LoadCartUI(cart);
+
+            //// Not location picked 
+            //// but we have a default address
+
+
+            setTimeout(DoFirstMapLoad, 500);
+
+
+            $(".form-signin").show();
+            //unblockUI();            
+
+       }
+    });
+    function DoFirstMapLoad()
+    {
+        if ((cart.locationID == "-1" && AddressID.length > 1) || cart.locationID.length > 1) {
+
+            var ToAddress = $('input[name=radLocation]:checked').attr("spapp-address") + " ";
+            ToAddress = ToAddress + $('input[name=radLocation]:checked').attr("spapp-city") + ", ";
+            ToAddress = ToAddress + $('input[name=radLocation]:checked').attr("spapp-state") + " ";
+            ToAddress = ToAddress + $('input[name=radLocation]:checked').attr("spapp-zipcode");
+
+            gToLat = $('input[name=radLocation]:checked').attr("spapp-lat");
+            gToLng = $('input[name=radLocation]:checked').attr("spapp-long");
+
+            updatelocationdisplayWithProviders(ToAddress, gZoom);
+
+
+        }
+    }
+    function resetpic(val)
+    {
+
+        gZoom = parseInt(gZoom) + val;
+
+
+
+        if (gZoom < 1)
+        {
+            gZoom = 1;
+        }
+
+        updatelocationdisplayWithProviders(gToAddress, gZoom);
+    }
+
+    function updatelocationdisplay(toaddress, zoom) {
+
+        gToAddress = toaddress;
+        gZoom = zoom;
+        gProviderListLatLong = "";
+
+        var address = toaddress.split(',');
+
+        cart.locationLat = gToLat;
+        cart.locationLng = gToLng;
+        UpdateCart();
+
+        var ServiceID = GetCookieItem("ServiceID");
+
+        var uri = ServicePrefix + "/api/GetAvailableProviderList/?serviceid=" + ServiceID + "&latitude=" + gToLat + "&longitude=" + gToLng + "&milesradius=" + "30";
+
+        $.get(uri).then(function (result) {
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.Status != null) {
+                if (result.Status != "SUCCESS") {
+                    showAlert(result.Message);
+
+                    return;
+                }
+                else {
+                    gAvailableProviderCount = result.Results.length;
+                    for (var i = 0; i < result.Results.length; i++)
+                    {
+                        gProviderListLatLong = gProviderListLatLong + "&markers=color:blue|label:A|" + result.Results[i].CurrentLatitude + "," + result.Results[i].CurrentLongitude + "|";
+                    }
+                    GetMap();
+                }
+            }
+            else {
+                return;
+            }
+        });
+
+
+    }
+
+    function GetMap()
+    {
+        if ((gToLat == 0) || (gToLng == 0))
+        {
+            $(".mapzoom").hide();
+            return;
+        }
+
+        if (typeof gToAddress == "undefined")
+        {
+            $(".mapzoom").hide();
+            return;
+        }
+
+        var w = $("#spa-menu-container").width();
+
+        if (w == "0") {
+            $(".mapzoom").hide();
+            return;
+        }
+
+        $(".mapzoom").show();
+
+        w = parseInt(parseInt($("#spa-menu-container").width()) * .9);
+
+
+        var img_url = "https://maps.googleapis.com/maps/api/staticmap?center=" + gToAddress + "&zoom=" + gZoom + "&maptype=roadmap&size=" + w.toString() + "x200&sensor=false" + gProviderListLatLong + "&markers=color:red|label:C|" + gToAddress + "&sensor=false";
+
+        $("#imgServicePic").attr("src", img_url);
+    }
+
+    function viewCart()
+    {
+        LoadCartDisplay(cart, false, "");
+    }
+
+    function GetCartLocationID()
+    {
+        cart = LoadCart();
+
+        return cart.locationID;
+    }
+    function Validation()
+    {
+        if ($("input[name='radLocation']").is(':checked') == false) {
+            showAlert('Plese select a location.');
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function LoadCartUI(cart) {
+
+        if (cart.locationID == -1)
+        {
+            return;
+        }
+
+        if (!cart.locationID) {
+            return;
+        }
+        else {
+            $("input[name=radLocation][value='" + cart.locationID + "']").click();
+        }        //showAlert(cart.locationID);
+    }
+
+    function UpdateCart()
+    {
+        if ($('input[name=radLocation]:checked').val() != "-1")
+        {
+            cart.locationID = $('input[name=radLocation]:checked').val();
+            // save settings
+            UpdateCookieItem("cart", JSON.stringify(cart));
+        }
+    }
+
+    //------------------------------------------------
+    // Geo functions
+    //------------------------------------------------
+    function HideGeoAddress(val)
+    {
+        //var lat = $('input[name="radLocation"]:checked').attr("spapp-lat");
+        //var long = $('input[name="radLocation"]:checked').attr("spapp-long");
+
+        $("#divCurrentLocationAddress").hide();
+
+        cart.locationID = val;
+    }
+    function ShowGeoAddress()
+    {
+        ResetAddress();
+        $("#divCurrentLocationAddress").show();
+    }
+
+    function getWhereLocation() 
+    {
+        blockUI();
+        //setTimeout("unblockUI();", 3600);
+        cart.locationID = "-1";
+        $("#divCurrentLocationAddress").show();
+        getLocation("updateAddressLocation()");
+    }
+
+    function updateAddressLocation()
+    {
+        var myLat = GetCookieItem("my_lat");
+        var myLong = GetCookieItem("my_lng");
+
+        if (myLat.toString().length == 0 || myLong.toString().length == 0) {
+            ResetAddress();
+            $("#divLocation").hide();
+            showAlert("Problem with current location functionality - please select or create an address");
+        }
+        else {
+            ResetAddress();
+            $("#divLocation").show();
+            showPosition(myLat, myLong);
+        }
+        //unblockUI();
+    }
+    
+    function showPosition(lat, long) 
+    {
+        //alert('NO GPS');
+        //return;
+
+        var latlon = lat + "," + long;
+
+
+        gToLat = lat;
+        gToLng = long;
+
+        ResetAddress();
+        $("#divLocation").show();
+
+        getAddress(lat, long, "localGPS");
+
+        if ($('input[name="radLocation"]:checked').val() == "-1") {
+
+            var ToAddress = GetCookieItem("localGPS_address") + " ";
+            ToAddress = ToAddress + GetCookieItem("localGPS_city") + ", ";
+            ToAddress = ToAddress + GetCookieItem("localGPS_state") + " ";
+            ToAddress = ToAddress + GetCookieItem("localGPS_zip");
+            updatelocationdisplay(ToAddress, gZoom);
+
+            // Load UI
+            $("#inputAddress1").val(GetCookieItem("localGPS_address"));
+            $("#inputAddress2").val("");
+            $("#inputCity").val(GetCookieItem("localGPS_city"));
+
+            $("#inputZipCode").val(GetCookieItem("localGPS_zip"));
+
+
+            // Select Country
+            $("#inputCountry option:selected").removeAttr("selected");
+            $('#inputCountry option[spa-countryCode="' + GetCookieItem("localGPS_country") + '"]').prop('selected', true);
+            // Select State
+            $("#inputState option:selected").removeAttr("selected");
+            $('#inputState option[spa-stateCode="' + GetCookieItem("localGPS_state") + '"]').prop('selected', true);
+
+
+        }
+        
+    }
+
+    function ResetAddress()
+    {
+        
+        $("#inputAddress1").val("");
+        $("#inputAddress2").val("");
+        $("#inputCity").val("");
+        $("#inputZipCode").val("");
+        // Select Country
+        $("#inputCountry option:selected").removeAttr("selected");
+        // Select State
+        $("#inputState option:selected").removeAttr("selected");
+    }
+
+    //----------------------------------------
+    // Address Add Stuff
+    //----------------------------------------
+    //-------------------------
+    // Validation
+    //-------------------------
+    function Validate() {
+
+        if (RemoveTags($("#inputCountry").val()) == "") {
+            showAlert('A Country must be selected');
+            return false;
+        }
+
+        if (DataLength(RemoveTags($("#inputAddress1").val())) == 0) {
+            showAlert('Address must be entered');
+            return false;
+        }
+
+        if (DataLength(RemoveTags($("#inputCity").val())) == 0) {
+            showAlert('City must be entered');
+            return false;
+        }
+
+        if (RemoveTags($("#inputState").val()) == "") {
+            showAlert('A State must be selected');
+            return false;
+        }
+
+        var countryCode = $('#inputCountry option:selected').attr('spa-countrycode');
+        
+        if ( isValidPostalCode(RemoveTags($("#inputZipCode").val()), countryCode) == false)
+        {
+            showAlert('A valid Zip Code must be entered');
+            return false;
+        }
+
+        //------------------------------------------
+        //---------------------
+        // More Edits needed on Zip Code
+        // based on country
+        //---------------------
+        //------------------------------------------
+
+        return true;
+    }
+
+    function APICall() {
+
+        RemoveCookie("cUserAddressList");
+
+        var myLat = GetCookieItem("my_lat");
+        var myLong = GetCookieItem("my_lng");
+
+        if (myLat=="")
+        {
+            myLat = "34.019266";
+        } 
+        
+        if (myLong=="")
+        {
+            myLong = "-118.498728";
+        } 
+
+        var callback = APICallSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/updateuseraddress/';
+
+        data = {
+            userid: user.UserID,
+            addressid: 0,
+            address1: RemoveTags($("#inputAddress1").val()),
+            address2: RemoveTags($("#inputAddress2").val()),
+            city: RemoveTags($("#inputCity").val()),
+            stateid: RemoveTags($("#inputState").val()),
+            countryid: RemoveTags($("#inputCountry").val()),
+            zipcode: RemoveTags($("#inputZipCode").val()),
+            latitude: myLat,
+            longitude: myLong 
+        };
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: APIUpdateError
+               });
+
+    }
+
+    function APICallSuccess(result) {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            
+            return;
+        }
+        else {
+            UpdateNewCartLocation(result.ID);
+        }
+    }
+
+    function APIUpdateError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+    function UpdateNewCartLocation(ID)
+    {
+        cart.locationID = ID;
+        UpdateCookieItem("cart", JSON.stringify(cart));
+        Next(gNextFileLocation);
+    }
+
+    //---------------------------------
+    // Navigation
+    //---------------------------------
+    function CheckLocation(file)
+    {
+        gNextFileLocation = file;
+
+        if ($('input[name=radLocation]:checked').val() != "-1")
+        {
+            // Nothing to Add,
+            // Using Saved Location
+            Next(file);
+        }
+        else
+        {
+            // Add it in
+            if (Validate() == true)
+            {
+                RemoveCookie("cUserAddressList");
+                APICall();
+            }
+        }
+    }
+
+    function Prev(file)
+    {
+
+        UpdateCart();
+        window.location = "../cart/" + file;
+    }
+
+    function Next(file)
+    {
+
+        if (Validation() == false) {
+            return;
+        }
+
+        if (gAvailableProviderCount == 0 && gNoArtistOption == true) {
+            showAlert("Sorry! We don't have any artists available in your area. Pick another location or try back later.");
+        }
+        else {
+            UpdateCart();
+            window.location = "../cart/" + file;
+        }
+    }
+</script>
+

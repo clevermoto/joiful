@@ -1,0 +1,402 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+      
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script> 
+  </head>
+
+<body ng-app="manageProviderApp">
+    <div class="appcontainer">
+        <script>document.write(DynamicMenu("white", "black", "X", "SendToArtistTools()", "PAYEE", true, "save", "Save()"));</script>
+
+        <div class="container" ng-controller="manageProviderPayeeCtrl">
+
+            <form class="form-signin">
+
+                <div class="scrollmenewheader scrollmenewbase">
+                    <div class="row">
+                        <div class="col-xs-12">
+                            <label for="inputPaymentType" class="sr-only">Payment Type</label>
+                            <div style="padding-bottom:10px;padding-top:15px">
+                                <label class="serviceOfferingRadio  radPaymentTypeIndividual" onclick="SetViewToIndividual(true);">
+                                    <input style="display:none" type="radio" name="radPaymentType" id="radPaymentTypeIndividual"  data-ng-model="IndividualFlag" data-ng-value="true"/>
+                                </label>
+                                <div style='display:inline-block'>Individual</div>
+                                <label class="serviceOfferingRadio  radPaymentTypeCompany"   onclick="SetViewToIndividual(false);">
+                                    <input style="display:none"  type="radio" name="radPaymentType" id="radPaymentTypeCompany" data-ng-model="IndividualFlag" data-ng-value="false"/>
+                                </label>
+                                    <div style='display:inline-block'>Company</div>
+                                
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="divCompanyIndividual" style="display:none;padding-top:10px;">
+                        <div class="row inputCompanyName" style="padding-bottom:10px">
+                            <div class="col-xs-12">
+                                <label for="inputCompanyName" class="sr-only">Company Name</label>
+                                <input type="text" id="inputCompanyName" class="form-control placeholder-silver" placeholder="Company" required maxlength="150" value="{{CompanyName}}">
+
+                            </div>
+                        </div>
+                        <div class="row border-bottom" style="padding-bottom:10px">
+                            <div class="col-xs-12">
+                                <label for="inputID" class="sr-only">Number</label>
+                                <input style="display:none" type="text" id="inputID" class="form-control placeholder-silver" placeholder="ID" required maxlength="20" value="111111111">
+
+                            </div>
+                        </div>
+
+                    </div>
+                    <div id="divBankInfo" style="display:none;padding-bottom:5px">
+                        <div class="row">
+                            <div class="col-xs-12">
+                                <h5 style="padding-top:10px; padding-bottom:10px">Bank Account Info</h5>
+
+                                <label for="inputAccountNumber" class="sr-only">Account Number</label>
+                                <input type="text" id="inputAccountNumber" class="form-control placeholder-silver" placeholder="Account Number" required maxlength="17" value="{{ActualAccountNumber}}">
+                            </div>
+                        </div>
+                        <div class="row" style="padding-top:10px">
+                            <div class="col-xs-12">
+                                <label for="inputRoutingNumber" class="sr-only">Routing Number</label>
+                                <input type="text" id="inputRoutingNumber" class="form-control placeholder-silver" placeholder="Routing Number" required maxlength="9" value="{{RoutingNumber}}">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                </form>
+
+        </div> <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<script>
+
+    var app = angular.module('manageProviderApp', []);
+
+    app.controller('manageProviderPayeeCtrl', function ($scope, $http) {
+
+        var uri = ServicePrefix + '/api/GetProviderPayeeInfo/?userid=' + GetCookieItem("UserID");
+
+        $http.get(uri).then(function (result)
+        {
+
+                if (!result) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+                    return;
+                }
+
+                if (result.data.Results.length > 0)
+                {
+	                
+                    $scope.IndividualFlag = result.data.Results[0].IndividualFlag;
+                    $scope.CompanyName = result.data.Results[0].CompanyName;
+                    $scope.RoutingNumber = result.data.Results[0].RoutingNumber;
+                    $scope.DisplayAccountNumber = result.data.Results[0].DisplayAccountNumber;
+                    $scope.ActualAccountNumber = result.data.Results[0].ActualAccountNumber;
+                    SetViewToIndividual(result.data.Results[0].IndividualFlag, true);
+                    if(result.data.Results[0].IndividualFlag == true) {
+						var val = result.data.Results[0].FederalEmployeeNumber.replace(/\D/g, '');
+						var newVal = '';
+						newVal += val.substr(0, 3) + '-';
+						newVal += val.substr(3, 2) + '-';
+						val = val.substr(5);
+						newVal += val;
+						$scope.FederalEmployeeNumber = newVal;
+                    } else {
+	                   var val = result.data.Results[0].FederalEmployeeNumber.replace(/\D/g, '');
+					   var newVal = '';
+					   newVal += val.substr(0, 2) + '-';
+					   val = val.substr(2);
+					   newVal += val;
+					   $scope.FederalEmployeeNumber = newVal;
+                    }
+				}
+
+        });
+
+    });
+
+    $(document).ready(function ()
+    {
+        $(".btn-menu-right").addClass("btn-menu-right-save");
+        $(".btn-menu-right").removeClass("btn-menu-right");
+
+        if (CheckLogin() == true) {
+            BuildCommonUI();
+            if (ProviderAccess() == false)
+            {
+                return;
+            }
+            $(".radPaymentTypeCompany").html(GetCheckMark(25, "unselected-silver"));
+            $(".radPaymentTypeIndividual").html(GetCheckMark(25, "unselected-silver") );
+
+            InitNotificationPoll();
+
+
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+            $(".form-signin").show();
+            //$("#messageHeading").html("PAYEE MAINT.");
+
+        }
+  });
+  
+  	function formatIDs() {
+	  	if($("#inputID").attr("spa-numbertype")=="SSN") {
+	        var val = $("#inputID").val().replace(/\D/g, '');
+	        var newVal = '';
+	        if(val.length > 4) {
+	        	$("#inputID").val(val);
+	        }
+	        if((val.length > 3) && (val.length < 6)) {
+	            newVal += val.substr(0, 3) + '-';
+	            val = val.substr(3);
+	        }
+	        if (val.length > 5) {
+	            newVal += val.substr(0, 3) + '-';
+	            newVal += val.substr(3, 2) + '-';
+	            val = val.substr(5);
+	        }
+	        newVal += val;
+	        $("#inputID").val(newVal);
+        }
+        
+        if($("#inputID").attr("spa-numbertype")=="EIN") {
+	        var val = $("#inputID").val().replace(/\D/g, '');
+	        var newVal = '';
+	        if(val.length > 3) {
+	        	$("#inputID").val(val);
+			}
+	        if (val.length > 2) {
+	            newVal += val.substr(0, 2) + '-';
+	            val = val.substr(2);
+	        }
+	        newVal += val;
+	        $("#inputID").val(newVal);
+        }
+  	}
+
+    function SetViewToIndividual(inVal, clear)
+  	{
+        $("#inputID").hide();
+        $("#divCompanyIndividual").show();
+        $("#divBankInfo").show();
+
+        if (inVal == false || inVal == "false")
+        {
+            $("#inputCompanyName").show();
+            $(".inputCompanyName").show();
+            SetCheckMarkToCompany(true);
+            //$("#inputID").val("");
+            $("#inputID").attr("placeholder", "EIN");
+            $("#inputID").attr("maxlength", "10");
+            $("#inputID").attr("spa-numbertype", "EIN");
+        }
+        else
+        {
+            SetCheckMarkToCompany(false);
+
+            $("#inputCompanyName").hide();
+            $(".inputCompanyName").hide();
+
+            //$("#inputID").val("");
+            $("#inputID").attr("placeholder", "SSN");
+            $("#inputID").attr("maxlength", "11");
+            $("#inputID").attr("spa-numbertype", "SSN");
+        }
+
+        if(!clear) {
+            console.log('clear')
+	        $("#inputCompanyName").val("");
+            $("#inputID").val("111111111");
+        }
+    }
+    
+    $('#inputID').keyup(function() {
+	    formatIDs();
+    });
+    
+  function SetCheckMarkToCompany(bCompanyChecked)
+  {
+      console.log(bCompanyChecked);
+
+        if (bCompanyChecked==true)
+        {
+            $(".radPaymentTypeCompany").html(GetCheckMark(25, "selected"));
+            $(".radPaymentTypeIndividual").html(GetCheckMark(25, "unselected-silver") );
+        }
+        else
+        {
+            $(".radPaymentTypeCompany").html(GetCheckMark(25, "unselected-silver"));
+            $(".radPaymentTypeIndividual").html(GetCheckMark(25, "selected"));
+        }
+  }
+
+  function ValidateInput()
+  {
+      if ((typeof $("#inputID").attr("spa-numbertype"))=="undefined" || $("#inputID").attr("spa-numbertype").length == 0)
+      {
+          showAlert('Please select your Payee type.');
+          return false;
+      }
+
+      if ($("#inputID").attr("spa-numbertype") == "SSN")
+      {
+	    var isValid = $("#inputID").val().match(/^\d+(-\d+)*$/);
+	    if (DataLength(RemoveTags($("#inputID").val()))!=11 || !isValid)
+	    {
+            $("#inputID").val("111111111")
+//	        showAlert('SSN: Exactly 9 characters. Only numbers.');
+//	        return false;
+	    }
+
+      }
+      else
+      {
+	    if (DataLength(RemoveTags($("#inputCompanyName").val()))<1 || DataLength(RemoveTags($("#inputCompanyName").val()))>151)
+		{
+        	showAlert('Company Name: Min 1 character and Max 150 characters');
+			return false;
+    	} 
+	    if (DataLength(RemoveTags($("#inputID").val()))!=10 )
+	    {
+            $("#inputID").val("111111111")
+	        //showAlert('EIN: Exactly 9 characters');
+	        //return false;
+	    }
+    }    
+    if (DataLength(RemoveTags($("#inputAccountNumber").val()))<4 || DataLength(RemoveTags($("#inputAccountNumber").val()))>17 || !$("#inputAccountNumber").val().match(/^\d+(-\d+)*$/))
+    {
+        showAlert('Bank Account: Min 4 characters and Max 17 characters. Only numbers.');
+        return false;
+    }  
+    
+    if (DataLength(RemoveTags($("#inputRoutingNumber").val()))!=9 || !$("#inputRoutingNumber").val().match(/^\d+(-\d+)*$/))
+    {
+        showAlert('Routing Number: Exactly 9 characters. Only numbers.');
+        return false;
+    }
+  }
+
+  function Save()
+  {
+        blockUI();
+
+        if (ValidateInput() == false)
+        {
+	        unblockUI();
+            return;
+        }
+        else
+        {
+            APICallUpdate();
+        }
+
+  }
+
+  function APICallUpdate()
+  {
+      var uri = ServicePrefix + '/api/updateproviderpayeeinfo/';
+      var payeetype = true;
+
+      if ($("#inputID").attr("spa-numbertype") == "SSN")
+      {
+	  	payeetype = true;		
+      }
+      else
+      {
+		payeetype = false;  
+	  }
+
+      var postData = {
+          userid: user.UserID,
+          individualflag: payeetype,
+          companyname: RemoveTags($("#inputCompanyName").val()),
+          federalemployeenumber: RemoveTags($("#inputID").val().replace(/[^0-9]/g, '')),
+          routingnumber: RemoveTags($("#inputRoutingNumber").val()),
+          accountnumber: RemoveTags($("#inputAccountNumber").val()),
+          externalpaymentprofileid: '',
+          externalpaymentid: ''
+      }
+
+      $.ajax(
+             {
+                 data: postData,
+                 dataType: "json",
+                 url: uri,
+                 method: "POST",
+                 success: APISuccessUpdate,
+                 error: APIUpdateError
+             });
+
+  }
+
+  function APISuccessUpdate(result)
+  {
+  	  if (result == null) {
+          showAlert('returned no data');
+          return;
+      }
+
+      if (result.Status != "SUCCESS") {
+          showAlert(result.Message);
+          return;
+      }
+
+      showAlert('', gProviderHomePage);
+
+  }
+
+  function APIUpdateError(result, textStatus, err) {
+	  unblockUI();
+      showAlert(err, '../index.html');
+      return;
+  }
+
+  function Done() {
+      SendUserHome();
+  }
+</script>

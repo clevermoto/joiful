@@ -1,0 +1,10 @@
+﻿    <div style="margin-top:0px;margin-bottom:0px;height:60px;padding-top:11px" ng-style="{'height' : 
+                (providerview == false ? '60px' : '30px')
+         }">
+        <div ng-if="y.ProviderUserID !='0' && (y.JobStatus !='complete' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel') && y.CartAddress.AddressLine1 != null">{{y.CartAddress.AddressLine1}}<span ng-if="y.CartAddress.AddressLine2 != null">&nbsp;{{y.CartAddress.AddressLine2}}</span></div>
+
+        <div ng-if="y.CartAddress.City != null" style="font-size:small">{{y.CartAddress.City}}, {{y.CartAddress.State}} </div>
+            <!--<div ng-show="y.ProviderUserID !='0' && providerview==true && MobileVersion==true && (y.JobStatus !='complete' && y.JobStatus !='usercancel' && y.JobStatus !='providercancel' && y.JobStatus !='systemcancel')">
+                <button style="margin-top:5px;margin-bottom:0px" ng-click="TakeMeThere()" class="btn btn-sm btn-primary btn-block btn-notround grad" type="button">take me there</button>
+            </div>-->
+        </div>

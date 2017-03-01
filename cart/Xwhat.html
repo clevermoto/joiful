@@ -1,0 +1,1240 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+      
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>              
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+	
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+     <!-- Slick-->
+    <link rel="stylesheet" type="text/css" href="../assets/lib/slick/slick.css" />
+    <link rel="stylesheet" type="text/css" href="../assets/lib/slick/slick-theme.css" />
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+  <body ng-app="spappApp">
+      <div class="appcontainer">
+          <div class="row spaheader" id="spaheader"><script>document.write(BuildHeaderNew());</script></div>
+          <div id="message" class="spaMessage">
+              <h3 id="messageHeading" class="spaMessageHeading">Select your Treatment</h3>
+          </div>
+          <div class="container">
+
+              <form class="form-signin" style="display:none;"onsubmit="return false">
+
+                  <div id="spa-menu-wrap">
+                      <div id="spa-menu-list">
+                          <ul class="list-unstyled"></ul>
+                      </div>
+                      <div id="spa-menu-container">
+
+
+                              <div class="main-gallery"ng-controller="manageServiceCtrl">
+                                  <!-- Example row of columns -->
+                                  <div class="row" style="border-left: solid #e5e5e6 2px;margin-bottom:0px;" ng-repeat="x in Services" ng-if="x.ServiceOfferingCount>0">
+                                      <div class="row" style="padding-left:0px;padding-right:0px" id="btnService{{$index}}" ng-click="BookAService(x.ServiceID, x.ServiceName)">
+                                        <div style="margin:0 auto">
+                                              <div style="padding-right:0px;padding-left:0px;text-align:center">
+                                                  <img style="width:100%; height:auto;max-height:60px;" ng-src="{{imglib}}/service/{{x.ServiceID}}.jpg" />
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="row"style="height:26px">
+                                          <div style="text-align:center;margin-top:0px;padding-top:0px">
+                                              <h6 style="margin-top:5px;margin-bottom:5px">{{x.ServiceName}}</h6>
+                                          </div>
+                                      </div>
+                                      <!--</div>-->
+                                  </div>
+                                  <div class="row" style="border-left: solid #e5e5e6 2px;margin-bottom:0px;" id="divHistory" ng-if="UserID!='0'">
+                                      <div class="row" style="padding-left:0px;padding-right:0px" id="btnServiceHistory" ng-click="BookAService('-1', 'Your Treatments')">
+                                          <div style="margin:0 auto">
+                                              <div style="padding-right:0px;padding-left:0px;text-align:center">
+                                                  <img style="width:100%; height:auto;max-height:60px;" ng-src="../assets/common/images/logo.png" />
+                                              </div>
+                                          </div>
+                                      </div>
+                                      <div class="row" style="height:26px">
+                                          <div style="text-align:center;margin-top:0px;padding-top:0px">
+                                              <h6 style="margin-top:5px;margin-bottom:5px">Your Treatments</h6>
+                                          </div>
+                                      </div>
+                                      <!--</div>-->
+                                  </div>
+                              </div>
+                              <div class="row" style="margin:0 auto;margin-bottom:5px;background-color:#d86018">
+                                  <div id="divServiceName" class="col-xs-12" style="font-size:large; color:#ffffff; padding-right:0px;padding-left:0px;text-align:center">
+                                  </div>
+                              </div>
+
+
+
+                          <div class="scrollmewhat">
+
+
+
+                              <div class="row">
+                                  <div id="divHistoryData"style="display:none">
+                                      <div  ng-include="'../assets/common/html/angJobListView.html'"></div>
+                                  </div>
+                                  <p id="workarea"></p>
+
+                              </div>
+
+                              <div class="divNonHistory">
+                                  <div class="row ">
+                                      <div class="col-xs-12 noPadding" id="lnkNext"></div>
+                                  </div>
+
+                                  <div class="row" style="padding-top:10px;">
+                                      <div class="col-xs-6" style="text-align:left">
+                                          <button onclick="viewCart()" class="btn btn-sm btn-default btn-block">Spa Bag</button>
+                                      </div>
+                                      <div class="col-xs-6" id="lnkQuit" style="text-align:right">
+                                          <button id="btnExit" type="button" class="btn btn-sm btn-danger btn-block" onclick="StartBAS()">Start Over</button>
+                                      </div>
+                                  </div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
+              </form>
+
+          </div> <!-- /container -->
+          </div>
+          <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+          <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<!-- slick -->
+<script type="text/javascript" src="../assets/lib/slick/slick.min.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- spapp-BAS -->
+<script src="../assets/common/js/spapp-bas.js"></script>
+
+<script type="text/javascript">
+
+    blockUI();
+    var ProviderEntry = (getParameterByName("ProviderEntry") == null ? "n" : getParameterByName("ProviderEntry"));
+    var ReturnRecordCount = 3;
+    var StatusGroup = "history";
+
+</script>
+
+<script src="../assets/common/js/angApp.js"></script>
+<script src="../assets/common/js/angJobListCtrl.js"></script>
+
+<script type="text/javascript">
+
+    var ServiceArray = new Array();
+    var ServiceObject = new Object();
+
+    app.controller('manageServiceCtrl', function ($scope, $http) {
+
+        var uri = ServicePrefix + "/api/GetServiceList/?activeonly=true";
+        $scope.UserID = GetCookieItem("UserID");
+
+        $scope.imglib = ImagePrefix;
+
+        if (GetCookieItem("cServices").length > 0)
+        {
+            $scope.Services = JSON.parse(GetCookieItem("cServices"));
+        }
+        else
+        {
+            $http.get(uri).then(function (result) {
+
+                if (!result) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (!result.data.Status) {
+                    if (result.data.Status != "SUCCESS") {
+                        showAlert(result.data.Message);
+                        return;
+                    }
+                }
+
+                LastRow = result.data.Results.length;
+                UpdateCookieItem("cServices", JSON.stringify(result.data.Results));
+
+                // kill all local cSO items
+                for (var i = 0; i < LastRow; i++)
+                {
+                    //alert("cSO" + result.data.Results[i].ServiceID);
+                    RemoveCookie("cSO" + result.data.Results[i].ServiceID);
+                }
+
+                $scope.Services = result.data.Results;
+            });
+
+
+
+        }
+        //---------------------------
+        // Load up a work array
+        //---------------------------
+        ServiceArray = new Array();
+
+        for (var i = 0; i < $scope.Services.length; i++) {
+            ServiceObject = new Object();
+            ServiceObject = {
+                ID: $scope.Services[i].ServiceID,
+                Name: $scope.Services[i].ServiceName
+            }
+            ServiceArray.push(ServiceObject);
+        }
+        $scope.BookAService = function (ServiceID, ServiceName)
+        {
+
+            BookAService(ServiceID, ServiceName);
+
+        }
+
+
+    });
+
+    var CreditCardID = GetCookieItem("PrimaryCreditCardID");
+    var AddressID = GetCookieItem("PrimaryAddressID");
+
+    var lnkNext = '<button id="btnWhere" type="button" class="btn btn-lg btn-success btn-block ajaxbtn" onclick="Next(\'' + 'where.html' + '\')">Location?</button>';
+    //if (CreditCardID != "0") {
+    //    lnkNext = '<button id="btnWhere" type="button" class="btn btn-md btn-success ajaxbtn" style="width:100px;height:40px" onclick="Next(\'' + 'where.html' + '\')">Where?</button>';
+    //}
+
+    if (getParameterByName("upd") == "y")
+    {
+        lnkNext = '<button id="btnWhere" type="button" class="btn btn-lg btn-success btn-block ajaxbtn"  onclick="Next(\'' + 'review.html' + '\')">Done</button>';
+    }
+    //var divserviceItem = "";
+
+
+    var ServiceID = GetCookieItem("ServiceID");
+    if (ServiceID == "")
+    {
+        ServiceID = "-1";
+        UpdateCookieItem("ServiceID", ServiceID);
+    }
+    var OfferingCount = 0;
+
+    var cartQuestionArray = new Array();
+    var cartQuestion = new Object();
+
+    var cartItemArray = new Array();
+    var cartItem = new Object();
+
+    var cart = new Object();
+    var now = new Date();
+    var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+    var ValidationType = "";
+    var ParentServiceID = 0;
+    var OfferingIndex = -1;
+
+    var ServiceOfferings = new Array();
+
+    var serviceItems = new Array();
+    var serviceItem = new Object();
+
+    var serviceAdditionalQuestions = new Array();
+    var serviceAdditionalQuestionsAnswer = new Array();
+    var LoggedIn = true;
+
+    var UserID = GetCookieItem("UserID");
+    if (UserID == "") {
+        UserID = "0";
+    }
+    $(document).ready(function () {
+        bDisplayPage = true;
+        if (UserID != '0') {
+            SetupDashboard(true);
+            $("#loggedin").show();
+            $(".loggedout").hide();
+        }
+        else {
+            LoadHomePage();
+            $("#loggedin").hide();
+            $(".loggedout").show();
+        }
+    });
+
+    function LoadHomePage() {
+
+
+        $('.main-gallery').slick({
+            slidesToShow: 2,
+            slidesToScroll: 2,
+            autoplay: true,
+            autoplaySpeed: 2500
+            //infinite: true,
+            //fade: true,
+            //cssEase: 'linear'
+        });
+
+        //var picsrc = ImagePrefix + "/service/" + GetCookieItem("ServiceID") + ".jpg";
+        //$("#imgServicePic").attr("src", picsrc);
+
+        UpdateCookieItem("CartCost", "$0.00");
+
+
+        $("#lnkNext").html(lnkNext);
+
+        CheckLogin();
+
+        var UserID = GetCookieItem("UserID");
+        if (UserID == "") {
+            UserID = "0";
+            LoggedIn = false;
+        }
+
+        BuildCommonUI();
+
+        $("#divServiceName").html(FindServiceName(ServiceID));
+
+        BookAService(ServiceID, FindServiceName(ServiceID));
+
+        if (LoggedIn == true) {
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+        }
+
+        $(".form-signin").show();
+
+        unblockUI();
+
+    }
+
+    function FindServiceName(inServiceID)
+    {
+
+        if (inServiceID == "-1")
+        {
+            if (user.UserID == "0") {
+                return "Welcome";
+            }
+            else {
+                return "Your Treatments";
+            }
+        }
+
+        for (var i = 0; i < ServiceArray.length; i++) {
+            if (ServiceArray[i].ID == inServiceID) {
+                return ServiceArray[i].Name;
+            }
+        }
+        return "";
+    }
+
+    function BookAService(selServiceID, ServiceName)
+    {
+        $("#divServiceName").html(ServiceName);
+
+        ServiceOfferings = new Array();
+
+        serviceItems = new Array();
+        serviceItem = new Object();
+
+        serviceAdditionalQuestions = new Array();
+        serviceAdditionalQuestionsAnswer = new Array();
+
+        UpdateCookieItem("CartCost", "$0.00");
+
+        UpdateCookieItem("ServiceID", selServiceID);
+        // Set Global
+        ServiceID = selServiceID;
+
+        $("#workarea").html("");
+        $(".divNonHistory").hide();
+
+        if (selServiceID == "-1") {
+
+            $(".divNonHistory").hide();
+            $("#workarea").html("");
+            $("#divHistoryData").show();
+            RemoveCookieItem("cart");
+        }
+        else {
+
+            $("#divHistoryData").hide();
+            BuildServiceOptions(selServiceID);
+
+        }
+    }
+
+    function Register()
+    {
+        UpdateCart(true);
+        window.location = '../account/register.html';
+    }
+    function Login()
+    {
+        UpdateCart(true);
+        window.location = '../account/login.html';
+    }
+    function viewCart() {
+        if (LoggedIn == false) {
+            showConfirm("Sorry! You must login or create a Joiful account to proceed...", "Login", "Register", "Login()", "Register()");
+        }
+        else {
+            UpdateCookieItem("cart", JSON.stringify(cart));
+            LoadCartDisplay(cart, false, "");
+        }
+    }
+
+    function BuildServiceOptions(ServiceID)
+    {
+
+        // Start with Additional Questions
+
+        var uri = ServicePrefix + "/api/GetServiceAdditionalQuestions/?serviceid=" + ServiceID;
+
+        $.get(uri).then(function (result) {
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.Status != null) {
+                if (result.Status != "SUCCESS") {
+                    showAlert(result.Message);
+                    
+                    return;
+                }
+                else {
+                    BuildAdditionalQuestionArray(result.Results)
+                    //showAlert(JSON.stringify(result.Results));
+                    return;
+                }
+            }
+            else {
+                return;
+            }
+        });
+
+
+
+    }
+
+    function BuildAdditionalQuestionArray(results)
+    {
+
+        for (var i = 0; i < results.length; i++) {
+            // -------------------------------------
+            // This service has this question
+            // -------------------------------------
+            if (results[i].AdditionalServiceQuestionID.length > 1) {
+                var serviceAdditionalQuestion = new Array();
+
+                serviceAdditionalQuestion = {
+                    serviceAdditionalQuestionType: results[i].AdditionalQuestionType,
+                    serviceAdditionalQuestionID: results[i].AdditionalQuestionID,
+                    serviceAdditionalQuestionText: results[i].AdditionalQuestionText
+                }
+                serviceAdditionalQuestions.push(serviceAdditionalQuestion);
+            }
+        }
+
+        GetUserAdditionalQuestionAnswerList();
+        //GetAllServiceOfferings(ServiceID);
+    }
+
+    function GetUserAdditionalQuestionAnswerList()
+    {
+
+        for (var i = 0; i < serviceAdditionalQuestions.length; i++) {
+            if (user.UserID.length > 1)
+            {
+                GetUserAdditionalQuestionAnswerItem(serviceAdditionalQuestions[i].serviceAdditionalQuestionType);
+            }
+        }
+
+        setTimeout('GetAllServiceOfferings("' + ServiceID + '")', 500);
+
+    }
+    
+    function GetUserAdditionalQuestionAnswerItem(additionalquestiontoken)
+    {
+        // Start with Additional Questions
+
+        var uri = ServicePrefix + "/api/GetUserAdditionalQuestionAnswer/?userid=" + user.UserID + "&additionalquestiontoken=" + additionalquestiontoken;
+
+        $.get(uri).then(function (result) {
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.Status != null) {
+                if (result.Status != "SUCCESS") {
+                    showAlert(result.Message);
+                    
+                    return;
+                }
+                else {
+
+                    serviceAdditionalQuestionsAnswer.push(result.ID);
+                    //alert(result.ID);
+                    return;
+                }
+            }
+            else {
+                return;
+            }
+        });
+
+    }
+
+    function GetAllServiceOfferings(ServiceID)
+    {
+       // alert(GetCookieItem("cSO" + ServiceID).length)
+        if (GetCookieItem("cSO" + ServiceID).length == 0) {
+            var uri = ServicePrefix + "/api/GetAllOfferingsByServiceID/?userid=" + user.UserID + "&serviceID=" + ServiceID;
+
+            $.get(uri).then(function (result) {
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+                if (result.Status != null) {
+                    if (result.Status != "SUCCESS") {
+                        showAlert(result.Message);
+                        
+                        return;
+                    }
+                    else {
+
+                        UpdateCookieItem("cSO" + ServiceID, JSON.stringify(result.Results));
+
+                        BuildInternalObjects(result.Results);
+                        //showAlert(JSON.stringify(result.Results));
+                        return;
+                    }
+                }
+                else {
+                    return;
+                }
+            });
+        }
+        else {
+            BuildInternalObjects(JSON.parse(GetCookieItem("cSO" + ServiceID)));
+        }
+    }
+
+    function BuildInternalObjects(ServiceOfferings) {
+
+
+        var subOfferingCount = 0;
+        var subOfferingAddOnCount = 0;
+        var subOfferingFreeAddOnCount = 0;
+        var ctr = 0;
+        var holdServiceOfferingIndex = 0;
+
+        for (var i = 0; i < ServiceOfferings.length; i++) {
+            ctr++;
+
+            if (ServiceOfferings[i].ServiceType.toLowerCase() == "serviceoffering") {
+                // Don't update initial
+                if (i > 0) {
+                    // Update old one...
+                    UpdateInternalObjectCounts(subOfferingCount, subOfferingAddOnCount, subOfferingFreeAddOnCount, holdServiceOfferingIndex);
+                }
+
+                // reset new one
+                holdServiceOfferingIndex = i;
+
+                // reset counters
+                subOfferingCount = 0;
+                subOfferingAddOnCount = 0;
+                subOfferingFreeAddOnCount = 0;
+            }
+            else {
+                subOfferingCount++;
+
+                if (ServiceOfferings[i].Required == false) {
+                    subOfferingAddOnCount++;
+                }
+
+                if (ServiceOfferings[i].Cost == 0) {
+                    subOfferingFreeAddOnCount++;
+                }
+            }
+
+
+
+            var serviceItem = new Object();
+
+            serviceItem = {
+                itemID: ServiceOfferings[i].ServiceOfferingID,
+                itemSubID: (ServiceOfferings[i].ServiceType.toLowerCase() == "serviceOffering" ? 0 : ServiceOfferings[i].ServiceSubOfferingID),
+                itemName: ServiceOfferings[i].Name,
+                itemParentID: ServiceOfferings[i].ServiceOfferingID,
+                itemCost: ServiceOfferings[i].Cost,
+                itemType: ServiceOfferings[i].ServiceType,
+                selectionRequired: ServiceOfferings[i].Required,   // this should only be true for suboffering
+                subOfferingCount: 0,
+                subOfferingAddOnCount: 0,
+                subOfferingFreeAddOnCount: 0
+            };
+
+            serviceItems.push(serviceItem);
+        }
+
+        // Finish updating last object
+        if (ctr > 0) {
+            // Update old one...
+            UpdateInternalObjectCounts(subOfferingCount, subOfferingAddOnCount, subOfferingFreeAddOnCount, holdServiceOfferingIndex);
+            BuildOfferingList();
+        }
+        else {
+
+            BuildOfferingList();
+        }
+    }
+    function UpdateInternalObjectCounts(subOfferingCount, subOfferingAddOnCount, subOfferingFreeAddOnCount, Index) {
+        serviceItems[Index].subOfferingCount = subOfferingCount;
+        serviceItems[Index].subOfferingAddOnCount = subOfferingAddOnCount;
+        serviceItems[Index].subOfferingFreeAddOnCount = subOfferingFreeAddOnCount;
+
+
+        serviceItems[Index].selectionRequired = (subOfferingCount == 0 ? true : (subOfferingAddOnCount == 0 ? true : false));
+    }
+    function BuildOfferingList() {
+
+        var work = '';
+        OfferingCount = 0;
+        var SOCount = -2;
+        var NewGroupCtr = 0;
+
+        for (var i = 0; i < serviceItems.length; i++)
+        {
+
+            if (serviceItems[i].itemType.toLowerCase() == "serviceoffering")
+            {
+
+                if (NewGroupCtr > 0)
+                {
+                    work = work + "</div>";
+                }
+
+                NewGroupCtr = 0;
+                SOCount++;
+
+                var labelLink = 'ChangeLabelColor("SOContainer", "SOContainer"' + SOCount.toString() + '")';
+                var link = 'clickTheRadioSO(' + '"' + serviceItems[i].itemID + '"' + ',' + serviceItems[i].subOfferingCount + ',' + serviceItems[i].subOfferingAddOnCount + ',' + (OfferingCount - 1).toString() + ',' + SOCount +')';
+                //alert(link);
+
+                OfferingCount++;
+
+
+                // Label
+                var label = serviceItems[i].itemName;
+                label = label + ((serviceItems[i].subOfferingCount == 0 || serviceItems[i].subOfferingAddOnCount > 0) ? " <div style='max-width:200px;width:50%;margin:0 auto;padding: 5px 5px 5px 5px; background-color:#535354;color:#ffffff;border-radius:50%'>$" + serviceItems[i].itemCost.toFixed(2) + "</div>" : "");
+
+                // Div / Button
+                work = work + "<label style='margin-bottom:5px' type='button' id='SOContainer" + (SOCount).toString() + "' class='SOC" + serviceItems[i].itemID + " SOContainer btn btn-lg btn-default btn-block' onclick='" + link + "' >" + label;
+
+                // Hidden input
+                work = work + "<input spapp-cost='" + serviceItems[i].itemCost + "' onclick=" + link + " style='display:none' id='radServiceOffering" + i + "' ";
+                work = work + " value='" + ((serviceItems[i].subOfferingCount > 0 && serviceItems[i].subOfferingAddOnCount == 0 && serviceItems[i].subOfferingFreeAddOnCount == 0) ? serviceItems[i].itemID : serviceItems[i].itemID) + "|" + serviceItems[i].itemType + "' ";
+                work = work + " type='radio' ";
+                //work = work + " onclick='clickTheRadio(" + "\"" + serviceItems[i].itemID + "\"" + "," + serviceItems[i].subOfferingCount + "," + serviceItems[i].subOfferingAddOnCount + "," + (OfferingCount - 1).toString() + ")'";
+
+                work = work + " name='radioOffering' class='radioOffering'></label>";
+                
+            }
+
+            if (serviceItems[i].itemType.toLowerCase() == "servicesuboffering")
+            {
+
+                if (serviceItems[i].selectionRequired == true)
+                {
+                    if (NewGroupCtr == 0)
+                    {
+                        work = work + "<div style='display:none;text-align:center;margin:auto 0;color:#535354;font-style:italic' class='divSubOffering divRadioOffering_" + serviceItems[i].itemParentID.toString() + "'>Select one</div>";
+
+                        work = work + '<div style="display:none;margin-bottom:10px;" class="divSubOffering divRadioOffering_' + serviceItems[i].itemParentID.toString() + '">';
+                    }
+
+                    var itemName = "radioOffering_" + serviceItems[i].itemParentID;
+                    var lblID = serviceItems[i].itemSubID + serviceItems[i].itemType;
+                    var link = "clickTheRequiredRadio('" + itemName + "','" + NewGroupCtr + "','" + lblID + "','" + serviceItems[i].itemSubID + "|" + serviceItems[i].itemType + "')";
+                    var itemID = "divRadioOffering_" + itemName + NewGroupCtr;
+                    var labelLink = 'ChangeLabelColor("SOContainer", "SOContainer"' + SOCount.toString() + '")';
+
+                    NewGroupCtr++;
+
+                    work = work + '<label type="button" onclick="' + link + '" style="margin:0 auto;margin-bottom:5px; width:90%" id="lbl' + serviceItems[i].itemSubID + serviceItems[i].itemType + '" class="btn btn-md btn-default btn-block subOfferingClass' + SOCount + (NewGroupCtr - 1).toString() + ' lblSubOffering' + (serviceItems[i].itemCost == 0 ? " lblFree_" + serviceItems[i].itemParentID.toString() : "") + '" >';
+
+
+                    // Label
+                    var label = "&nbsp;" + serviceItems[i].itemName + " <div style='max-width:150px;width:50%;margin:0 auto;padding: 5px 5px 5px 5px; background-color:#535354;color:#ffffff;border-radius:50%'>$" + serviceItems[i].itemCost.toFixed(2) + "</div>";
+                  
+                    // Div / Button
+ //                   work = work + "<button id='" + itemID + "' class='btn btn-default btn-block divSubOffering btnRadioOffering divRadioOffering_" + serviceItems[i].itemParentID.toString() + "' style='display:none' type='button'  onclick='" + link + "' >" + label + "</button>";
+
+
+                    work = work + label + "</label>";
+                    work = work + "<input  spapp-cost='" + serviceItems[i].itemCost + "'  style='display:none' value='" + serviceItems[i].itemSubID + "|" + serviceItems[i].itemType + "' class='SubOffering' type='radio' name='radioOffering_" + serviceItems[i].itemParentID + "' />";
+                }
+                else 
+                {
+                    if (NewGroupCtr == 0)
+                    {
+                        work = work + "<div style='display:none;text-align:center;margin:0 auto;color:#535354;font-style:italic' class='divSubOffering divRadioOffering_" + serviceItems[i].itemParentID.toString() + "'>Select one or more add-ons</div>";
+                        work = work + '<div class="divSubOffering divRadioOffering_' + serviceItems[i].itemParentID.toString() + '" data-toggle="buttons" style="display:none">';
+                    }
+                    NewGroupCtr++;
+                    
+                    var link = "clickRadioButtonAddon('" + serviceItems[i].itemSubID + serviceItems[i].itemType + "','" + serviceItems[i].itemSubID + "|" + serviceItems[i].itemType + "','" + "radioOffering_" + serviceItems[i].itemParentID + "')";
+
+                    work = work + '<label onclick="' + link + '" type="button" style="margin:0 auto;margin-bottom:5px; width:90%" id="lbl' + serviceItems[i].itemSubID + serviceItems[i].itemType + '" class="btn btn-md btn-default btn-block subOfferingClass' + SOCount + (NewGroupCtr - 1).toString() + ' lblSubOffering' + (serviceItems[i].itemCost == 0 ? " lblFree_" + serviceItems[i].itemParentID.toString() : "") + '" >';
+
+
+
+                    work = work + serviceItems[i].itemName + (serviceItems[i].itemCost > 0 ? " <div style='max-width:150px;width:50%;margin:0 auto;padding: 5px 5px 5px 5px; background-color:#535354;color:#ffffff;border-radius:50%'>$" + serviceItems[i].itemCost.toFixed(2) + "</div>" : "");
+                    work = work + "</label>";
+                    work = work + "<input style='display:none' spapp-cost='" + serviceItems[i].itemCost + "'  id='chk" + serviceItems[i].itemSubID + serviceItems[i].itemType + "' value='" + serviceItems[i].itemSubID + "|" + serviceItems[i].itemType + "' class='SubOffering" + (serviceItems[i].itemCost == 0 ? " Free_" + serviceItems[i].itemParentID.toString() : "") + "' type='checkbox' name='radioOffering_" + serviceItems[i].itemParentID + "'>";
+                }
+            }
+
+        }
+
+        if (NewGroupCtr > 0) {
+            work = work + "</div>";
+        }
+
+
+        if (serviceAdditionalQuestions.length > 0)
+        {
+            work = work + BuildQuestions();
+        }
+
+        $("#workarea").html(work + '<div style="width:100%"><span id="spnCost" style="float:right">$0.00</span><span style="float:right">Your total cost:&nbsp;</span></div>');
+        $(".divNonHistory").show();
+        //----------------------------------
+        // Pre-select if only one choice
+        //----------------------------------
+        if (OfferingCount == 1)
+        {
+            $(".radioOffering").click();
+        }
+        //alert(GetCookieItem("cart").length);
+
+        // Check Storage for Cart
+        if (GetCookieItem("cart").length == 0)
+        {
+            cart = NewCart();
+            $(".cartDisplay").hide();
+            //LoadCartUI();
+        }
+        else {
+            // Load Cart Obj
+            cart = LoadCart();
+
+            LoadCartUI();
+
+            //UpdateCart(false);
+
+            $(".cartDisplay").show();
+
+        }
+        //unblockUI();
+    }
+    function BuildQuestions()
+    {
+
+        //GetAdditionalQuestionDefaults();
+
+        var work = '';
+        for (var i = 0; i < serviceAdditionalQuestions.length; i++)
+        {
+            //var answer = GetAdditionalQuestionAnswer(serviceAdditionalQuestions[i].serviceAdditionalQuestionType);
+
+            var usersavedanswer = serviceAdditionalQuestionsAnswer[i];
+            //alert(usersavedanswer);
+
+            if (serviceAdditionalQuestions[i].serviceAdditionalQuestionType == "gender")
+            {
+                work = work + '<div style="width:100%;margin: 0 auto;padding-top:5px;padding-bottom:5px;border:solid #d86018 1px;border-radius:0px;">';
+                work = work + '<div style="text-align:center;color:#535354;font-weight:600;white-space:normal;word-wrap:normal;padding: 5px 5px 5px 5px;">' + serviceAdditionalQuestions[i].serviceAdditionalQuestionText + '</div>';
+
+                work = work + '<div class="row" style="margin-left:0px;margin-right:0px;margin-top:5px">';
+
+
+
+                //--------------------------------------
+                // Male
+                //--------------------------------------
+                var tempAnswer = "male";
+                var btnColor = "btn-default";
+                var selected = "";
+                //alert(usersavedanswer);
+                if (tempAnswer == usersavedanswer)
+                {
+                    btnColor = "btn-primary";
+                    selected = "checked";
+                }
+
+                var cNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                var iNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID + tempAnswer;
+                var oNameRAD = "q_" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                var iNameRAD = oNameRAD + tempAnswer;
+                var vNameRAD = tempAnswer;
+                var vlNameRAD = "Male";
+
+                var link = "internalChangeLabelColorAQ('" + cNameLBL + "','" + iNameLBL + "','" + vNameRAD + "');";
+                work = work + '<div class="col-xs-4">';
+                work = work + '<label onclick="' + link + '" id="' + iNameLBL + '" class="' + cNameLBL + ' btn btn-sm btn-block ' + btnColor + '" style="margin-left:0px;margin-right:0px">'
+                work = work + '<input ' + selected + '  style="display:none" id="' + iNameRAD + '" type="radio" name="' + oNameRAD + '" value="' + vNameRAD + '"/>' + vlNameRAD;
+                work = work + '</label>';
+                work = work + '</div>';
+
+                //--------------------------------------
+                // Female
+                //--------------------------------------
+                tempAnswer = "female";
+                btnColor = "btn-default";
+                selected = "";
+
+                if (tempAnswer == usersavedanswer) {
+                    btnColor = "btn-primary";
+                    selected = "checked";
+                }
+
+                var cNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                var iNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID + tempAnswer;
+                var oNameRAD = "q_" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                //var iNameRAD = "AQgender1";
+                var iNameRAD = oNameRAD + tempAnswer;
+                var vNameRAD = tempAnswer;
+                var vlNameRAD = "Female";
+
+                var link = "internalChangeLabelColorAQ('" + cNameLBL + "','" + iNameLBL + "','" + vNameRAD + "');";
+                work = work + '<div class="col-xs-4">';
+                work = work + '<label onclick="' + link + '" id="' + iNameLBL + '" class="' + cNameLBL + ' btn btn-sm btn-block ' + btnColor + '" style="margin-left:0px;margin-right:0px">'
+                work = work + '<input ' + selected + '  style="display:none" id="' + iNameRAD + '" type="radio" name="' + oNameRAD + '" value="' + vNameRAD + '"/>' + vlNameRAD;
+                work = work + '</label>';
+                work = work + '</div>';
+
+                //--------------------------------------
+                // Either
+                //--------------------------------------
+                tempAnswer = "na";
+                btnColor = "btn-default";
+                selected = "";
+
+                if (tempAnswer == usersavedanswer) {
+                    btnColor = "btn-primary";
+                    selected = "checked";
+                }
+
+                var cNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                var iNameLBL = "lblAQ" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID + tempAnswer;
+                var oNameRAD = "q_" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                //var iNameRAD = "AQgender2";
+                var iNameRAD = oNameRAD + tempAnswer;
+                var vNameRAD = tempAnswer;
+                var vlNameRAD = "Either";
+
+                var link = "internalChangeLabelColorAQ('" + cNameLBL + "','" + iNameLBL + "','" + vNameRAD + "');";
+                work = work + '<div class="col-xs-4">';
+                work = work + '<label onclick="' + link + '" id="' + iNameLBL + '" class="' + cNameLBL + ' btn btn-sm btn-block ' + btnColor + '" style="margin-left:0px;margin-right:0px">'
+                work = work + '<input ' + selected + '  style="display:none" id="' + iNameRAD + '" type="radio" name="' + oNameRAD + '" value="' + vNameRAD + '"/>' + vlNameRAD;
+                work = work + '</label>';
+                work = work + '</div>';
+
+
+
+                work = work + '</div></div>';
+            }
+            //alert(work);
+        }
+        return work;
+    }
+
+    function internalChangeLabelColorAQ(classname, id, val)
+    {
+        //console.log(classname);
+        //alert(id);
+        $('input[name="q_'+ id +'"][value="' + val + '"]').prop('checked', true);
+        //resetCreditCardUI(val);
+        ChangeLabelColor(classname, id);
+    }
+    //----------------------------------
+    // Validation
+    //----------------------------------
+    function Validation() {
+
+        if (ValidationType == "")
+        {
+            showAlert('Plese select a Treatment');
+            return false;
+        }
+
+        if (ValidationType == "Offering") {
+            if ($("input[name='radioOffering']").is(':checked') == false) {
+                showAlert('Plese select a Treatment');
+                return false;
+            }
+        }
+        else {
+            if ($("input[name='radioOffering_" + ParentServiceID.toString() + "']").is(':checked') == false) {
+                showAlert('Plese select a Treatment option');
+                return false;
+            }
+        }
+
+        if (serviceAdditionalQuestions.length > 0)
+        {
+            for (var i = 0; i < serviceAdditionalQuestions.length; i++)
+            {
+                if ($("input[name='q_" + serviceAdditionalQuestions[i].serviceAdditionalQuestionID.toString() + "']").is(':checked') == false) {
+                    showAlert('Plese answer all Treatment questions');
+                    return false;
+                }
+            }
+
+        }
+
+        return true;
+    }
+
+    function clickRadioButtonAddon(obj, val, objname)
+    {
+        if ($('input[name="' + objname + '"][value="' + val + '"]').is(':checked') == false)
+        {
+            $('input[name="' + objname + '"][value="' + val + '"]').prop('checked', true);
+            $("#lbl" + obj).removeClass('btn-default');
+            $("#lbl" + obj).addClass('btn-primary');
+        }
+        else
+        {
+            $('input[name="' + objname + '"][value="' + val + '"]').prop('checked', false);
+            $("#lbl" + obj).addClass('btn-default');
+            $("#lbl" + obj).removeClass('btn-primary');
+        }
+
+        UpdateCart(false);
+    }
+    function clickTheRequiredRadio(name, index, lbl, val)
+    {
+        //$(".SOContainer").removeClass('btn-default');
+        //$(".SOContainer").addClass('btn-primary');
+
+        $(".lblSubOffering").removeClass('btn-primary');
+        $(".lblSubOffering").addClass('btn-default');
+
+        //$("input[name=" + name + "]")[index].click();
+        $("input[name=" + name + "][value='" + val + "']").prop('checked', true);
+
+        //$("#SOContainer" + (SOCount).toString()).removeClass('btn-default');
+        //$("#SOContainer" + (SOCount).toString()).addClass('btn-primary');
+
+        $(".btnRadioOffering").removeClass('btn-primary');
+        $(".btnRadioOffering").addClass('btn-default');
+
+        $("#lbl" + lbl).removeClass('btn-default');
+        $("#lbl" + lbl).addClass('btn-primary');
+
+        UpdateCart(false);
+    }
+
+    function clickTheRadioSO(ParentID, subOfferingCount, subOfferingAddOnCount, index, SOCount)
+    {
+        $('input[name="radioOfferring"][value="' + ParentID + '"]').prop('checked', true);
+
+        $(".SOContainer").removeClass('btn-primary');
+        $(".SOContainer").addClass('btn-default');
+
+        $("#radServiceOffering" + (SOCount).toString()).attr("checked", true);
+
+        $("#SOContainer" + (SOCount).toString()).removeClass('btn-default');
+        $("#SOContainer" + (SOCount).toString()).addClass('btn-primary');
+
+        clickTheRadio(ParentID, subOfferingCount, subOfferingAddOnCount, index);
+    }
+    function clickTheRadio(ParentID, subOfferingCount, subOfferingAddOnCount, index)
+    {
+        // Clear Radio Buttons
+        $(".btnRadioOffering").removeClass('btn-primary');
+        $(".btnRadioOffering").addClass('btn-default');
+
+        // Clear labels
+        $(".lblSubOffering").removeClass('btn-primary');
+        $(".lblSubOffering").addClass('btn-default');
+
+
+        OfferingIndex = index;
+        ParentServiceID = ParentID;
+
+        // hide all sub offerings first
+        $(".divSubOffering").hide();
+
+        // Show the proper sub items
+        $(".divRadioOffering_" + ParentID).show();
+
+        // Clear Sub Offerings
+        $(".SubOffering").prop('checked', false);
+
+        // Set Freebees...
+        $(".Free_" + ParentID).prop('checked', true);
+        $(".Free_" + ParentID).prop('disabled', true);
+
+        // set validationtype
+        ValidationType = "Offering";
+
+        // This is a sub radio check
+        if ((subOfferingCount > 0) && (subOfferingAddOnCount==0))
+        {
+            ValidationType = "SubOffering";
+        }
+        UpdateCart(false);
+        // reset all children checked and selected = false
+    }
+
+    //---------------------------
+    // Cart functions
+    //---------------------------
+    function NewCart()
+    {
+
+
+        var NewDate = new Date();
+
+        cart = {
+            FirstName: user.FirstName,
+            LastName: user.LastName,
+            UserMobile: "",
+            cartID: GetNewCartID(),
+            WhenIndex: "0",
+            serviceItemEntry: -1,
+            parentID: 0,
+            locationID: (AddressID == "0" ? -1 : AddressID),
+            providerUserID: 0,
+            creditCardID: (CreditCardID == "0" ? -1 : CreditCardID),
+            userID: user.UserID,
+            cartDateTime: now_utc,
+            serviceDeliveryDateTime: now_utc,
+            cartItems: cartItemArray,
+            additionalQuestions: cartQuestionArray,
+            discountCode: "",
+            tipAmount: "0",
+            serviceDeliveryDateTime: NewDate.toString()
+        }
+        return cart;
+    }
+
+    function LoadCartUI()
+    {
+        // new instance of a cart 
+        // from storage...
+
+        var oldcart = LoadCart();
+
+        for (var i = 0; i < oldcart.cartItems.length; i++)
+        {
+
+            if (oldcart.cartItems[i].itemType.toLowerCase() == "serviceoffering")
+            {
+                $(".SOC" + oldcart.cartItems[i].itemID).click();
+            }
+        }
+        for (var i = 0; i < oldcart.cartItems.length; i++) {
+
+            if (oldcart.cartItems[i].itemType.toLowerCase() != "serviceoffering") {
+                // This is for 1 type
+                $("#lbl" + oldcart.cartItems[i].itemSubID + "ServiceSubOffering").click();
+            }
+        }
+
+        //alert(oldcart.additionalQuestions.length);
+        for (var i = 0; i < oldcart.additionalQuestions.length; i++)
+        {
+           // alert("#lblAQ" + oldcart.additionalQuestions[i].ID + oldcart.additionalQuestions[i].answer);
+            $("#lblAQ" + oldcart.additionalQuestions[i].ID + oldcart.additionalQuestions[i].answer).click();
+//            $("input[name=q_" + oldcart.additionalQuestions[i].ID + "][value='" + oldcart.additionalQuestions[i].answer + "']").click();
+        }
+
+        //UpdateCart(true);
+        // set back original from working copy
+        //cart = oldcart;
+        //alert(JSON.stringify(cart.cartItems));
+    }
+
+
+    function GetNewCartID()
+    {
+        return "1";
+    }
+
+    function UpdateCart(bSaveToStorage)
+    {
+        var tCost = 0;
+
+        //----------------------------
+        // Passed and now save Cart
+        //-----------------------------
+        cartItemArray = new Array();
+
+        ///////////////////////////////
+        // CartItems
+        ////////////////////////////////
+
+        // Add Parent to the Cart
+        cart.parentID = ParentServiceID;
+        cart.serviceItemEntry = OfferingIndex;
+        // Load the OfferingID - IF 
+        if ($('input[name=radioOffering]').is(':checked') == false)
+        {
+            return;
+        }
+        var ItemID = $('input[name=radioOffering]:checked').val();
+        // Add the ID
+        cartItem = new Object();
+        var items = ItemID.split("|");
+        cartItem = new Object();
+        cartItem = {
+            itemID: ParentServiceID.toString(),
+            itemSubID: (items[1].toString().toLowerCase() == "serviceoffering" ? "0" : items[0]),
+            itemType: items[1],
+            itemServiceID: ServiceID
+        };
+
+        tCost = parseFloat($('input[name=radioOffering]:checked').attr('spapp-cost'));
+
+        cartItemArray.push(cartItem);
+
+        var bcheckforAddOns = false;
+
+        // IF ItemID==-1, Get the SubOfferingID
+        if (ItemID == "-1|Offering")
+        {
+            //tCost = tCost + parseFloat($('input[name=radioOffering_' + ParentServiceID.toString() + ']:checked').attr('spapp-cost'));
+            ItemID = $('input[name=radioOffering_' + ParentServiceID.toString() + ']:checked').val();
+            // Add the ID
+            cartItem = new Object();
+            var items = ItemID.split("|");
+            cartItem = new Object();
+            cartItem = {
+                itemID: ParentServiceID.toString(),
+                itemSubID: (items[1].toString().toLowerCase() == "serviceoffering" ? "0" : items[0]),
+                itemType: items[1],
+                itemServiceID: ServiceID
+            };
+
+            cartItemArray.push(cartItem);
+        }
+        else {
+            bcheckforAddOns = true;
+        }
+
+        if (bcheckforAddOns == true)
+        {
+            $('input[name=radioOffering_' + ParentServiceID.toString() + ']').each(function ()
+            {
+                if (this.checked == true) 
+                {
+                    var items = this.value.split("|"); 
+                    cartItem = new Object();
+                    cartItem = {
+                        itemID: ParentServiceID.toString(),
+                        itemSubID: (items[1].toString().toLowerCase() == "serviceoffering" ? "0" : items[0]),
+                        itemType: items[1],
+                        itemServiceID: ServiceID
+                    };
+                    cartItemArray.push(cartItem);
+                    tCost = tCost + parseFloat(this.getAttribute('spapp-cost'));
+                }
+            });
+        }
+
+        cart.cartItems = cartItemArray;
+        
+        ////////////////////////
+        // Questions
+        ////////////////////////
+
+        if (serviceAdditionalQuestions.length > 0) {
+            for (var i = 0; i < serviceAdditionalQuestions.length; i++) {
+                $('input[name=q_' + serviceAdditionalQuestions[i].serviceAdditionalQuestionID.toString() + ']').each(function () {
+                    if (this.checked == true) {
+                        var cartQuestion = new Object();
+                        cartQuestion.ID = serviceAdditionalQuestions[i].serviceAdditionalQuestionID;
+                        cartQuestion.answer = this.value;              
+                        cartQuestionArray.push(cartQuestion);
+                        
+                    }
+                });
+            }
+            cart.additionalQuestions = cartQuestionArray;
+        }
+
+        $("#spnCost").html("$" + tCost.toFixed(2).toString());
+        UpdateCookieItem("CartCost", "$" + tCost.toFixed(2).toString());
+
+        if (bSaveToStorage == true) {
+            // save settings
+            UpdateCookieItem("cart", JSON.stringify(cart));
+        }
+
+
+    }
+    //-------------------------------
+    // Navigation
+    //-------------------------------
+    function Next(file)
+    {
+
+        if (Validation() == false) {
+            return;
+        }
+        else {
+            if (LoggedIn == false) {
+                showConfirm("Sorry! You must login or create a Joiful account to proceed...", "Login", "Register", "Login()", "Register()");
+            }
+            else {
+                UpdateCart(true);
+                window.location = "../cart/" + file;
+            }
+        }
+    }
+</script>
+

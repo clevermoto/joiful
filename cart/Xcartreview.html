@@ -1,0 +1,273 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+                
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+   
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+    
+    </head>
+ 
+    <body ng-app="spappApp">
+        <div class="appcontainer"  style="display:none">
+            <div class="row spaheader" id="spaheader"><script>document.write(BuildHeaderNew());</script></div>
+            <div id="message" class="spaMessage">
+                <h3 id="messageHeading" class="spaMessageHeading"></h3>
+            </div>
+
+            <div class="container">
+
+                <form class="form-signin">
+
+                    <div id="spa-menu-wrap">
+                        <div id="spa-menu-list" >
+                            <ul class="list-unstyled"></ul>
+                        </div>
+                        <div id="spa-menu-container">
+                            <div class="scrollme">
+
+                                <div>
+                                    <div ng-include="'../assets/common/html/angJobListView.html'"></div>
+                                </div>
+                                <div style="width: 100%;">
+                                    <div class="row" style="margin-top: 10px; margin-bottom:5px">
+                                        <div class="col-sm-6">
+                                            <label id="radReview5" onclick="InternalClick('radReview', 'radReview5')" class="radReview btn btn-md btn-default btn-block">
+                                                <input style="display:none" type="radio"  id="optReview5"name="radReviewValue" value="5">
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                            </label>
+                                            <label id="radReview4" onclick="InternalClick('radReview', 'radReview4')" class="radReview btn btn-md btn-default btn-block">
+                                                <input style="display:none" type="radio"  id="optReview4"name="radReviewValue" value="4">
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                            </label>
+                                            <label id="radReview3" onclick="InternalClick('radReview', 'radReview3')" class="radReview btn btn-md btn-default btn-block">
+                                                <input style="display:none" type="radio" id="optReview3" name="radReviewValue" value="3">
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                                <span>
+                                                    <img style="height:20px" src="../assets/common/images/stars.png" />
+                                                </span>
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                            </label>
+                                            <label id="radReview2" onclick="InternalClick('radReview', 'radReview2')" class="radReview btn btn-md btn-default btn-block">
+                                                <input style="display:none" type="radio"  id="optReview2"name="radReviewValue" value="2">
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                            </label>
+                                            <label id="radReview1" onclick="InternalClick('radReview', 'radReview1')" class="radReview btn btn-md btn-default btn-block">
+                                                <input style="display:none" type="radio" id="optReview1" name="radReviewValue" value="1">
+                                                <span><img style="height:20px" src="../assets/common/images/stars.png" /></span>
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-6">
+                                            <div style="font-weight:600;margin-top:5px">Tell us your thoughts...</div>
+                                            <textarea id="txtAreaReview" style="width: 100%; height: 90px; resize: none" maxlength="5000"></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <button id="btnSave" onclick="Save()" class="btn btn-lg btn-success btn-block ajaxbtn btnHeight" type="button">Save</button>
+                                        <button style="margin-bottom:3px"id="btnDone" onclick="Done()" class="btn btn-lg btn-info btn-block btnHeight" type="button">Cancel</button>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                        </div>
+                    </div>
+                </form>
+
+            </div> <!-- /container -->
+        </div>
+            <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+    </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+
+
+<script type="text/javascript">
+
+    var bProvider = (getParameterByName("Provider").toLowerCase() == "true" ? true : false);
+    var JobID = getParameterByName("JobID").toUpperCase();
+    var bTipAdded = false;
+    var JobListDisplayMode = true;
+
+</script>
+
+<script src="../assets/common/js/angApp.js"></script>
+<script src="../assets/common/js/angJobListCtrl.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function ()
+    {
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            if (bProvider == true) {
+                if (user.Persona != "provider") {
+                    showAlert('You do not have access to this area!', 'SendUserHome();');
+                    return;
+                }
+            }
+
+            $("#messageHeading").html("Review a Service");
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+
+            if (bDisplayPage == true) {
+                $(".appcontainer").show();
+            }
+            else {
+                setTimeout(ReleasePage, 5000);
+            }
+        }
+    });
+
+    function InternalClick(classname, id)
+    {
+        $("#optReview" + id).click();
+        ChangeLabelColor(classname, id);
+    }
+
+
+    function Validation()
+    {
+        blockUI();
+
+        if ($("input[name='radReviewValue']").is(':checked') == false)
+        {
+            showAlert('Plese select a number of stars.');
+            return false;
+        }
+        else
+        {
+			APICallUpdate();
+            return true;
+        }
+    }
+
+
+    function APICallUpdate() {
+
+        var uri = ServicePrefix + '/api/UpdateReview/';
+
+        if(bProvider==true) {
+	        var userType = "provider";
+        } else {
+	        var userType = "user";
+        }
+
+        var postData = {
+            jobid: JobID,
+            userid: user.UserID,
+            usertype: userType,
+            reviewid: 0,
+            reviewtext: RemoveTags($("#txtAreaReview").val()),
+            ratingvalue: RemoveTags($("input[name='radReviewValue']:checked").val())
+        }
+
+        $.ajax(
+               {
+                   data: postData,
+                   dataType: "json",
+                   url: uri,
+                   method: "POST",
+                   success: APIUpdateSuccess,
+                   error: APIUpdateError
+               });
+	}
+
+    function Done()
+    {
+        SendUserHome();
+    }
+    function Save()
+    {
+        Validation();
+    }
+
+    function APIUpdateSuccess(result)
+    {
+
+        if (result == null)
+        {
+	        showAlert('returned no data');
+	        return;
+        }
+
+        if (result.Status != "SUCCESS")
+        {
+	      showAlert(result.Message);
+	      return;
+        }
+        else
+        {
+	        if (bProvider==false && bTipAdded==false)
+	        {
+	          showConfirm("Review has been added!<br><br>Would you like to add a tip?", "Yes", "Not right now", "SendToTipPage();", "SendUserHome();");
+	        }
+	        else
+	        {
+	            showAlert("", "SendUserHome();");
+	        }
+        }
+    }
+
+    function APIUpdateError(result, textStatus, err) {
+        showAlert(err);
+        return;
+    }
+
+    function SendToTipPage()
+    {
+      window.location = "../cart/carttip.html?jobid=" + JobID;
+    }
+
+    function CompleteFunctionality()
+    {
+      SendUserHome();
+    }
+</script>

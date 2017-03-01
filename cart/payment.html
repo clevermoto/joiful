@@ -1,0 +1,692 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+
+	<!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+    <!-- card.io -->
+    <script src="../assets/lib/card.io/card.io.js"></script>
+  </head>
+
+  <body ng-app="CreditCardApp">
+      <div class="appcontainer">
+          <script>document.write(DynamicMenu("white", "black", "X", "StartBAS()", "PAYMENT", true, "", ""));</script>
+
+          <div class="container">
+
+              <form class="form-signin" style="display:none;"onsubmit="return false">
+
+                          <div class="scrollmenewheaderfooter scrollmenewbase noPadding">
+                              <div style="margin:0 auto;padding-bottom:0px">
+
+                              </div>
+                              <div ng-controller="CreditCardCtrl">
+                                  <div class="row" ng-repeat="x in CreditCardList">
+                                      <div class="col-sm-12 noPadding border-bottom" style="margin-bottom:0px">
+                                          <div ng-click="ChangeLabelColor('ccRAD', $index, x.CreditCardID)" style="text-align:left" 
+                                                 id="lblPayment{{$index}}" 
+                                                 class="lblPayment btn btn-md btn-block btn-clear">
+                                                 <input 
+                                                        style="display:none" 
+                                                        type="radio" 
+                                                        id="radCC{{$index}}" 
+                                                        ng-checked="(x.PrimaryCreditCard && creditCardID=='-1') || (x.CreditCardID==creditCardID)" 
+                                                        name="radCC" value="{{x.CreditCardID}}" />
+                                                  <div class='ccRAD' id='ccRAD{{$index}}' style='text-align:center;margin:0px;padding:0px;font-size:10pt;vertical-align:middle; border-radius:50%;display:inline-block;height:23px;width:23px;color:#00A499'><img id="imgCheck{{$index}}" class="imgCheck" height="23" width="23"ng-src="{{(x.PrimaryCreditCard && creditCardID=='-1') || (x.CreditCardID==creditCardID) ? '../assets/common/images/selected-joiful.png' : '../assets/common/images/unselected-silver.png'}}"/></div>
+                                                  <div style='vertical-align: bottom;padding-left:10px;padding-top:2px;display:inline-block;color:#5B6770;'>&nbsp;{{x.CreditCardType}}:&nbsp;{{x.CreditCardNumber.slice(12)}}&nbsp;{{x.CreditCardExpMonth}}/{{x.CreditCardExpYear}}</div>
+
+                                              </div>                                          
+                                        </div>
+                                    </div>
+
+                                <div class="row" style="display:none">
+                                    <div class="col-sm-12 noPadding border-bottom" style="margin-bottom:5px;text-align:left;">
+
+                                        <div style="text-align:left" ng-click="ChangeLabelColor('ccRAD', 'Scan', '-2')" id="lblPaymentScan" class="lblPayment btn btn-md btn-clear btn-block">
+                                            <!--<div class='ccRAD' id='ccRADScan' style='text-align:center;margin:0px;padding:0px;font-size:10pt;vertical-align:middle;font-family: Zapf Dingbats;border-radius:50%;display:inline-block;border:solid 2px black;height:auto;width:23px;color:#00A499'>&nbsp;</div>
+                                            <div style='vertical-align: bottom;padding-left:10px;padding-top:2px;display:inline-block;color:#5B6770;'><span>Scan Credit Card</span></div>
+                                            <input style="display:none" type="radio" id="radCCScan" name="radCC" value="-2">-->
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="col-sm-12 noPadding border-bottom" style="margin-bottom:5px;text-align:left">
+
+                                        <div style="text-align:left" ng-click="ChangeLabelColor('ccRAD', '99', '-1')" id="lblPayment99" class="lblPayment btn btn-md btn-block btn-clear">
+
+                                            <input style="display:none" type="radio" id="radCCNew" name="radCC" value="-1">
+                                            <div class='ccRAD' id='ccRAD99' style='text-align:center;margin:0px;padding:0px;font-size:10pt;vertical-align:middle;font-family: Zapf Dingbats;border-radius:50%;display:inline-block;height:auto;width:23px;color:#00A499'></div>
+                                            <div style='vertical-align: bottom;padding-left:10px;padding-top:2px;display:inline-block;color:#5B6770;'><span>Add Credit Card</span></div>
+
+                                        </div>
+
+                                    </div>
+                                </div>
+                              </div>
+                              <div class="row" id="divNewCreditCard" ng-controller="editCreditCardGetCtrl" style="display:none;padding-top:0px;">
+                                  <div style="width:90%;margin:0 auto;">
+                                      <label for="inputCardNumber" class="sr-only">Name on Credit Card</label>
+                                      <input style="display:none" type="text" id="inputCardName" class="form-control" placeholder="Name on Credit Card" autofocus maxlength="50" value="NA">
+                                      <div class="row">
+                                          <div class="col-xs-6 noPadding" style="padding-right:5px">
+                                              <label for="inputCardType" class="sr-only">Card Type</label>
+                                              <select style="font-size:small;border:none" name="inputCardType" id="inputCardType" class="form-control" placeholder="Card Type" required autofocus ng-controller="CreditCardTypeGetCtrl">
+                                                  <option style="font-size:small;border:none" ng-repeat="x in CreditCardTypeList" value="{{x.CreditCardTypeID}}">{{x.CreditCardTypeName}}</option>
+                                              </select>
+                                          </div>
+                                          <div class="col-xs-6 noPadding">
+                                              <label for="inputCardNumber" class="sr-only">Card Number</label>
+                                              <input style="font-size:small;border:none" type="text" id="inputCardNumber" class="form-control" placeholder="Card Number" autofocus maxlength="50" value="">
+                                          </div>
+                                      </div>
+
+                                      <div class="row">
+                                          <div class="col-xs-4 noPadding" style="padding-right:5px">
+                                              <label for="inputExpMonth" class="sr-only">Expiration Month</label>
+                                              <select style="font-size:small;border:none" id="inputExpMonth" class="form-control" placeholder="MM" autofocus>
+                                                  <option style="font-size:small;border:none" ng-repeat="x in Months" value="{{x.MonthNumber}}">{{(x.MonthNumber==0 ? 'Exp. Month' : x.MonthName)}}</option>
+                                              </select>
+                                          </div>
+                                          <div class="col-xs-4 noPadding" style="padding-right:5px">
+                                              <label for="inputExpYear" class="sr-only">Expiration Year</label>
+                                              <select style="font-size:small;border:none" id="inputExpYear" class="form-control" placeholder="YYYY" autofocus>
+                                                  <option style="font-size:small;border:none" ng-repeat="x in Years" value="{{x.YearNumber}}">{{(x.YearNumber==0 ? 'Exp. Year' : x.YearNumber)}}</option>
+                                              </select>
+                                          </div>
+
+                                          <div class="col-xs-4 noPadding" style="padding-right:5px">
+                                              <label for="inputSecurityCode" class="sr-only">Security Code</label>
+                                              <input style="font-size:small;border:none" type="text" id="inputSecurityCode" class="form-control" placeholder="Sec Code" autofocus maxlength="4" value="{{CreditCardSecurityCode}}">
+                                          </div>
+
+                                      </div>
+
+
+                                      <label for="radAddress" class="sr-only">Address</label>
+                                      <div class="row" style="width:90%;margin:0 auto;display:none">
+                                          <div class="col-sm-12">
+                                              <input type="radio" name="optCCAddressType" value="0" onchange="DisplayAddressDiv(this.value)" checked="checked" /> Zip Code
+                                          </div>
+                                      </div>
+                                      <div class="row" id="divZipCodeOnly" style="margin-left:0px;margin-right:0px;width:100%;margin:0 auto;">
+                                          <div class="col-sm-12">
+                                              <label for="inputZipCode" class="sr-only">Zip Code</label>
+                                              <input style="font-size:small;border:none" type="text" id="inputZipCode" class="form-control" placeholder="Zip Code" autofocus maxlength="8" value="">
+                                          </div>
+                                      </div>
+
+                                  </div>
+                              </div>
+                          </div>
+                          <div class="footer-auto">
+                              <div class="row" style="padding-top:0px; padding-bottom:0px">
+                                  <div class="col-xs-12 noPadding" id="lnkNext"></div>
+                              </div>
+
+                          </div>
+                        <!--</div>
+                      </div>-->
+              </form>
+
+          </div> <!-- /container -->
+
+      </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- spapp-bas -->
+<script src="../assets/common/js/spapp-bas.js"></script>
+
+<script type="text/javascript">
+
+
+    if (GetCookieItem("cart").length == 0) {
+        showAlert('problem with your order - start again please', 'SendUserHome();');
+    }
+
+    var app = angular.module('CreditCardApp', []);
+
+    app.controller('CreditCardCtrl', function ($scope, $http) {
+
+        var UserID = GetCookieItem("UserID");
+
+        $scope.creditCardID = GetCartCreditCardID();
+
+        if (!UserID) {
+            showAlert('Problem with Input.', 'SilentLogout();');
+        }
+
+        //if (GetCookieItem("cUserCCList").length > 0) {
+        //    $scope.CreditCardList = JSON.parse(GetCookieItem("cUserCCList"));
+        //}
+        //else {
+            var uri = ServicePrefix + "/api/GetUserCreditCardList/?userid=" + UserID.toString();
+            $http.get(uri).then(function (result) {
+                if (!result) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.data.Status != "SUCCESS") {
+                    showAlert(result.data.Message);
+                    return;
+                }
+
+                if (result.data.Results.length > 0) {
+                    $scope.CreditCardList = result.data.Results;
+                    UpdateCookieItem("cUserCCList", JSON.stringify(result.data.Results));
+                    // Set Default to checked
+                    // setTimeout("ChangeLabelColor('lblPayment', 'lblPayment0');", 1000);
+                }
+
+
+            });
+       // }
+
+        $scope.ChangeLabelColor = function (classname, idname, val) {
+
+            $('input[name="radCC"][value="' + val + '"]').prop('checked', true);
+            resetCreditCardUI(val);
+            setDefaultCC('imgCheck', 'imgCheck' + idname, val);
+        }
+    });
+    app.controller('editCreditCardGetCtrl', function ($scope, $http) {
+
+        $scope.Months = BuildMonths();
+        $scope.Years = BuildYears();
+
+    });
+    app.controller('CreditCardTypeGetCtrl', function ($scope, $http) {
+
+        var uri = ServicePrefix + "/api/getcreditcardtypelist";
+
+        var CreditCardTypes = new Array();
+        var CreditCardType = new Object();
+
+        CreditCardType = {
+            CreditCardTypeID: 0,
+            CreditCardTypeName: 'Card Type'
+        }
+        CreditCardTypes.push(CreditCardType);
+
+        $http.get(uri).then(function (result) {
+
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.data.Status != "SUCCESS") {
+                showAlert(result.data.Message);
+                
+                return;
+            }
+
+
+            for (var i = 0; i < result.data.Results.length; i++) {
+                CreditCardType = new Object();
+
+                CreditCardType = {
+                    CreditCardTypeID: result.data.Results[i].CreditCardTypeID,
+                    CreditCardTypeName: result.data.Results[i].CreditCardTypeName
+                }
+                CreditCardTypes.push(CreditCardType);
+            }
+
+            $scope.CreditCardTypeList = CreditCardTypes;
+            //unblockUI();
+
+        });
+    });
+    function BuildMonths() {
+
+        var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+        var Months = new Array();
+        var Month = new Object();
+        Month = new Object();
+        Month = {
+            MonthName: 'Exp. Month',
+            MonthNumber: 0
+        }
+
+        Months.push(Month);
+        for (var i = 1; i <= 12; i++) {
+            Month = new Object();
+            Month = {
+                
+                MonthName: MonthNames[i - 1],
+                MonthNumber: i,
+            }
+            Months.push(Month);
+        }
+
+        return Months;
+    }
+    function BuildYears() {
+
+        var Years = new Array();
+        var Year = new Object();
+
+        Year = new Object();
+        Year = {
+            YearNumber: 0
+        }
+        Years.push(Year);
+
+        var dt = new Date();
+
+        var CurrentYear = dt.getFullYear();
+
+        for (var i = CurrentYear; i <= CurrentYear + 10; i++) {
+            Year = new Object();
+            Year = {
+                YearNumber: i
+            }
+            Years.push(Year);
+        }
+
+        return Years;
+    }
+    function DisplayAddressDiv(id)
+    {
+        // Zip Only
+        if (id=="0")
+        {
+            $("#divZipCodeOnly").show();
+            $("#divFullAddress").hide();
+        }
+        else
+        {
+            $("#divZipCodeOnly").hide();
+            $("#divFullAddress").show();
+        }
+    }
+    function setDefaultCC(classname, idname, val) {
+
+        $("." + classname).attr("src", '../assets/common/images/unselected-silver.png');
+
+        $("#" + idname).attr("src",'../assets/common/images/selected-joiful.png');
+        //'../assets/common/images/selected-joiful.png' : '../assets/common/images/unselected-silver.png'
+    }
+    var lnkNext = '<button id="btnReview" type="button" class="btn btn-lg btn-success btn-block ajaxbtn btn-notround grad btnHeight" onclick="Next(\'' + 'review.html' + '\')">CONTINUE</button>';
+
+    if (getParameterByName("upd") == "y") {
+        lnkNext = '<button id="btnWhere" type="button" class="btn btn-lg btn-success btn-block ajaxbtn btn-notround grad btnHeight" onclick="Next(\'' + 'review.html' + '\')">CONTINUE</button>';
+    }
+    var cartItemArray = new Array();
+    var cartItem = new Object();
+    var cart = new Object();
+    var now = new Date();
+    var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+    $(document).ready(function ()
+    {
+        if (getParameterByName("upd") == "y") {
+            $(".btn-menu-left").hide();
+        }
+        else
+        {
+            $(".btn-menu-left").show();
+        }
+        $("#lnkNext").html(lnkNext);
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            $("#spnCost").html(GetCookieItem("CartCost"));
+            //-----------------------
+            // Allow Scan of CC
+            //-----------------------
+            //if (gMobileVersion == true)
+            //{
+                $("#divMobile").show();
+            //}
+
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+            // Load Cart Obj
+            cart = LoadCart();
+
+
+            $(".form-signin").show();
+       }
+    });
+
+    function viewCart() {
+        LoadCartDisplay(cart, false, "");
+    }
+
+    //function CCScanSuccess(result)
+    //{
+    //    //Your response array contain these fields
+    //    // redacted_card_number, card_number, expiry_month,expiry_year, cvv, zip
+    //    var cc = JSON.stringify(result);
+    //    $("#inputCardName").val(user.FirstName + " " + user.LastName);
+    //    $("#inputCardType").val(detectCardType(cc.card_number));
+    //    $("#inputCardNumber").val(cc.card_number);
+    //    $("#inputExpMonth").val(cc.expiry_month);
+    //    $("#inputExpYear").val(cc.expiry_year);
+    //    $("#inputSecurityCode").val(cc.cvv);
+    //    $("#inputZipCode").val(cc.zip);
+
+    //    $("#divNewCreditCard").show();
+    //}
+    //function CCScanFail(result)
+    //{
+    //    alert(result);
+    //}
+
+    function resetCreditCardUI(val) {
+        scanCreditCardID = val;
+        if (val == "-1")
+        {
+            $("#divNewCreditCard").show();
+            //if (gMobileVersion == true ) {
+                scanCreditCard();
+            //}
+        }
+        else
+        {
+            $("#divNewCreditCard").hide();
+        }
+    }
+
+    function GetCartCreditCardID() {
+        cart = LoadCart();
+        //showAlert(cart.creditCardID);
+        return cart.creditCardID;
+        //        LoadCartUI(cart);
+    }
+    function Validation() {
+
+        if ($("input[name='radCC']").is(':checked') == false) {
+            showAlert('Plese select a payment method.');
+            return false;
+        }
+        else {
+
+            return true;
+        }
+    }
+
+    function LoadCartUI(cart) {
+
+        if (cart.creditCardID > 0) {
+            $("input[name=radCC][value='" + cart.creditCardID + "']").click();
+        }
+    }
+
+    function UpdateCart() {
+        cart.creditCardID = $('input[name=radCC]:checked').val();
+        // save settings
+        UpdateCookieItem("cart", JSON.stringify(cart));
+    }
+    //---------------------------------
+    // Navigation
+    //---------------------------------
+    function Prev(file) {
+        //if (Validation() == false) {
+        //    return;
+        //}
+
+        UpdateCart();
+        window.location = "../cart/" + file;
+    }
+
+    function Next(file) {
+
+        if (Validation() == false) {
+            return;
+        }
+
+        // go build new credit card
+        if ($('input[name=radCC]:checked').val() == "-1" || $('input[name=radCC]:checked').val() == "-2")
+        {
+            if (Validate() == true)
+            {
+                blockUI();
+                APICall();
+            }
+            else
+            {
+                $("#divNewCreditCard").show();
+            }
+        }
+        else
+        {
+            UpdateCart();
+
+            window.location = "../cart/" + file;
+        }
+    }
+
+    //-------------------------------
+    // Credit Card Editor Functions
+    //-------------------------------
+    //-------------------------
+    // Validation
+    //-------------------------
+    function Validate() {
+
+        if (DataLength(RemoveTags($("#inputCardName").val())) == 0) {
+            showAlert('Valid Credit Card Name must be entered');
+            return false;
+        }
+
+        if (RemoveTags($("#inputCardType").val()) == 0) {
+            showAlert('Valid Credit Card Type must be selected');
+            return false;
+        }
+
+        if (DataLength(RemoveTags($("#inputCardNumber").val())) == 0) {
+            showAlert('Valid Credit Card must be entered');
+            return false;
+        }
+
+        if (ValidateCreditCardNumber(RemoveTags($("#inputCardNumber").val())) == false) {
+            showAlert('Valid Credit Card Number must be entered');
+            return false;
+        }
+
+        if (RemoveTags($("#inputExpMonth").val()) == 0) {
+            showAlert('Valid Month must be selected');
+            return false;
+        }
+
+        if (RemoveTags($("#inputExpYear").val()) == 0) {
+            showAlert('Valid Year must be selected');
+            return false;
+        }
+
+
+        var dt = new Date();
+
+        // Expired Date in past?
+        var ExpYear = parseInt($("#inputExpYear").val());
+
+        if (ExpYear == dt.getFullYear()) {
+            var ExpMonth = parseInt($("#inputExpMonth").val());
+
+            if (ExpMonth < 1 + dt.getMonth()) {
+                showAlert('Expiration Date must be in the future');
+                return false;
+            }
+        }
+
+        if (DataLength(RemoveTags($("#inputSecurityCode").val())) == 0) {
+            showAlert('Security Code must be entered');
+            return false;
+        }
+
+        if (testInputData(RemoveTags($("#inputSecurityCode").val()), numbersOnly)==false)
+        {
+            showAlert('Security Code must be numeric');
+            return false;
+        }
+
+        // check the zip
+        if ($("input[name='optCCAddressType'][value='0']").is(':checked'))
+
+        {
+            var countryCode = 'US';
+
+            if(isValidPostalCode(RemoveTags($("#inputZipCode").val()), countryCode) == false)
+            {
+                showAlert('A valid Zip Code must be entered');
+                return false;
+            }
+        }
+        else
+        {
+
+            if ($("input[name='radAddress']").is(':checked') == false) {
+                showAlert('An address must be selected');
+                return false;
+            }
+        }
+
+        return true;
+
+    }
+
+    function ValidateCreditCardNumber(value) {
+
+        // accept only digits, dashes or spaces
+        if (/[^0-9-\s]+/.test(value)) return false;
+
+        // The Luhn Algorithm. It's so pretty.
+        var nCheck = 0, nDigit = 0, bEven = false;
+        value = value.replace(/\D/g, "");
+
+        for (var n = value.length - 1; n >= 0; n--) {
+            var cDigit = value.charAt(n),
+                  nDigit = parseInt(cDigit, 10);
+
+            if (bEven) {
+                if ((nDigit *= 2) > 9) nDigit -= 9;
+            }
+
+            nCheck += nDigit;
+            bEven = !bEven;
+        }
+
+        return (nCheck % 10) == 0;
+
+    }
+
+    function APICall() {
+
+        var callback = APICallSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/updateusercreditcard/';
+
+        var ccAddressID = RemoveTags($("input[name='radAddress']:checked").val());
+
+        if ($("input[name='optCCAddressType'][value='0']").is(':checked'))
+        {
+            ccAddressID = "ZIP:" + RemoveTags($("#inputZipCode").val());
+        }
+
+        data = {
+            userid: user.UserID,
+            creditcardid: "0",
+            creditcardnumber: RemoveTags($("#inputCardNumber").val()),
+            creditcardexpmonth: RemoveTags($("#inputExpMonth").val()),
+            creditcardexpyear: RemoveTags($("#inputExpYear").val()),
+            creditcardsecuritycode: RemoveTags($("#inputSecurityCode").val()),
+            creditcardtypeid: RemoveTags($("#inputCardType").val()),
+            nameoncard: RemoveTags($("#inputCardName").val()),
+            creditcardaddressid: ccAddressID,
+            externalprofileid: RemoveTags(user.ExternalProfileID)
+        };
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: APIUpdateError
+               });
+
+    }
+
+    function APICallSuccess(result) {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            
+            return;
+        }
+
+        RemoveCookieItem("cUserCCList");
+
+        cart.creditCardID = result.ID;
+        // save settings
+        UpdateCookieItem("cart", JSON.stringify(cart));
+        //
+        window.location = "../cart/review.html";
+    }
+
+    function APIUpdateError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+    function EditAddress(AddressID) {
+
+        showConfirm('Are you sure you want to add a new address? This will take you out of the Booking a Treatment process and you will need to start this process again.', 'Yes!', 'No', 'GoToAddressEditor("0");');
+
+    }
+    function GoToAddressEditor(AddressID)
+    {
+        window.location = "../profile/profileaddresseditor.html?addressid=" + AddressID;
+    }
+
+</script>
+

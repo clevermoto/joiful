@@ -1,0 +1,125 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+  <body>
+      <div class="appcontainer">
+          <div class="row spaheader" id="spaheader"><script>document.write(BuildHeaderNew());</script></div>
+          <div id="message" class="spaMessage">
+              <h3 id="messageHeading" class="spaMessageHeading"></h3>
+              <p id="messageDetail" class="spaMessageDetail"></p>
+          </div>
+        <div class="container">
+      
+
+          <form class="form-signin" >
+
+            <button id="btnLogin" onclick="LoginNow()" class="btn btn-lg btn-success btn-block" type="button">Login to my SPA X Account</button>
+
+          </form>
+
+        </div> <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+
+<script type="text/javascript">
+    
+    $(document).ready(function ()
+    {
+		BuildCommonUI();
+        if (ValidateInput() == true) {
+            APICallLoad();
+        }
+        else
+        {
+            showAlert('Invalid Request', '../index.html');
+        }
+
+
+
+    });
+    
+    function LoginNow()
+    {
+        // 
+        // write cookie here
+        window.location.href = "../account/login.html";    
+    }
+    function ValidateInput() {
+        // Get Token
+        var token = getParameterByName("vet");
+
+        if (token == null || token.length == 0) {
+            showAlert('no token passed. Invalid request.', "../index.html");
+            return false;
+        }
+        else {
+            return true;
+        }
+    }
+
+    function APICallLoad() {
+
+        //Temp
+        APISuccessLoad();
+        return;
+
+        var ret = false;
+        var id = 1;
+        var uri = ServicePrefix + '/api/products/' + id;
+
+        $.ajax(
+               {
+                   dataType: "json",
+                   url: uri,
+                   success: APISuccessLoad,
+                   error: (function (jqXHR, textStatus, err) {
+                       showAlert(textStatus);
+                   })
+               });
+
+    }
+
+    function APISuccessLoad() {
+        //user.UserID = "11111";
+        $("#messageHeading").html("Congrats!");
+        $("#messageDetail").html("You are now ready to use Joiful and start booking some awesome treatments!!!");
+
+    }
+</script>

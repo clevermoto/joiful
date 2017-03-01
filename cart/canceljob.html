@@ -1,0 +1,351 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+  
+  </head>
+
+<body ng-app="spappApp">
+    <div class="appcontainer"  style="display:none">
+
+        <script>document.write(DynamicMenu("white", "black", "X", "CancelTheCancel()", "", true, "", ""));</script>
+
+        <div class="container">
+
+            <form class="form-signin">
+
+
+                <div class="scrollmenewheaderfooter scrollmenewbase">
+                    <div id="divCancel" >
+                        <div style="width: 100%;padding-top:5px;padding-bottom:5px">
+                            <div class="row">
+                                <div class="col-xs-12" style="text-align:center;font-size:large">Why?</div>
+                            </div>
+                            <div class="row" style="width:100%; margin:0 auto;">
+                                <div class="col-xs-12" ng-controller="CancelReasonListCtrl">
+                                    <div class="row" ng-repeat="x in CancelReasonList">
+                                        <div id="lblCancel{{$index}}" style="border:none" ng-click="ChangeLabelColor('lblCancel', $index, x.ReasonText)" class="lblCancel btn btn-md btn-default btn-block">
+                                            <input style="display:none" id="cancelJob{{$index}}" type="radio" name="radCancelReason" value="{{x.ReasonText}}">
+                                            <div class='lblCancelC' id='lblCancelC{{$index}}' style='display:table-cell;border:none;'>
+                                                <img src='../assets/common/images/unselected-silver.png' width='25' height='25' />
+                                            </div><div style="display:table-cell;padding-left:10px;color:#5B6770;vertical-align:middle">{{x.ReasonText}}</div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+                                        <div id='lblCancelOther' style="border:none" ng-click="ChangeLabelColor('lblCancel', 'Other', 'Other')" class="lblCancel btn btn-md btn-default btn-block">
+                                            <input style="display:none" id="cancelJobOther" type="radio" name="radCancelReason" value="Other">
+                                            <div class='lblCancelC' id='cancelJobOtherC' style='display:table-cell;border:solid 2px #5B6770;border:none;'><img src='../assets/common/images/unselected-silver.png' width='25' height='25' /></div>
+                                            <div style="display:table-cell;padding-left:10px;color:#5B6770;vertical-align:middle">Other</div>
+                                            </div>
+                                        </div>
+                                        <div style="width:80%; margin: 0 auto; padding-top:10px;display: none;" id="divCancelReason">
+                                            <span style="color:#5B6770">Please tell us more</span><br />
+                                            <span><input style="width:100%; max-width:280px" type="text" id="txtCancelReason" value="" maxlength="50"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+
+                <div class="footer-auto">
+                    <button id="btnCancel" onclick="Save()" class="btn btn-lg btn-success btn-block ajaxbtn btn-notround grad btnHeight" type="button">Cancel it</button>
+                </div>
+            </form>
+
+        </div> <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+
+<script type="text/javascript">
+
+    var bProvider = (getParameterByName("Provider").toLowerCase() == "true" ? true : false);
+    var JobID = getParameterByName("JobID").toUpperCase();
+    var JobListDisplayMode = true;
+    var NewStatus = getParameterByName("newstatus");
+
+    if (NewStatus == "")
+    {
+        showAlert("Input problem...", "SendUserHome();");
+    }
+
+
+</script>
+
+<script src="../assets/common/js/angApp.js"></script>
+<script src="../assets/common/js/angJobListCtrl.js"></script>
+<script>
+
+
+    app.controller('CancelReasonListCtrl', function ($scope, $http)
+    {
+        var uri = ServicePrefix + "/api/GetJobCancelReasons/?canceltype=" + (bProvider==true ? "provider" : "user");
+
+        //$scope.CancelReasonList = CancelReasons;
+
+        $http.get(uri).then(function (result) 
+        {
+        
+            if (!result) {
+                showAlert('returned no data');
+                return;
+            }
+        
+            if (result.data.Status != "SUCCESS") {
+                showAlert(result.data.Message);
+                return;
+            }
+        
+            if (result.data.Results.length > 0) 
+            {
+                $scope.CancelReasonList = result.data.Results;
+                        
+            }
+
+            $scope.ChangeLabelColor = function (classname, id, val)
+            {
+                // clear it by class
+                $("." + classname + "C").html(GetCheckMark(25, "unselected-silver"));
+
+                //console.log(classname);
+                //console.log(id);
+
+                if (val.toLowerCase() == 'other') {
+                    showOther(true);
+                    $("#cancelJobOtherC").html(GetCheckMark(25, "joiful-checked"));
+                }
+                else
+                {
+                    showOther(false);
+                    $("#" + classname + "C" + id).html(GetCheckMark(25, "joiful-checked"));
+                }
+                
+                $('input[name=radCancelReason][value="' + val + '"]').prop('checked', true);
+
+
+
+                //ChangeLabelColor(classname, classname + id);
+               // $("#cancelJob" + id).click();
+
+            }
+        });
+       
+    });
+
+</script>
+<script type="text/javascript">
+
+    $(document).ready(function ()
+    {
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            if (bProvider == true) {
+                if (user.Persona != "provider") {
+                    showAlert('You do not have access to this area!', 'SendUserHome();');
+                    return;
+                }
+            }
+            if (bProvider == true) {
+                $("#btnCancel").html("CANCEL SESSION");
+            }
+            else
+            {
+                $("#btnCancel").html("CANCEL TREATMENT");
+            }
+            //$("#btnCancel").html($("#messageHeading").html());
+
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+
+            //if (bDisplayPage == true) {
+                $(".appcontainer").show();
+            //}
+            //else {
+            //    setTimeout(ReleasePage, 5000);
+            //}
+
+        }
+    });
+
+    function showOther(bShow)
+    {
+        $("#txtCancelReason").val('');
+        if (bShow==true)
+        {
+            $("#divCancelReason").show();
+        }
+        else
+        {
+            $("#divCancelReason").hide();
+        }
+    }
+
+    function Validation()
+    {
+
+        if ($("input[name='radCancelReason']").is(':checked') == false) {
+            showAlert('Please select a reason for cancelling.');
+            return false;
+        }
+        else {
+
+            if ($("input[name='radCancelReason']:checked").val().toLowerCase() == "other")
+            {
+                if (DataLength(RemoveTags($("#txtCancelReason").val())) == 0)
+                {
+                    showAlert("Please supply a reason for cancelling");
+                    return false;
+                }
+            }
+
+        }
+
+        return true;
+    }
+
+    function APICallUpdate()
+    {
+
+        var uri = ServicePrefix + '/api/CancelJob/';
+
+        if(bProvider==true) {
+	        var userType = "provider";
+        } else {
+	        var userType = "user";
+        }
+
+        var cancelreason = $("input[name='radCancelReason']:checked").val();
+
+        if (cancelreason.toLowerCase() == "other")
+        {
+            cancelreason = RemoveTags($("#txtCancelReason").val())
+        }
+
+        var postData = {
+            jobid: JobID,
+            userid: user.UserID,
+            usertype: userType,
+            cancelreason: cancelreason,
+            status: NewStatus
+        }
+
+        $.ajax(
+               {
+                   data: postData,
+                   dataType: "json",
+                   url: uri,
+                   method: "POST",
+                   success: APIUpdateSuccess,
+                   error: APIUpdateError
+               });
+	}
+    function CancelTheCancel()
+    {
+        window.location = "../cart/jobdetail.html?jobid=" + JobID + "&provider=" + bProvider;
+    }
+    function Done()
+    {
+        SendUserHome();
+    }
+
+    // form submit with enter key
+     document.onkeydown=function(evt){
+        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+        if(keyCode == 13){  
+            Save();
+        }
+    }
+
+    function Save()
+    { 
+        if (Validation() == true)
+        {
+            APICallUpdate();
+           // showConfirm("Are you really sure you want to cancel this " + (bProvider==true ? "Session" : "Treatment") + "?", "Yes", "No", "APICallUpdate();");
+        }
+        
+    }
+
+    function APIUpdateSuccess(result)
+    {
+        var url = (user.Persona == "provider" ? gProviderHomePage : gCustomerHomePage);
+
+        if (result == null)
+        {
+
+	        showAlert('returned no data');
+	        return;
+      }
+
+      if (result.Status != "SUCCESS") {
+	      showAlert(result.Message);
+	          return;
+      }
+
+      if (bProvider == true) {
+          showAlert("Session has been cancelled", url);
+      }
+      else {
+          showAlert("Treatment has been cancelled", url);
+      }
+      
+      
+      
+
+    }
+
+    function APIUpdateError(result, textStatus, err) {
+        showAlert(err);
+        return;
+    }
+
+
+    function CompleteFunctionality()
+    {
+      SendUserHome();
+    }
+</script>

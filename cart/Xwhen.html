@@ -1,0 +1,436 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+      <!-- Bootstrap core CSS -->
+      <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+      <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+      <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+
+      <!-- jQuery UI-->
+      <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+
+      <!-- Custom styles for this template -->
+      <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+      <!-- Angular-->
+      <script src="../assets/lib/angular/angular.min.js"></script>
+
+      <!-- FastClick -->
+      <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+      <!-- Cordova -->
+      <script src="../cordova.js"></script>
+
+
+  </head>
+
+  <body>
+      <div class="appcontainer">
+          <div class="row spaheader" id="spaheader"><script>document.write(BuildHeaderNew());</script></div>
+          <div id="message" class="spaMessage">
+              <h3 id="messageHeading" class="spaMessageHeading">When?</h3>
+          </div>
+          <div class="container">
+
+              <form class="form-signin" style="display:none;"onsubmit="return false">
+
+                  <div id="spa-menu-wrap">
+                      <div id="spa-menu-list">
+                          <ul class="list-unstyled"></ul>
+                      </div>
+                      <div id="spa-menu-container">
+                          <div class="scrollme">
+                              <div style="margin:0 auto;padding-bottom:5px">
+                                  <div style="padding-right:0px;padding-left:0px;text-align:center">
+                                      <!--<img class="img-circle" style="border:solid #d86018 2px;width:40px;height:40px;border-radius: 50%;" ng-src="{{imglib}}/service/{{x.ServiceID}}.jpg" />-->
+                                      
+                                      <img style="border-radius:10px;width:100%; height:auto;max-height:240px;" src="../assets/common/images/when.jpg" id='imgServicePic' alt='Joiful' />
+                                  </div>
+                              </div>
+                              <div class="row">
+                                  <label id="lblWhereNow" onclick="ChangeLabelColor('lblWhere', 'lblWhereNow');" class="lblWhere btn btn-md btn-default btn-block">
+                                      <input style="display:none" id="radWhenNow" type="radio" name="radWhen" value="0" checked="checked" onclick="SetDateValue(true)">&nbsp;Now-ish<br />
+                                  </label>
+                                  <label id="lblWhereLater" onclick="ChangeLabelColor('lblWhere', 'lblWhereLater');" class="lblWhere btn btn-md btn-default btn-block">
+                                      <input style="display:none" type="radio" id="radWhenLater" name="radWhen" value="1" onclick="SetDateValue(false)">&nbsp;Later
+                                  </label>
+                              </div>
+                              <div id="divDateTime" class="row" style="padding: 5px 5px 5px 25px;display:none">
+
+                                  <div class="col-xs-6">
+                                      <input type="text" id="inputServiceDate" class="form-control" placeholder="mm/dd/yyyy" width="10" style="text-align:center; width:120px;height:30px;padding:0px 0px 0px 0px" required autofocus maxlength="10" value="" onclick="blur()">
+                                  </div>
+
+                                  <div class="col-xs-6">
+                                      <div style="display:table-cell">
+                                          <select id="selHour" style="height:30px;border-color:#808080;">
+                                              <option value="1">1</option>
+                                              <option value="2">2</option>
+                                              <option value="3">3</option>
+                                              <option value="4">4</option>
+                                              <option value="5">5</option>
+                                              <option value="6">6</option>
+                                              <option value="7">7</option>
+                                              <option value="8">8</option>
+                                              <option value="9">9</option>
+                                              <option value="10">10</option>
+                                              <option value="11">11</option>
+                                              <option value="12">12</option>
+                                          </select>
+                                      </div>
+                                      <div style="display:table-cell">
+                                          <select id="selMinute" style="height:30px;border-color:#808080;">
+                                              <option value="0">00</option>
+                                              <option value="15">15</option>
+                                              <option value="30">30</option>
+                                              <option value="45">45</option>
+                                          </select>
+                                      </div>
+                                      <div style="display:table-cell">
+                                          <select id="selAM" style="height:30px;border-color:#808080;">
+                                              <option value="true">AM</option>
+                                              <option value="false">PM</option>
+                                          </select>
+                                      </div>
+                                  </div>
+                              </div>
+
+                              <div style="width:100%"><span id="spnCost" style="float:right">$0.00</span><span style="float:right">Your total cost:&nbsp;</span></div>
+
+
+                              <div class="row" style="padding-top:5px">
+                                  <div class="col-xs-12 noPadding" id="lnkNext"></div>
+                              </div>
+
+                              <div class="row" style="padding-top:5px; padding-bottom:3px">
+                                  <div class="col-xs-6" style="text-align:left">
+                                      <button onclick="viewCart()" class="btn btn-sm btn-default btn-block">Spa Bag</button>
+                                  </div>
+                                  <div class="col-xs-6" id="lnkQuit" style="text-align:right">
+                                      <button id="btnExit" type="button" class="btn btn-sm btn-danger btn-block" onclick="StartBAS()">Start Over</button>
+                                  </div>
+                              </div>
+                          </div>
+                    </div>
+                  </div>
+              </form>
+
+          </div> <!-- /container -->
+
+      </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- spapp-bas -->
+<script src="../assets/common/js/spapp-bas.js"></script>
+
+<script type="text/javascript">
+
+    if (GetCookieItem("cart").length == 0) {
+        showAlert('problem with your order - start again please', 'SendUserHome();');
+    }
+
+    var lnkNext = '<button id="btnPayment" type="button" class="btn btn-lg btn-success btn-block ajaxbtn" onclick="Next(\'' + 'payment.html' + '\')">Payment?</button>';
+
+    if (getParameterByName("upd") == "y") {
+        lnkNext = '<button id="btnPayment" type="button" class="btn btn-lg btn-success btn-block ajaxbtn" onclick="Next(\'' + 'review.html' + '\')">Done</button>';
+    }
+
+    var cartItemArray = new Array();
+    var cartItem = new Object();
+    var cart = new Object();
+    var now = new Date();
+    var now_utc = new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(), now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+
+    $(function () {
+        $("#inputServiceDate").datepicker(
+            {
+                minDate: new Date(),
+                changeYear: true,
+                changeMonth: true
+            }
+            );
+    });
+
+    $(document).ready(function ()
+    {
+
+        $("#lnkNext").html(lnkNext);
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            $("#spnCost").html(GetCookieItem("CartCost"));
+
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+
+            // Load Cart Obj
+            cart = LoadCart();
+
+            LoadCartUI(cart);
+
+
+            $(".form-signin").show();
+       }
+    });
+
+    function viewCart() {
+       
+        LoadCartDisplay(cart, false, "");
+    }
+
+
+    function Validation()
+    {
+
+        if ($("input[name='radWhen']").is(':checked') == false)
+        {
+            showAlert('Plese select when.');
+            return false;
+        }
+        else
+        {
+
+            if ($('input[name=radWhen]:checked').val() != "0")
+            {
+                var dt = BuildDateFromUI();
+                var NowDT = new Date();
+                if (dt < NowDT)
+                {
+                    showAlert('Date must be in the future');
+                    return false;
+                }
+                else
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                return true;
+            }
+        }
+    }
+
+    //-----------------------
+    // Cart functions
+    //-----------------------
+
+    function LoadCartUI(cart) {
+
+        if (!cart.WhenIndex)
+        {
+            return;
+        }
+        else {
+            $('input[name=radWhen][value="' + cart.WhenIndex + '"]').prop('checked', true);
+            if (cart.WhenIndex == "0") {
+                ChangeLabelColor('lblWhere', 'lblWhereNow');
+            }
+            else
+            {
+                ChangeLabelColor('lblWhere', 'lblWhereLater');
+            }
+
+            if ((cart.WhenIndex=="0") || (!cart.serviceDeliveryDateTime) || (cart.serviceDeliveryDateTime.length==0))
+            {
+                var dt = new Date(cart.serviceDeliveryDateTime.toString());
+                var hr = dt.getHours();
+                var mn = dt.getMinutes();
+
+                var bAM = true;
+
+                if (hr >= 12)
+                {
+                    bAM = false;
+
+                    if (hr > 12)
+                    {
+                        hr = hr - 12;
+                    }
+                }
+
+                $("#selHour").val((hr==0 ? 12 : hr));
+                $("#selMinute").val(mn);
+                $("#selAM").val(bAM.toString());
+            }
+            else
+            {
+                var NewDate = new Date(cart.serviceDeliveryDateTime);
+                var month = NewDate.getMonth() + 1;
+                var day = NewDate.getDate();
+                var year = NewDate.getFullYear();
+                var strDate = (month < 10 ? "0" + month.toString() : month.toString());
+                strDate = strDate + "/" + (day < 10 ? "0" + day.toString() : day.toString());
+                strDate = strDate + "/" + year.toString();
+                $("#inputServiceDate").val(strDate);
+                //alert(cart.serviceDeliveryDateTime);
+                var hr = NewDate.getHours();
+                var mn = NewDate.getMinutes();
+
+                var bAM = true;
+
+                if (hr >= 12) {
+                    bAM = false;
+
+                    if (hr > 12) {
+                        hr = hr - 12;
+                    }
+                }
+                $("#selHour").val((hr == 0 ? 12 : hr));
+                $("#selMinute").val(mn);
+                $("#selAM").val(bAM.toString());
+
+            }
+        }
+    }
+
+    function UpdateCart()
+    {
+        cart.WhenIndex = $('input[name=radWhen]:checked').val();
+
+        if (cart.WhenIndex == "0") {
+            var cDate = new Date();
+            cart.serviceDeliveryDateTime = cDate.toString();
+        }
+        else {
+
+            var dt = BuildDateFromUI();
+            cart.serviceDeliveryDateTime = dt.toString();
+        }
+        // save settings
+        UpdateCookieItem("cart", JSON.stringify(cart));
+    }
+
+    //------------------------
+    //  Misc
+    //------------------------
+    function SetDateValue(bNow)
+    {
+        var dt = new Date();
+
+        var sDate = ( (dt.getMonth() + 1).toString().length == 1) ? "0" + (dt.getMonth() + 1).toString() : (dt.getMonth() + 1).toString();
+
+        var sDateDay = (dt.getDate().toString().length == 1) ? "0" + dt.getDate().toString() : dt.getDate().toString();
+
+        sDate = sDate + "/" + sDateDay + "/" + dt.getFullYear();
+
+        var mn = dt.getMinutes().toString();
+        var hr = dt.getHours();
+
+        var quarterHours = Math.round(mn / 15);
+
+        if (quarterHours == 4) {
+            hr = now.getHours() + 1;
+        }
+
+        var mn = (quarterHours * 15) % 60;
+
+        hr = (hr.length == 1 ? "0" + hr : hr);
+        mn = (mn.length == 1 ? "0" + mn : mn);
+
+        var bAM = true;
+
+        if (hr >= 12)
+        {
+            bAM = false;
+        }
+
+        if (hr == 24)
+        {
+            hr = 12;
+        }
+
+        if (hr > 12)
+        {
+            hr = hr - 12;
+        }
+
+        $("#inputServiceDate").val(sDate);
+        $("#selHour").val(hr);
+        $("#selMinute").val(mn);
+        $("#selAM").val(bAM.toString());
+
+        // Now
+        if (bNow == true)
+        {
+            $("#divDateTime").hide();
+        }
+        else
+        {
+            $("#divDateTime").show();
+            $("#inputServiceDate").click();
+        }
+
+    }
+
+    function BuildDateFromUI()
+    {
+
+        var dt = new Date($("#inputServiceDate").val());
+
+        var bAM = ($("#selAM").val() == "true" ? true : false);
+
+        var hr = parseInt($("#selHour").val());
+
+        if (bAM == false) {
+            if (hr < 12) {
+                hr = hr + 12;
+            }
+            if (hr > 23) {
+                hr = 0;
+            }
+        }
+
+        dt.setHours(hr);
+        dt.setMinutes($("#selMinute").val());
+        return dt;
+    }
+    //---------------------------------
+    // Navigation
+    //---------------------------------
+    function Prev(file) {
+        //if (Validation() == false) {
+        //    return;
+        //}
+
+        UpdateCart();
+        window.location = "../cart/" + file;
+    }
+
+    function Next(file) {
+
+        if (Validation() == false) {
+            return;
+        }
+        else {
+            UpdateCart();
+
+            window.location = "../cart/" + file;
+        }
+    }
+</script>
+

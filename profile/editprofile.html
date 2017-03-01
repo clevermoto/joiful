@@ -1,0 +1,1219 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport"  id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+      
+    <!-- jQuery UI-->
+    <link href="../assets/lib/jquery/jquery-ui.min.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+<body ng-app="editProfileGet" >
+    <div class="appcontainer">
+
+        <script>document.write(DynamicMenu("white", "black", "X", "SendUserHome()", "SETTINGS", true, "save", "Update()"));</script>
+
+        <div class="container" ng-controller="editProfileGetCtrl">
+
+            <form class="form-signin">
+
+                <div class="scrollmenewheader scrollmenewbase" id="scrollwindow" >
+                    <div class="row noPadding footer-auto lnkUserType" style='display:none'>
+                        <div class="col-xs-12 noPadding">
+                            <button id="lnkUserType" onclick="ChangePersona()" class="btn btn-lg btn-notround btn-success btn-block grad btnHeight" type="button">BECOME A JOIFUL ARTIST</button>     
+                        </div>
+                    </div>
+                    <div class="row border-bottom-silver openingInputRows btnEmailView">
+                        <div class="col-xs-4 noPadding blackopenninglabels">
+                            email address
+                        </div>
+                        <div class="col-xs-8 noPadding">
+                            <button id="btnEmailView" onclick="ChangeEmailView()" class="btn btn-xs  btn-notround profile-edit" type="button">edit</button>     
+                        </div>
+                    </div>
+                    <div class="row border-bottom-silver openingInputRows btnPasswordView">
+                        <div class="col-xs-4 noPadding blackopenninglabels">
+                            password
+                        </div>
+                        <div class="col-xs-8 noPadding">
+                            <button id="btnEmailView" onclick="ChangePasswordView()" class="btn btn-xs  btn-notround profile-edit" type="button">edit</button>     
+                        </div>
+                    </div>
+                    <div class="row border-bottom-silver openingInputRows btnMiscView" style='display:none'>
+                        <div class="col-xs-4 noPadding blackopenninglabels">
+                            profile
+                        </div>
+                        <div class="col-xs-8 noPadding">
+                            <button id="btnMiscView" onclick="ChangeMisc()" class="btn btn-xs  btn-notround profile-edit" type="button">edit</button>     
+                        </div>
+                    </div>
+
+
+                    <div style="padding-top:4px"> </div>
+
+                    <div>
+
+                        <!--<label for="inputFirstName" class="sr-only">First Name</label>
+                        <input type="text" id="inputFirstName" class="form-control control-clearwhite" placeholder="First Name" autofocus maxlength="50" value="{{FirstName}}">
+
+                        <label for="inputLastName" class="sr-only">Last Name</label>
+                        <input type="text" id="inputLastName" class="form-control control-clearwhite" placeholder="Last Name" autofocus maxlength="50" value="{{LastName}}">
+                        <button id="btnName" onclick="ChangeName()" class="btn btn-lg btn-success btn-block" style="margin-bottom: 10px" type="button">Update Name</button>-->
+
+                        <div class="row border-bottom-silver  openingInputRows  inputFirstName">
+                            <div class="col-xs-4 noPadding blackopenninglabels">
+                                first name
+                            </div>
+                            <div class="col-xs-8 noPadding">
+                                <input type="text" id="inputFirstName" style="font-size:12px;" class="form-control control-clear blackopenninglabels" required autofocus maxlength="50" value="{{FirstName}}"/>
+                            </div>
+                        </div>
+                        <div class="row border-bottom-silver openingInputRows inputLastName">
+                            <div class="col-xs-4 noPadding blackopenninglabels">
+                                last name
+                            </div>
+                            <div class="col-xs-8 noPadding">
+                                <input type="text" id="inputLastName" style="font-size:12px;" class="form-control control-clear blackopenninglabels placeholder-silver" required autofocus maxlength="50" value="{{LastName}}" />
+                            </div>
+                        </div>
+
+                        <div class="row border-bottom-silver openingInputRows inputEmail">
+                            <div class="col-xs-4 noPadding blackopenninglabels">
+                                email address
+                            </div>
+                            <div class="col-xs-8 noPadding">
+
+                                <input type="email" id="inputEmail" class="inputEmail form-control control-clear blackopenninglabels" style="font-size:12px;" required autofocus maxlength="150" value="{{EmailAddress}}" />
+                            </div>
+                        </div>
+                        <div class="row border-bottom-silver openingInputRows inputMobile">
+                            <div class="col-xs-4 noPadding blackopenninglabels">
+                                phone number
+                            </div>
+                            <div class="col-xs-8 noPadding">
+                                <input type="text" id="inputMobile" style="font-size:12px;" class="form-control control-clear blackopenninglabels" placeholder="999-999-9999" required autofocus maxlength="10" value="{{Mobile}}" />
+                            </div>
+                        </div>
+                        <div class="row border-bottom-silver inputPassword openingInputRows  inputPassword">
+                            <div class="col-xs-4 noPadding blackopenninglabels">
+                                password
+                            </div>
+                            <div class="col-xs-8 noPadding">
+                                <input type="password" id="inputPassword" style="font-size:12px;" class="form-control control-clear blackopenninglabels" required maxlength="20" />
+                            </div>
+                        </div>
+
+                        <div class="row border-bottom-silver openingInputRows inputConfirmPassword inputPassword" >
+                            <div class="col-xs-4 noPadding blackopenninglabels" style="padding-top:2px!important;">
+                                confirm<br />password
+                            </div>
+                            <div class="col-xs-8 noPadding">
+                                <input type="password" id="inputConfirmPassword" style="font-size:12px;" class="form-control control-clear blackopenninglabels" required maxlength="20" />
+                            </div>
+                        </div>
+                        <!--<label for="inputMobile" class="sr-only">Mobile</label>
+                        <button id="btnMobile" onclick="ChangeMobile()" class="btn btn-lg btn-success btn-block" style="margin-bottom: 10px" type="button">Update Mobile Phone</button>-->
+
+                        <div class="row border-bottom-silver  openingInputRows inputDOB">
+                            <div class="col-xs-4 noPadding blackopenninglabels">
+                                birthday
+                            </div>
+                            <div class="col-xs-8 noPadding">
+                           <!--     <input type="text" id="inputFirstName"                                                         class="form-control control-clear blackopenninglabels"                          required autofocus maxlength="50" value="{{FirstName}}" />-->
+                                <input type="text" id="inputDOB" style="font-size:12px;" class="form-control control-clear blackopenninglabels readonlyjm" placeholder="mm/dd/yyyy" required autofocus maxlength="10" value="{{DOB}}" onclick="blur()" />
+                            </div>
+                        </div>
+
+
+                        <div class="row border-bottom-silver  openingInputRows genderblock" style="height:96px!important">
+                            <div class="col-xs-4 noPadding blackopenninglabels" style="height:88px!important">
+                                gender
+                            </div>
+                            <div class="col-xs-8 noPadding" style="height:88px!important">
+                                <div class="form-control control-clearwhite" id="genderblock" style="height:88px!important;padding-left: 15px;">
+                                    <div class="row optFemale">
+                                        <div class="optGender optfemale" ng-style="{'background': Gender=='female' ? '#d86018': 'white', 'border-color': Gender=='female' ? '#d86018': '#5B6770'} " style='border-radius:50%;border:#5B6770 1px solid;height:17px;width:17px;display:inline-block;vertical-align:top' onclick="SetGender('female')">    
+                                            <input id="optFemale"  type="radio" name="optradio" value="female" ng-checked="Gender=='female'" style='display:none' />
+                                        </div> 
+                                        <div style="display:inline-block;font-size:12px;margin-bottom:0px;vertical-align:top">Female</div>
+                                   </div>
+
+
+                                    <div class="row">
+                                        <div class="optGender optmale"  ng-style="{'background': Gender=='male' ? '#d86018': 'white', 'border-color': Gender=='male' ? '#d86018': '#5B6770'} " style='border-radius:50%;border:#5B6770 1px solid;height:17px;width:17px;display:inline-block;vertical-align:top' onclick="SetGender('male')">    
+                                            <input id="optMale"  type="radio" name="optradio" value="male" ng-checked="Gender=='male'" style='display:none' />
+                                        </div> 
+                                        <div style="display:inline-block;font-size:12px;margin-bottom:0px;vertical-align:top">Male</div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="optGender optother"  ng-style="{'background': Gender=='other' ? '#d86018': 'white', 'border-color': Gender=='other' ? '#d86018': '#5B6770'} " style='border-radius:50%;border:#5B6770 1px solid;height:17px;width:17px;display:inline-block;vertical-align:top' onclick="SetGender('other')">    
+                                            <input id="optOther"  type="radio" name="optradio" value="male" ng-checked="Gender=='other'" style='display:none' />
+                                        </div> 
+                                        <div style="display:inline-block;font-size:12px;margin-bottom:0px;vertical-align:top">Other</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row border-bottom-silver  openingInputRows inputTip">
+                            <div class="col-xs-4 noPadding blackopenninglabels">
+                                tip %
+                            </div>
+                            <div class="col-xs-8 noPadding">
+                                <select id="inputTip" class="form-control control-clearwhite" autofocus style="font-size:12px;">
+                                    <option style="background-color:silver!important;border:none!important" value=".00">No Pre-Tip</option>
+                                    <option style="background-color:silver!important;border:none!important" value=".05">5%</option>
+                                    <option style="background-color:silver!important;border:none!important"value=".10">10%</option>
+                                    <option style="background-color:silver!important;border:none!important"value=".15">15%</option>
+                                    <option style="background-color:silver!important;border:none!important"value=".20">20%</option>
+                                    <option style="background-color:silver!important;border:none!important"value=".25">25%</option>
+                                    <option style="background-color:silver!important;border:none!important"value=".30">30%</option>
+                                    <option style="background-color:silver!important;border:none!important"value=".35">35%</option>
+                                    <option style="background-color:silver!important;border:none!important"value=".40">40%</option>
+                                    <option style="background-color:silver!important;border:none!important"value=".45">45%</option>
+                                    <option style="background-color:silver!important;border:none!important"value=".50">50%</option>
+                                </select>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                </div>
+            </form>
+
+        </div>
+        <!-- /container -->
+    </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+    </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- jQuery UI-->
+<script src="../assets/lib/jquery/jquery-ui.min.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<script type="text/javascript">
+
+    var mode = getParameterByName("mode");
+
+    var gPrimaryAddress = "";
+    var gPrimaryCreditCard = "";
+    var gUpdateType = "";
+
+    var gGender = "";
+    
+    var app = angular.module('editProfileGet', []);
+    
+    app.controller('editProfileGetCtrl', function ($scope, $http) {
+
+        var UserID = (window.localStorage.getItem("UserID") == null ? "0" : window.localStorage.getItem("UserID"));
+    
+        var uriPrimaryAddress = ServicePrefix + "/api/getuseraddresslist?userid=" + encodeURIComponent(UserID);
+
+        $http.get(uriPrimaryAddress).then(function (result) {
+
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.data.Status != "SUCCESS") {
+                showAlert(result.data.Message);
+                return;
+            }
+
+
+            $scope.PrimaryAddress = "";
+
+            for (var i = 0; i < result.data.Results.length; i++)
+            {
+                if (result.data.Results[i].PrimaryAddress == true)
+                {
+                    var PrimaryAddress = result.data.Results[i].Address1 + " " + result.data.Results[i].City + ", " + result.data.Results[i].State + " " + " " + result.data.Results[i].ZipCode;
+                    $scope.PrimaryAddress = PrimaryAddress;
+                    gPrimaryAddress = PrimaryAddress;
+                    break;
+                }
+            }
+
+        });
+
+
+        var uriPrimaryCreditCard = ServicePrefix + "/api/getusercreditcardlist?userid=" + encodeURIComponent(UserID);
+
+        $http.get(uriPrimaryCreditCard).then(function (result) {
+
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.data.Status != "SUCCESS") {
+                showAlert(result.data.Message);
+                return;
+            }
+
+            $scope.PrimaryCreditCard = "";
+
+            for (var i = 0; i < result.data.Results.length; i++)
+            {
+                if (result.data.Results[i].PrimaryCreditCard == true)
+                {
+                    var PrimaryCreditCard = result.data.Results[i].CreditCardType + ": " + result.data.Results[i].CreditCardNumber;
+
+                    PrimaryCreditCard = PrimaryCreditCard + " EXPIRES: " + result.data.Results[i].CreditCardExpMonth + " / " + result.data.Results[i].CreditCardExpYear;
+
+                    $scope.PrimaryCreditCard = PrimaryCreditCard;
+
+                    gPrimaryCreditCard = PrimaryCreditCard;
+
+                    break;
+                }
+            }
+            //console.log("getusercreditcardlist-" + (new Date).getTime());
+
+        });
+
+        var uriMain = ServicePrefix + "/api/getuserinfo?userid=" + encodeURIComponent(UserID);
+        $http.get(uriMain).then(function (result) {
+
+            if (result == null) {
+                showAlert('returned no data');
+                return;
+            }
+
+            if (result.data.Status != "SUCCESS") {
+                showAlert(result.data.Message);
+                return;
+            }
+
+            $scope.UserID = result.data.UserId;
+            $scope.FirstName = result.data.FirstName;
+            $scope.LastName = result.data.LastName;
+            $scope.EmailAddress = result.data.EmailAddress;
+            $scope.DOB = (result.data.DateOfBirth == "01/01/0001" ? "mm/dd/yyyy" : result.data.DateOfBirth);
+
+            var mobile = "";
+            if (result.data.MobileNumber != null) {
+                mobile = result.data.MobileNumber.toString();
+                mobile = replaceAll(mobile, "-", "");
+                mobile = replaceAll(mobile, ".", "");
+                mobile = replaceAll(mobile, "(", "");
+                mobile = replaceAll(mobile, ")", "");
+                mobile = replaceAll(mobile, " ", "");
+            }
+
+            if (mobile != null && mobile.length == 10) {
+                $scope.Mobile = '(' + mobile.substr(0, 3) + ') ' + mobile.substr(3, 3) + '-' + mobile.substr(6, 4);
+            }
+            else {
+                $scope.Mobile = "";
+            }
+
+            $scope.Gender = result.data.Gender;
+
+            gGender = $scope.Gender;
+            //console.log("getuserinfo-" + (new Date).getTime());
+        });
+
+    });
+
+
+    $(document).ready(function ()
+    {
+        $(".btn-menu-right").addClass("btn-menu-right-save");
+        $(".btn-menu-right").removeClass("btn-menu-right");
+
+
+
+        setFormHeight();
+        //$("#ui-datepicker-div").hide();
+//        document.getElementById("btnUpdateNew").focus();
+        // Normal
+        resetView(mode);
+        //console.log("document.ready-" + (new Date).getTime());
+        if (CheckLogin() == true)
+        {
+
+            if (user.Persona=="provider")
+            {
+                $("#scrollwindow").addClass("scrollmenewheader");
+                $("#scrollwindow").removeClass("scrollmenewheaderfooter");
+            }
+            else
+            {
+                $("#scrollwindow").addClass("scrollmenewheader");
+                $("#scrollwindow").removeClass("scrollmenewheaderfooter");
+            }
+
+            if (user.Persona == "provider") {
+                $("#divNonAdmin").show();
+                $("#divAdmin").hide();
+                $("#lnkUserType").hide();
+                $(".lnkUserType").hide();
+            }
+            else if (user.Persona == "admin")
+            {
+                $("#divAdmin").show();
+                $("#divNonAdmin").hide();
+
+                $("#lnkUserType").hide();
+                $(".lnkUserType").hide();
+            }
+            else
+            {          
+                $("#divNonAdmin").show();
+                $("#divAdmin").hide();
+                $("#lnkUserType").show();
+                $(".lnkUserType").show();
+            }
+
+            BuildCommonUI();
+
+
+            //var link = "<a href='" + BuildReferralLink() + "' target='_new'>" + BuildReferralLink() + "</a>";
+
+//            var link = BuildReferralLink();
+//            $("#userToken").html("USER REFERRAL CODE<br><span style='color:#d86018'>" + user.ReferralCode + "</span>");
+//            $("#userTokenHidden").val(link);
+
+            $("#message").show();
+            $("#messageHeading").html("SETTINGS");
+
+            GetDefaultTip();
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+
+            unblockUI();
+
+            $('.readonlyjm').on('focus',function(){
+                $(this).trigger('blur');
+            });
+
+            $(function () {
+                $("#inputDOB").datepicker({
+                    yearRange: "-100:+0",
+                    maxDate: new Date(),
+                    changeYear: true,
+                    changeMonth: true
+                    /*onClose: function(dateText, inst) 
+                        { 
+                            $(this).attr("disabled", false);
+                        },
+                        beforeShow: function(input, inst) 
+                        {
+                            $(this).attr("disabled", true);
+                        }*/
+                });
+            });
+        }
+
+ 
+    });
+
+    function resetView(inmode)
+    {
+        mode = inmode;
+
+        if (mode == "")
+        {
+            $("#btnMisc").hide();
+            $("#btnEmailView").show();
+            $("#btnPasswordView").show();
+
+            $("#btnEmailViewAdmin").show();
+            $("#btnPasswordViewAdmin").show();
+            $("#btnMiscAdmin").hide();
+
+            $(".btnEmailView").show();
+            $(".btnPasswordView").show();
+            $(".btnMiscView").hide();
+
+
+            $("#spnUserType").hide();
+            //$("#lnkUserType").hide();
+
+            $("#inputFirstName").show();
+            $("#inputLastName").show();
+            $(".inputFirstName").show();
+            $(".inputLastName").show();
+            //$("#btnName").hide();
+
+            $("#inputEmail").hide();
+            $(".inputEmail").hide();
+
+            //$("#btnEmail").hide();
+
+            $("#inputPassword").hide();
+            $("#inputConfirmPassword").hide();
+            $(".inputPassword").hide();
+            $(".inputConfirmPassword").hide();
+            //$("#btnPassword").hide();
+
+            $("#inputMobile").show();
+            $(".inputMobile").show();
+
+            $("#inputDOB").show();
+            $(".inputDOB").show();
+ 
+            $("#genderblock").show();
+            $(".genderblock").show();
+
+            $(".optFemale").show();
+            $(".optMale").show();
+            $(".optOther").show();
+            $("#btnGender").hide();
+
+            $("#inputTip").show();
+            $(".inputTip").show();
+
+
+
+
+        }
+
+        if (mode == "e") {
+
+            // Start with Buttons
+
+
+            $("#btnMiscAdmin").show();
+            $("#btnEmailPasswordAdmin").hide();
+            $("#btnEmailViewAdmin").hide();
+
+            $("#btnMisc").show();
+            $("#btnEmailView").hide();
+            $("#btnPasswordView").show();
+
+            $(".btnEmailView").hide();
+            $(".btnPasswordView").show();
+            $(".btnMiscView").show();
+
+
+            $("#spnUserType").hide();
+            //$("#lnkUserType").hide();
+
+            $("#inputFirstName").hide();
+            $("#inputLastName").hide();
+            $(".inputFirstName").hide();
+            $(".inputLastName").hide();
+ //           $("#btnName").hide();
+
+            // Email
+            $("#inputEmail").show();
+            $(".inputEmail").show();
+
+            //$("#btnEmail").show();
+            //document.getElementById("btnEmail").focus();
+
+            // Password
+            $("#inputPassword").hide();
+            $("#inputConfirmPassword").hide();
+            $(".inputPassword").hide();
+            $(".inputConfirmPassword").hide();
+            //$("#btnPassword").hide();
+
+
+            $("#inputMobile").hide();
+            $(".inputMobile").hide();
+
+            $("#inputDOB").hide();
+            $(".inputDOB").hide();
+
+            $("#genderblock").hide();
+            $(".genderblock").hide();
+
+            $(".optFemale").hide();
+            $(".optMale").hide();
+            $(".optOther").hide();
+            $("#btnGender").hide();
+
+            $("#inputTip").hide();
+            $(".inputTip").hide();
+
+
+        }
+
+        if (mode == "p") {
+
+            $("#btnMisc").show();
+
+            $("#btnEmailView").show();
+            $("#btnPasswordView").hide();
+            $("#btnMisc").show();
+
+            $("#btnEmailViewAdmin").show();
+            $("#btnPasswordViewAdmin").hide();
+            $("#btnMiscAdmin").show();
+
+            $(".btnMiscView").show();
+            $(".btnEmailView").show();
+            $(".btnPasswordView").hide();
+
+            $("#spnUserType").hide();
+            //$("#lnkUserType").hide();
+
+            $("#inputFirstName").hide();
+            $("#inputLastName").hide();
+            $(".inputFirstName").hide();
+            $(".inputLastName").hide();
+            //$("#btnName").hide();
+
+            // Email
+            $("#inputEmail").hide();
+            $(".inputEmail").hide();
+
+            $("#btnEmail").hide();
+            //document.getElementById("btnEmail").focus();
+
+            // Password
+            $("#inputPassword").show();
+            $("#inputConfirmPassword").show();
+            $(".inputPassword").show();
+            $(".inputConfirmPassword").show();
+            //$("#btnPassword").show();
+            //document.getElementById("btnPassword").focus();
+
+            $("#inputMobile").hide();
+            $(".inputMobile").hide();
+
+            $("#inputDOB").hide();
+            $(".inputDOB").hide();
+ 
+            $("#genderblock").hide();
+            $(".genderblock").hide();
+
+            $(".optFemale").hide();
+            $(".optMale").hide();
+            $(".optOther").hide();
+            $("#btnGender").hide();
+
+            $("#inputTip").hide();
+            $(".inputTip").hide();
+
+
+        }
+
+    }
+
+    function ChangeMisc()
+    {
+        //window.location = "../profile/editprofile.html?mode=";
+        resetView("");
+    }
+    function ChangePasswordView()
+    {
+        resetView("p");
+        //window.location = "../profile/editprofile.html?mode=p";
+    }
+    function ChangeEmailView() {
+        resetView("e");
+
+        //window.location = "../profile/editprofile.html?mode=e";
+    }
+    function GetDefaultTip() {
+        var UserID = user.UserID;
+
+        var url = ServicePrefix + "/api/GetUserDefaultGratuity/?userid=" + UserID;
+
+        $.ajax(
+               {
+                   dataType: "json",
+                   url: url,
+                   method: "GET",
+                   success: BuildDefaultTip,
+                   error: DefaultTipeError
+               });
+    }
+
+    function BuildDefaultTip(result)
+    {
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+        else {
+            $("#inputTip").val(result.DefaultGratuity);
+        }
+    }
+
+    function DefaultTipeError(jqXHR, textStatus, err) {
+        showAlert(textStatus);
+        return false;
+    }
+    function Update()
+    {
+        if ($("#inputFirstName").is(":visible"))
+        {
+            //console.log('misc');
+            UpdateMisc();
+        }
+        else if ($("#inputPassword").is(":visible")) {
+           // console.log('pass');
+            ChangePassword();
+        }
+        else if ($("#inputEmail").is(":visible")) {
+
+            ChangeEmail();
+        }
+        else
+        {
+            return;
+        }        
+    }
+
+    // form submit with enter key
+    document.onkeydown=function(evt){
+        var keyCode = evt ? (evt.which ? evt.which : evt.keyCode) : event.keyCode;
+        if(keyCode == 13){  
+            Update();
+        }
+    }
+
+    function Done()
+    {    
+            SendUserHome();
+    }
+    
+    //---------------------------
+    // Update/Change Functions
+    //---------------------------
+    function UpdateMisc()
+    {
+        blockUI();
+
+        if (ValidateName() == false)
+        {
+            return;
+        }
+        else if (ValidateMobile() == false) {
+            return;
+        }
+        else if (ValidateDOB() == false) {
+            return;
+        }
+        else if (ValidateGender() == false) {
+            return;
+        }
+        else {
+            APIPreCall("misc");
+        }
+    }
+
+    function ChangePersona()
+    {
+        if (user.Persona != "admin") {
+            window.location = "../profile/selectpersona.html";
+        }
+        else
+        {
+            showAlert("Sorry! Admin accounts can not change their persona.");
+        }
+    }
+
+    function ChangeName()
+    {
+	    blockUI();
+        if (ValidateName() == false)
+        {	
+	        unblockUI();
+            return;
+        }
+        else
+        {
+            APIPreCall("username");
+        }
+    }
+    
+    function ChangeEmail()
+    {
+	    blockUI();
+        if (ValidateEmail() == false)
+        {
+	        unblockUI();
+            return;
+        }
+
+        if (ValidEmailAddress(RemoveTags($("#inputEmail").val())) == false)
+        {
+	        showAlert('Invalid Email Address');
+            return;
+        }
+        else
+        {
+            APIPreCall("email");
+        }
+    }
+    
+    function ChangePassword()
+    {
+	    blockUI();
+        if (ValidatePassword() == false)
+        {
+	        unblockUI();
+            return;
+        }
+        else
+        {
+            APIPreCall("password");
+        }
+    }
+    
+    function ChangeMobile()
+    {
+	    blockUI();
+        if (ValidateMobile() == false)
+        {
+	        unblockUI();
+            return;
+        }
+        else
+        {
+            APIPreCall("mobile");
+        }
+    }
+    
+    function ChangeDOB()
+    {
+	    blockUI();
+        if (ValidateDOB() == false)
+        {
+	        unblockUI();
+            return;
+        }
+        else
+        {
+            APIPreCall("dob");
+        }
+    }
+    
+    function ChangeGender()
+    {
+	    blockUI();
+        if (ValidateGender() == false)
+        {
+	        unblockUI();
+            return;
+        }
+        else
+        {
+            APIPreCall("gender");
+        }
+    }
+    
+    function ChangeAddress()
+    {
+        if (gPrimaryAddress == "")
+        {
+            window.location = "../profile/profileaddresseditor.html?addressid=0&autogps=yes";
+        }
+        else
+        {
+            window.location = "../profile/profileaddressmanager.html";
+        }
+    }
+
+    function ChangeCreditCard()
+    {
+        if (gPrimaryCreditCard == "") {
+            window.location = "../profile/profilecreditcardeditor.html?creditcardid=0";
+        }
+        else {
+            window.location = "../profile/profilecreditcardmanager.html";
+        }
+    }
+
+    function ChangeTip()
+    {
+        blockUI();
+        APIPreCall("gratuity");
+    }
+
+    //-------------------------
+    // Validation
+    //-------------------------
+    function ValidateName()
+    {
+      if (DataLength(RemoveTags($("#inputFirstName").val()))== 0)
+      {
+        showAlert('First Name must be entered');
+        return false;
+      }
+
+        else if (DataLength(RemoveTags($("#inputLastName").val())) == 0)
+      {
+        showAlert('Last Name must be entered');
+        return false;
+      }
+      else
+      {
+        return true;
+      }
+      
+    }
+    
+    function ValidateEmail()
+    {
+
+      blockUI();
+
+      if (DataLength(RemoveTags($("#inputEmail").val())) == 0)
+      {
+        showAlert('Email must be entered');
+        return false;
+      }
+      else
+      {
+        return true;
+      }
+
+    }
+
+    function ValidatePassword()
+    {
+        var password = RemoveTags($("#inputPassword").val());
+        var confirmedpassword = RemoveTags($("#inputConfirmPassword").val());
+
+      // Validate Input
+      if (ValidatedPassword(password, confirmedpassword) == false)
+      {
+          return false;
+      }
+      else
+      {
+        return true;
+      }
+    }
+
+    function ValidateMobile()
+    {
+        return ValidMobile(RemoveTags($("#inputMobile").val()));
+    }
+    
+    function ValidateDOB()
+    {
+
+      if (
+          (RemoveTags($("#inputDOB").val()) == 'mm/dd/yyyy') || 
+           DataLength(RemoveTags($("#inputDOB").val())) < 10
+           )
+      {
+        showAlert('Date of Birth must be entered');
+        return false;
+      }
+      else
+      {
+        return true;
+      }
+       
+    }
+
+    function SetGender(value)
+    {
+        $(".optGender").css("border", "#5B6770 1px solid");
+        $(".optGender").css("background", "white");
+        
+        $(".opt" + value).css("border", "#d86018 1px solid");
+        $(".opt" + value).css("background", "#d86018");
+
+        gGender = value;
+    }
+ 
+    function ValidateGender()
+    {
+        if (gGender == "")
+        {
+          showAlert ('Please select a Gender.');
+          return false;
+        }
+        else
+        {
+            return true; 
+        }
+    }  
+
+    function APIPreCall(UpdateType)
+    {
+
+        var callback = APICallSuccess;
+        var data = null;
+        var ret = false;
+        var url = ServicePrefix + '/api/updateprofile/';
+
+        gUpdateType = UpdateType;
+
+        var APIToken = UpdateType.toLowerCase();
+
+        switch (UpdateType.toLowerCase())
+        {
+            case "misc":
+                data = {
+                    apitoken: APIToken,
+                    userid: user.UserID,
+                    firstname: RemoveTags($("#inputFirstName").val()),
+                    lastname: RemoveTags($("#inputLastName").val()),
+                    mobilephone: RemoveTags($("#inputMobile").val()),
+                    dateofbirth: RemoveTags($("#inputDOB").val()),
+                    gender: gGender,
+                    gratuityamount: RemoveTags($("#inputTip").val())
+                };
+                callback = UpdateNameCookie;
+                break;
+
+            case "username":
+                data = {
+                    apitoken: APIToken,
+                    userid: user.UserID,
+                    firstname: RemoveTags($("#inputFirstName").val()),
+                    lastname: RemoveTags($("#inputLastName").val())
+                };
+                callback = UpdateNameCookie;
+                break;
+
+            case "email":
+                data = {
+                    apitoken: APIToken,
+                    userid: user.UserID,
+                    emailaddress: RemoveTags($("#inputEmail").val())
+                };
+                break;
+
+            case "password":
+                data = {
+                    apitoken: APIToken,
+                    userid: user.UserID,
+                    password: RemoveTags($("#inputPassword").val()),
+                    confirmpassword: RemoveTags($("#inputConfirmPassword").val())
+                };
+                break;
+
+            case "mobile":
+                data = {
+                    apitoken: APIToken,
+                    userid: user.UserID,
+                    mobilephone: RemoveTags($("#inputMobile").val())
+                };
+                break;
+
+            case "dob":
+                data = {
+                    apitoken: APIToken,
+                    userid: user.UserID,
+                    dateofbirth: RemoveTags($("#inputDOB").val())
+                };
+                break;
+
+            case "gender":
+                data = {
+                    apitoken: APIToken,
+                    userid: user.UserID,
+                    gender: gGender
+                };
+                break;
+
+            case "gratuity":
+                data = {
+                    apitoken: APIToken,
+                    userid: user.UserID,
+                    gratuityamount: RemoveTags($("#inputTip").val())
+                };
+
+                break;
+
+            default:
+                showAlert('error has occured');
+                return false;
+        }
+
+
+        APICall(url, data, callback);
+
+    }
+
+    function APIUpdateError(jqXHR, textStatus, err)
+    {
+        showAlert(textStatus);
+        return false;
+    }
+    
+    function APICallSuccess(result)
+    {
+	
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            
+            return;
+        }
+
+        showAlert('');
+        
+        if (gUpdateType == "mobile" || gUpdateType == "misc")
+        {
+            UpdateCookieItem("MobileNumber", RemoveTags($("#inputMobile").val()));
+        }
+    }
+    
+    function APICall(url, data, callback)
+    {
+
+        var ret = false;
+
+
+
+        $.ajax(
+               {
+                   data: data,
+                   dataType: "json",
+                   url: url,
+                   method: "POST",
+                   success: callback,
+                   error: APIUpdateError
+               });
+
+    }
+
+    function UpdateNameCookie()
+    {
+
+        var firstname = RemoveTags($("#inputFirstName").val());
+        var lastname = RemoveTags($("#inputLastName").val());
+
+        UpdateCookieItem("FirstName", firstname);
+        UpdateCookieItem("LastName", lastname);
+
+        user.FirstName = firstname;
+        user.LastName = lastname;
+
+        if (gUpdateType == "mobile" || gUpdateType == "misc") {
+            UpdateCookieItem("MobileNumber", RemoveTags($("#inputMobile").val()));
+        }
+        if (GetCookieItem("PrimaryCreditCardID").toString().length <= 1)
+        {
+
+            showAlert("", 'ForceCC();');
+        }
+        else
+        {
+            showAlert('');
+        }
+
+    }
+
+    function ForceCC()
+    {
+        window.location = "../profile/profilecreditcardeditor.html?creditcardid=0";
+    }
+    function ChangePersona()
+    {
+        var message =  "Are you sure you want to become a Joiful Artist?" ;
+        showConfirm(message, "Yes", "No", "APIPersonaCall()");
+    }
+
+    function APIPersonaCall()
+    {
+
+        user.Persona =  (user.Persona == "provider" ? "user" : "provider");
+
+        var APIToken = "persona";
+
+        var uri = ServicePrefix + '/api/updateprofile/';
+
+        var postData = {
+            apitoken: APIToken,
+            userid: user.UserID,
+            persona: user.Persona
+        }
+
+        $.ajax(
+               {
+                   data: postData,
+                   dataType: "json",
+                   url: uri,
+                   method: "POST",
+                   success: APIPersonaSuccessUpdate,
+                   error: APIPersonaUpdateError
+               });
+
+    }
+
+    function APIPersonaSuccessUpdate(result)
+    {
+
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+		
+        var Key = "Persona";
+        var Value = user.Persona;
+        UpdateCookieItem(Key, Value);
+
+            if (user.Persona == "provider") {
+                $("#lnkUserType").html("Consumer only?");
+            }
+            else
+            {          
+                $("#lnkUserType").html("Artist?");
+            }
+        showAlert('You are now a Joiful ' + (user.Persona == "user" ? "Consumer." : "Artist.") + " We will contact you with next steps. Welcome!", "../profile/editprofile.html");
+
+    }
+
+    function APIPersonaUpdateError(result, textStatus, err) {
+
+        showAlert(err, '../index.html');
+        return;
+    }  
+</script>

@@ -1,0 +1,398 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+
+    <!-- Angular-->
+    <script src="../assets/lib/angular/angular.min.js"></script>
+      
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+   
+    <script src="../cordova.js"></script>
+
+  </head>
+
+<body ng-app="managePeriodStatementsApp">
+    <div class="appcontainer">
+        <script>document.write(DynamicMenu("white", "black", "X", "SendToArtistTools()", "STATEMENTS", true, "", ""));</script>
+        <div class="container">
+
+            <form class="form-signin">
+
+                <div ng-controller="managePeriodStatementsCtrl" >
+                    <label for="selStatementPeriods" class="sr-only">Statement Period</label>
+
+                    <div class="row" style="padding-bottom:10px;padding-top:10px" >
+                        <div style="width:90%;margin:0 auto">
+                            <select id="selStatementPeriodYear" onchange="LoadStatementPeriods(this.val)" style="width:100%;min-width:240px" >
+                                <option ng-repeat="z in yearlist" value="{{z.yearnumber}}">{{z.yearnumber}}</option>
+                            </select>
+                        </div>   
+                    </div>
+                    <div class="row" style="padding-bottom:10px">
+                        <div style="width:90%;margin:0 auto">
+                            Week Ending
+                        </div>   
+                    </div>
+                    <div class="row" style="padding-bottom:10px">
+                        <div style="width:90%;margin:0 auto">
+                            <select id="selStatementPeriods" style="width:100%;min-width:240px;" onchange="LoadStatements(this.value);" >
+                            </select>
+                        </div>   
+                    </div>
+                </div>
+                <div class="scrollmenewstatement scrollmebase" >
+                    <div id="divStatementResults" style="display:none">
+                        <!-- Total Jobs -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div>Total Sessions</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divTotalJobs"></div>
+                            </div>
+                        </div>
+
+                        <!-- Total Bids -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div>Total Requests</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divTotalBids"></div>
+                            </div>
+                        </div>
+
+                        <!-- Commission % -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div>Commission %</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divCommissionPct"></div>
+                            </div>
+                        </div>
+                        <hr />
+                        <!-- Dollars Earned -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div>Total Dollars</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divDollarsEarned"></div>
+                            </div>
+                        </div>
+
+                        <!-- Ticket Fee -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div>Ticket Fee</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divTicketFee" style="color:red"></div>
+                            </div>
+                        </div>
+
+                        <!-- Ticket Fee Sub -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div>Sub-Total</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divTicketFeeSub"></div>
+                            </div>
+                        </div>
+
+                        <!-- Tatbeq Commission -->
+                        <div class="row" style="padding-top:10px">
+                            <div class="col-xs-6">
+                                <div>Commission</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divCommissionDollars" style="color:red"></div>
+                            </div>
+                        </div>
+
+                        <!-- Ticket Commision Sub -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div>Sub-Total</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divCommissionDollarsSub"></div>
+                            </div>
+                        </div>
+
+
+                        <!-- Tips -->
+                        <div class="row" style="padding-top:10px">
+                            <div class="col-xs-6">
+                                <div>Tips</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divTips" style="color:green"></div>
+                            </div>
+                        </div>
+
+                        <!-- Total to Provider -->
+                        <div class="row">
+                            <div class="col-xs-6">
+                                <div>Artist Dollars</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divTotalArtists"></div>
+                            </div>
+                        </div>
+
+                        <!-- Total to Tatbeq -->
+                        <div class="row" style="padding-top:10px;display:none">
+                            <div class="col-xs-6">
+                                <div>Tatbeq Dollars</div>
+                            </div>
+                            <div class="col-xs-6" style="text-align:right">
+                                <div id="divTotalTatbeq"></div>
+                            </div>
+                        </div>
+                        <!-- Generate Statement Date -->
+                        <div class="row" style="padding-top:10px">
+                            <div class="col-xs-12" style="text-align:center">
+                                <div style='font-weight:800'>Statement Generate Date</div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-12" style="text-align:center">
+                                <div id="divStatementGenerateDate"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </form>
+
+        </div> <!-- /container -->
+        </div>
+        <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+        <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+<script>
+
+    var app = angular.module('managePeriodStatementsApp', []);
+
+    app.controller('managePeriodStatementsCtrl', function ($scope, $http) {
+
+        var currentdate = new Date();
+        var currentyear = currentdate.getFullYear();
+        var startyear = 2016;
+        var arrayYear = new Array();
+        var objYear = new Object();
+/*
+        objYear = 
+        {
+            yearnumber: ""
+        };
+        arrayYear.push(objYear);
+  */      
+
+        for (var y=currentyear; y >=startyear; y-- )
+        {
+            objYear = 
+            {
+                yearnumber: y
+            };
+            arrayYear.push(objYear);
+        } 
+
+        $scope.yearlist = arrayYear;
+        LoadStatementPeriods(currentyear);
+
+    });
+
+    $(document).ready(function ()
+    {
+
+        if (CheckLogin() == true) {
+            BuildCommonUI();
+            if (ProviderAccess() == false)
+            {
+                return;
+            }
+
+            //InitNotificationPoll();
+
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+            $(".form-signin").show();
+            //$("#messageHeading").html("ARTIST STATEMENTS");
+
+        }
+  });
+  
+ function LoadStatementPeriods(year)
+ {
+
+        if (year=="")
+        {
+           $("#selStatementPeriods").html("");
+            
+        }
+
+        var selectOptions = "<option value='0'>- Select one -</option>";
+
+        $("#selStatementPeriods").html(selectOptions);
+
+        var uri = ServicePrefix + '/api/GetProviderStatementPeriods/?publiconly=true&userid=' + GetCookieItem("UserID") + "&year=" + year;
+
+        $.get(uri).then(function (result)
+        {
+
+                if (!result) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.Status != "SUCCESS") {
+                    showAlert(result.Message);
+                    return;
+                }
+                var MonthNames = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
+                for (var i=result.Results.length-1; i >=0; i--)
+                {
+                    var currentDt = new Date();
+                    var dtStart = new Date(result.Results[i].ProviderPeriodStartDate);
+                    var dtEnd = new Date(result.Results[i].ProviderPeriodEndDate);
+                    
+                    var displayStart = (dtStart.getMonth() + 1) + "/" + dtStart.getDate() ;
+                    displayStart = "";
+                    var displayEnd = MonthNames[dtEnd.getMonth()] + " " + ordinal_suffix_of(dtEnd.getDate());
+
+                    if (dtStart <=currentDt)
+                    {
+                        selectOptions = selectOptions + "<option value='" + result.Results[i].ProviderPeriodStatementID + "'>" + displayStart + " - " + displayEnd + "</option>";
+                    }
+                }
+
+                $("#selStatementPeriods").html(selectOptions);
+
+        });
+        
+ }
+
+  function LoadStatements(key)
+  {
+
+      if (key=="0")
+      {
+        $("#divStatementResults").hide();
+      }
+      else
+      {
+            blockUI();
+
+            var uri = ServicePrefix + '/api/GetProviderStatements/?export=false&exporttype=csv&publiconly=true&userid=' + GetCookieItem("UserID") + "&providerstatementperiodid=" + key;
+
+            $.get(uri).then(function (result) {
+
+                if (result == null) {
+                    showAlert('returned no data');
+                    return;
+                }
+
+                if (result.Status != null) {
+                    if (result.Status != "SUCCESS") {
+                        showAlert(result.Message);
+                        return;
+                    }
+                    else {
+                            LoadStatementSuccess(result.Results)
+                            return;
+                    }
+                }
+                else {
+                    return;
+                }
+            });
+
+
+
+      }
+  }
+
+  function LoadStatementSuccess(result)
+  {
+
+      if (result.length > 0)
+      {
+        $("#divTotalJobs").html(result[0].TotalJobs);
+        $("#divTotalBids").html(result[0].TotalBids);
+        $("#divCommissionPct").html(100 - parseInt(result[0].CommissionPct) + "%");
+
+        var myMoney = result[0].DollarsEarned;
+        $("#divDollarsEarned").html(formatDollar(myMoney));
+
+        myMoney = result[0].TicketFee;
+        $("#divTicketFee").html("-" + formatDollar(myMoney));
+
+        myMoney = formatDollar(result[0].TicketFeeSub);
+        $("#divTicketFeeSub").html(myMoney);
+
+        myMoney = formatDollar(result[0].CommissionDollars);
+        $("#divCommissionDollars").html("-" + myMoney);
+
+        myMoney = formatDollar(result[0].CommissionDollarsSub);
+        $("#divCommissionDollarsSub").html(myMoney);
+
+        myMoney = formatDollar(result[0].Tips);
+        $("#divTips").html("+" + myMoney);
+
+        myMoney = formatDollar(result[0].TotalArtists);
+        $("#divTotalArtists").html(myMoney);
+
+        myMoney = formatDollar(result[0].TotalTatbeq);
+        $("#divTotalTatbeq").html(myMoney);
+
+        $("#divStatementGenerateDate").html(result[0].StatementGenerateDate);
+
+        $("#divStatementResults").show();
+      }
+      else
+      {
+        $("#divStatementResults").hide();
+      }
+        unblockUI();
+      
+  }
+
+  function Done() {
+      SendUserHome();
+  }
+</script>

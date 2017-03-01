@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<!-- spappinit -->
+<script src="../spappinit.js"></script>
+<html lang="en">
+  <head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <meta name="viewport" id="metaViewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height">
+
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Joiful</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="../assets/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <link href="../assets/lib/bootstrap/css/ie10-viewport-bug-workaround.css" rel="stylesheet">
+                
+    <!-- Custom styles for this template -->
+    <link href="../assets/common/css/spapp.css" rel="stylesheet">
+    
+    <!-- FastClick -->
+    <script src="../assets/lib/fastclick/fastclick.js"></script>
+
+    <!-- Cordova -->
+    <script src="../cordova.js"></script>
+
+  </head>
+
+  <body>
+      <div class="appcontainer">
+          <div class="row border-bottom" style="width:100%">
+              <div class="col-xs-2">
+                  <button onclick="SendUserHome()" class="btn btn-sm cancel-menu" type="button">x</button>
+              </div>
+              <div class="col-xs-8">
+                  <h3 id="messageHeading" class="spaMessageHeading">CONCIERGE</h3>
+              </div>
+              <div class="col-xs-2">
+                  &nbsp;
+              </div>
+          </div>
+
+          <div class="container">
+
+              <form class="form-signin">
+
+                    <div class="scrollme">
+                        <div style="width:90%; margin-top:10px">
+                            <div class="row">
+                                <div class="col-xs-12">
+                                    <div class="radio">
+                                        <label><input id="optProvider" type="radio" name="optradio" value="provider" onclick="PersonaClick(this.value)">Yes- I do provide Treatment</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-xs-12">
+                                <div class="radio">
+                                    <label><input id="optUser" type="radio" name="optradio" value="user" onclick="PersonaClick(this.value)">No- I'm here to receive Treatments</label>
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                  <div class="footer-auto">
+                      <button id="btnDone" onclick="Done()" class="btn btn-lg btn-success btn-block ajaxbtn btn-notround grad btnHeight" type="button">DONE</button>
+                  </div>
+              </form>
+
+          </div> <!-- /container -->
+
+      </div>
+    <!-- IE10 viewport hack for Surface/desktop Windows 8 bug -->
+    <script src="../assets/lib/bootstrap/js/ie10-viewport-bug-workaround.js"></script>
+  </body>
+</html>
+<!-- jQuery -->
+<script src="../assets/lib/jquery/jquery.js"></script>
+<!-- spapp -->
+<script src="../assets/common/js/spapp.js"></script>
+<!-- Block UI -->
+<script src="../assets/lib/block-ui/jquery.blockUI.js"></script>
+
+<script type="text/javascript">
+    
+    $(document).ready(function ()
+    {
+
+        if (CheckLogin() == true)
+        {
+            BuildCommonUI();
+            $("#messageHeading").html("JOIFUL PERSONA");
+            $('input[name="optradio"][value="' + user.Persona + '"]').attr('checked',true);
+            $("#divUserName").html(user.FirstName + " " + user.LastName);
+        }
+    });
+    
+    function PersonaClick(value)
+    {
+      user.Persona = value;  
+    }
+
+    function ValidateInput()
+    {
+        if (user.Persona == "")
+        {
+            alert ('please select an option.');
+            return false;
+        }
+        else
+        {
+            return true;
+        }
+    }
+
+    function Done()
+    {
+	    blockUI();
+        if (ValidateInput() == false) {
+	        unblockUI();
+            return;
+        }
+        else
+        {
+            APICall();
+        }
+    }
+    
+    function APICall()
+    {
+
+        var APIToken = "persona";
+
+        var uri = ServicePrefix + '/api/updateprofile/';
+
+        var postData = {
+            apitoken: APIToken,
+            userid: user.UserID,
+            persona: user.Persona
+        }
+
+        $.ajax(
+               {
+                   data: postData,
+                   dataType: "json",
+                   url: uri,
+                   method: "POST",
+                   success: APISuccessUpdate,
+                   error: APIUpdateError
+               });
+
+    }
+
+    function APISuccessUpdate(result)
+    {
+
+        if (result == null) {
+            showAlert('returned no data');
+            return;
+        }
+
+        if (result.Status != "SUCCESS") {
+            showAlert(result.Message);
+            return;
+        }
+		
+        var Key = "Persona";
+        var Value = user.Persona;
+        UpdateCookieItem(Key, Value);
+
+        var redirectURL = '../profile/editprofile.html';
+
+        if (user.Persona == "provider" && user.ProviderWaiverSigned == "false")
+        {
+            redirectURL = "../account/waiver.html?provider=true";
+        }
+       
+        showAlert('', redirectURL);
+
+    }
+
+    function APIUpdateError(result, textStatus, err) {
+
+        showAlert(err, '../index.html');
+        return;
+    }
+
+    
+    
+</script>

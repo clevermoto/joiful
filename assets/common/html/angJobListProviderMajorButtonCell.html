@@ -1,0 +1,22 @@
+﻿    <!-- Provider View -->
+    <div style="margin:0 auto;padding:0px 0px 0px 0px" >
+
+        <!-- Major Entries -->
+        <!--<div>
+            <button id="jlBid{{$index}}" ng-if="y.JobStatus=='open' && y.ProviderBidStatus !='Bid Made'" ng-click="BidJob(y.OpenBidID)" class="btn btn-md btn-primary btn-block btn-notround grad" type="button">REQUEST</button>
+        </div>-->
+
+        <!--<div>
+            <span style="margin:0 auto;margin-top:5px;display:table; font-size:medium;color:white;margin:0 auto" class='' >request made</span>
+            <button style="color:red;background-color:transparent;border:none" ng-if="y.ProviderBidStatus=='Bid Made'" class="btn-info ">REQUEST MADE</button>
+        </div>-->
+        <div>
+            <button id="jlTravel{{$index}}" ng-if="y.JobStatus=='providerassign'" ng-click="TravelJob(y.JobID)" class="btn btn-lg btn-primary btn-block btn-notround grad btnHeight" type="button">START TRAVEL</button>
+        </div>
+        <div>
+            <button id="jlStart{{$index}}" ng-if="y.JobStatus=='providertravel'" ng-click="StartJob(y.JobID)" class="btn  btn-lg btn-primary btn-block  btn-notround grad btnHeight" type="button">START SESSION</button>
+        </div>
+        <div>
+            <button id="jlStop{{$index}}" ng-if="y.JobStatus=='servicestarted'" ng-click="EndJob(y.JobID)" class="btn btn-lg btn-primary btn-block  btn-notround grad btnHeight" type="button">COMPLETE SESSION</button>
+        </div>
+    </div>
